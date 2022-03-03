@@ -1,0 +1,140 @@
+Leképezés
+--------------------
+    User (
+        _UUID, Password, Email, Permission, FirstName, LastName )
+
+    UserData (
+        _UUID, Gender, ProfilePicture, BirthDate, PhoneNumber, Profession, *UserUUID )
+    
+    Friends (
+        _User1, _User2 )
+
+    FriendRequest (
+        _User1, _User2, Approved )
+
+    PrivateMessage (
+        _UUID, Content, TimeStamp, *ToUser, *FromUser )
+
+    MediaAlbum (
+        _UUID, Name, *UserUUID )
+
+    PublicPicture (
+        _UUID, Content, *AlbumUUID )
+
+    PublicPost (
+        _UUID, Text, TimeStamp, *Picture, *UserUUID )
+
+    PublicComment (
+        _UUID, Content, TimeStamp, *PostUUID, *UserUUID )
+
+    Group (
+        _UUID, Name, Logo, *OwnerUUID )
+
+    GroupMembers (
+        _UserUUID, _GroupUUID )
+
+    GroupPost (
+        _UUID, Text, Picture, TimeStamp, *GroupUUID, *UserUUID )
+
+    GroupComment (
+        _UUID, Content, TimeStamp, *PostUUID, *UserUUID )
+
+Normalizálás
+--------------------
+    User ( _UUID, Password, Email, Permission, FirstName, LastName )
+        Funkcionális függőségek:
+            { UUID } -> { Password, Email, Permission, FirstName, LastName }
+
+        1NF: Megfelel 1NF-nek, mivel minden attribútum atomi
+        2NF: Megfelel 2NF-nek
+        3NF: Megfelel 3NF-nek, mivel nincs nincs kacsolat a másodlagos attribútomok között
+    
+    UserData ( _UUID, Gender, ProfilePicture, BirthDate, PhoneNumber, Profession, *UserUUID )
+        Funkcionális függőségek:
+            { UUID } -> { Gender, ProfilePicture, BirthDate, PhoneNumber, Profession, *UserUUID }
+
+        1NF: Megfelel 1NF-nek, mivel minden attribútum atomi
+        2NF: Megfelel 2NF-nek
+        3NF: Megfelel 3NF-nek, mivel nincs nincs kacsolat a másodlagos attribútomok között
+    
+    Friends ( _User1, _User2 )
+        1NF: Megfelel 1NF-nek, mivel minden attribútum atomi
+        2NF: Megfelel 2NF-nek, mivel nincs másodlagos attribútum
+        3NF: Megfelel 3NF-nek, mivel nincs másodlagos attribútum
+
+    FriendRequest ( _User1, _User2, Approved )
+        Funkcionális függőségek:
+            { User1, User2 } -> { Approved }
+
+        1NF: Megfelel 1NF-nek, mivel minden attribútum atomi
+        2NF: Megfelel 2NF-nek
+        3NF: Megfelel 3NF-nek, mivel nincs nincs kacsolat a másodlagos attribútomok között
+
+    PrivateMessage ( _UUID, Content, TimeStamp, *ToUser, *FromUser )
+        Funkcionális függőségek:
+            { UUID } -> { Content, TimeStamp, *ToUser, *FromUser }
+
+        1NF: Megfelel 1NF-nek, mivel minden attribútum atomi
+        2NF: Megfelel 2NF-nek
+        3NF: Megfelel 3NF-nek, mivel nincs nincs kacsolat a másodlagos attribútomok között
+
+    MediaAlbum ( _UUID, Name, *UserUUID )
+        Funkcionális függőségek:
+            { UUID } -> { Name, *UserUUID }
+
+        1NF: Megfelel 1NF-nek, mivel minden attribútum atomi
+        2NF: Megfelel 2NF-nek
+        3NF: Megfelel 3NF-nek, mivel nincs nincs kacsolat a másodlagos attribútomok között
+
+    PublicPicture ( _UUID, Content, *AlbumUUID )
+        Funkcionális függőségek:
+            { UUID } -> { Content, *AlbumUUID }
+
+        1NF: Megfelel 1NF-nek, mivel minden attribútum atomi
+        2NF: Megfelel 2NF-nek
+        3NF: Megfelel 3NF-nek, mivel nincs nincs kacsolat a másodlagos attribútomok között
+
+    PublicPost ( _UUID, Text, TimeStamp, *Picture, *UserUUID )
+        Funkcionális függőségek:
+            { UUID } -> { Text, TimeStamp, *Picture, *UserUUID }
+
+        1NF: Megfelel 1NF-nek, mivel minden attribútum atomi
+        2NF: Megfelel 2NF-nek
+        3NF: Megfelel 3NF-nek, mivel nincs nincs kacsolat a másodlagos attribútomok között
+
+    PublicComment ( _UUID, Content, TimeStamp, *PostUUID, *UserUUID )
+        Funkcionális függőségek:
+            { UUID } -> { Content, TimeStamp, *PostUUID, *UserUUID }
+
+        1NF: Megfelel 1NF-nek, mivel minden attribútum atomi
+        2NF: Megfelel 2NF-nek
+        3NF: Megfelel 3NF-nek, mivel nincs nincs kacsolat a másodlagos attribútomok között
+
+    Group ( _UUID, Name, Logo, *OwnerUUID )
+        Funkcionális függőségek:
+            { UUID } -> { Name, Logo, *OwnerUUID }
+
+        1NF: Megfelel 1NF-nek, mivel minden attribútum atomi
+        2NF: Megfelel 2NF-nek
+        3NF: Megfelel 3NF-nek, mivel nincs nincs kacsolat a másodlagos attribútomok között
+
+    GroupMembers ( _UserUUID, _GroupUUID )
+        1NF: Megfelel 1NF-nek, mivel minden attribútum atomi
+        2NF: Megfelel 2NF-nek, mivel nincs másodlagos attribútum
+        3NF: Megfelel 3NF-nek, mivel nincs másodlagos attribútum
+
+    GroupPost ( _UUID, Text, Picture, TimeStamp, *GroupUUID, *UserUUID )
+        Funkcionális függőségek:
+            { UUID } -> { Text, Picture, TimeStamp, *GroupUUID, *UserUUID }
+
+        1NF: Megfelel 1NF-nek, mivel minden attribútum atomi
+        2NF: Megfelel 2NF-nek
+        3NF: Megfelel 3NF-nek, mivel nincs nincs kacsolat a másodlagos attribútomok között
+
+    GroupComment ( _UUID, Content, TimeStamp, *PostUUID, *UserUUID )
+        Funkcionális függőségek:
+            { UUID } -> { Content, TimeStamp, *PostUUID, *UserUUID }
+
+        1NF: Megfelel 1NF-nek, mivel minden attribútum atomi
+        2NF: Megfelel 2NF-nek
+        3NF: Megfelel 3NF-nek, mivel nincs nincs kacsolat a másodlagos attribútomok között

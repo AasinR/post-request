@@ -47,7 +47,7 @@ Normalizálás
 
         1NF: Megfelel 1NF-nek, mivel minden attribútum atomi
         2NF: Megfelel 2NF-nek
-        3NF: Megfelel 3NF-nek, mivel nincs nincs kacsolat a másodlagos attribútomok között
+        3NF: Megfelel 3NF-nek, mivel nincs kapcsolat a másodlagos attribútomok között
     
     UserData ( _UUID, Gender, ProfilePicture, BirthDate, PhoneNumber, Profession, *UserUUID )
         Funkcionális függőségek:
@@ -55,7 +55,7 @@ Normalizálás
 
         1NF: Megfelel 1NF-nek, mivel minden attribútum atomi
         2NF: Megfelel 2NF-nek
-        3NF: Megfelel 3NF-nek, mivel nincs nincs kacsolat a másodlagos attribútomok között
+        3NF: Megfelel 3NF-nek, mivel nincs kapcsolat a másodlagos attribútomok között
     
     Friends ( _User1, _User2 )
         1NF: Megfelel 1NF-nek, mivel minden attribútum atomi
@@ -68,7 +68,7 @@ Normalizálás
 
         1NF: Megfelel 1NF-nek, mivel minden attribútum atomi
         2NF: Megfelel 2NF-nek
-        3NF: Megfelel 3NF-nek, mivel nincs nincs kacsolat a másodlagos attribútomok között
+        3NF: Megfelel Megfelel 3NF-nek, mivel nincs kapcsolat a másodlagos attribútomok között
 
     PrivateMessage ( _UUID, Content, TimeStamp, *ToUser, *FromUser )
         Funkcionális függőségek:
@@ -76,7 +76,7 @@ Normalizálás
 
         1NF: Megfelel 1NF-nek, mivel minden attribútum atomi
         2NF: Megfelel 2NF-nek
-        3NF: Megfelel 3NF-nek, mivel nincs nincs kacsolat a másodlagos attribútomok között
+        3NF: Megfelel Megfelel 3NF-nek, mivel nincs kapcsolat a másodlagos attribútomok között
 
     MediaAlbum ( _UUID, Name, *UserUUID )
         Funkcionális függőségek:
@@ -84,7 +84,7 @@ Normalizálás
 
         1NF: Megfelel 1NF-nek, mivel minden attribútum atomi
         2NF: Megfelel 2NF-nek
-        3NF: Megfelel 3NF-nek, mivel nincs nincs kacsolat a másodlagos attribútomok között
+        3NF: Megfelel Megfelel 3NF-nek, mivel nincs kapcsolat a másodlagos attribútomok között
 
     PublicPicture ( _UUID, Content, *AlbumUUID )
         Funkcionális függőségek:
@@ -92,7 +92,7 @@ Normalizálás
 
         1NF: Megfelel 1NF-nek, mivel minden attribútum atomi
         2NF: Megfelel 2NF-nek
-        3NF: Megfelel 3NF-nek, mivel nincs nincs kacsolat a másodlagos attribútomok között
+        3NF: Megfelel Megfelel 3NF-nek, mivel nincs kapcsolat a másodlagos attribútomok között
 
     PublicPost ( _UUID, Text, TimeStamp, *Picture, *UserUUID )
         Funkcionális függőségek:
@@ -100,7 +100,7 @@ Normalizálás
 
         1NF: Megfelel 1NF-nek, mivel minden attribútum atomi
         2NF: Megfelel 2NF-nek
-        3NF: Megfelel 3NF-nek, mivel nincs nincs kacsolat a másodlagos attribútomok között
+        3NF: Megfelel Megfelel 3NF-nek, mivel nincs kapcsolat a másodlagos attribútomok között
 
     PublicComment ( _UUID, Content, TimeStamp, *PostUUID, *UserUUID )
         Funkcionális függőségek:
@@ -108,7 +108,7 @@ Normalizálás
 
         1NF: Megfelel 1NF-nek, mivel minden attribútum atomi
         2NF: Megfelel 2NF-nek
-        3NF: Megfelel 3NF-nek, mivel nincs nincs kacsolat a másodlagos attribútomok között
+        3NF: Megfelel Megfelel 3NF-nek, mivel nincs kapcsolat a másodlagos attribútomok között
 
     Group ( _UUID, Name, Logo, *OwnerUUID )
         Funkcionális függőségek:
@@ -116,7 +116,7 @@ Normalizálás
 
         1NF: Megfelel 1NF-nek, mivel minden attribútum atomi
         2NF: Megfelel 2NF-nek
-        3NF: Megfelel 3NF-nek, mivel nincs nincs kacsolat a másodlagos attribútomok között
+        3NF: Megfelel Megfelel 3NF-nek, mivel nincs kapcsolat a másodlagos attribútomok között
 
     GroupMembers ( _UserUUID, _GroupUUID )
         1NF: Megfelel 1NF-nek, mivel minden attribútum atomi
@@ -129,7 +129,7 @@ Normalizálás
 
         1NF: Megfelel 1NF-nek, mivel minden attribútum atomi
         2NF: Megfelel 2NF-nek
-        3NF: Megfelel 3NF-nek, mivel nincs nincs kacsolat a másodlagos attribútomok között
+        3NF: Megfelel Megfelel 3NF-nek, mivel nincs kapcsolat a másodlagos attribútomok között
 
     GroupComment ( _UUID, Content, TimeStamp, *PostUUID, *UserUUID )
         Funkcionális függőségek:
@@ -137,4 +137,4 @@ Normalizálás
 
         1NF: Megfelel 1NF-nek, mivel minden attribútum atomi
         2NF: Megfelel 2NF-nek
-        3NF: Megfelel 3NF-nek, mivel nincs nincs kacsolat a másodlagos attribútomok között
+        3NF: Megfelel Megfelel 3NF-nek, mivel nincs kapcsolat a másodlagos attribútomok között

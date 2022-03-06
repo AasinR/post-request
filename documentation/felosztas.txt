@@ -1,0 +1,29 @@
+Sándor Balázs:
+Egyedmodell
+Egyed-kapcsolat diagram
+Relációs adatelemzés (E-K diagram leképezése, normalizálás legalább 3NF-ig)
+Táblák létrehozása
+Integritás ellenőrzés
+Rekordok feltöltése
+Nemtriviális lekérdezés
+Tárolt eljárások és függvények
+Funkcionalitás
+
+Mészáros Richárd Márk:
+Adatfolyam diagramok
+Funkció meghatározás
+Rekordok feltöltése
+Nemtriviális lekérdezés
+Triggerek
+Funkcionalitás
+
+Virágh Vivien:
+Specifikáció és követelmény katalógus
+Egyed-esemény mátrix
+Szerep-funkció mátrix
+Képernyőtervek
+Menütervek
+Rekordok feltöltése
+Nemtriviális lekérdezés
+Grafikus felület
+Funkcionalitás

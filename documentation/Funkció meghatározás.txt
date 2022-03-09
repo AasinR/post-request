@@ -1,0 +1,107 @@
+Funkció neve és azonosítója: Bejelentkezés, 1.1
+Funkció típusa: on-line felhasználói lekérdezés
+Felhasználói szerepkörök: regisztrált felhasználók
+Funkcióleírás: A felhasználó megadja a belépési adatait, majd ha ezek megfelelnek átírányításra kerül a főoldalra.
+Hibakezelés: Rossz input esetén tájékoztatjuk a felhasználót a sikertelen belépésről.
+AFD eljárás(ok): 1.1
+I/O leírások:
+I/O szerkezetek:
+Követelménykatalógusra hivatkozás:
+Tömegszerűség: Aktív felhasználók számától függő.
+Lekérdezések:
+Közös feldolgozás:
+Dialógusnevek: 
+Szolgáltatás szint követelményei:
+Leírás: Bejelentkezés ideje
+Célérték 0.5mp
+Tartomány: 0 - 2 mp
+
+Funkció neve és azonosítója: Fal böngészése, 2.1.1
+Funkció típusa: on-line felhasználói lekérdezés
+Felhasználói szerepkörök: bejelentkezett felhasználók
+Funkcióleírás: A felhasználó bejelentkezés után a fal-ra átírányítódik, ahol a publikus posztokat böngészheti.
+Hibakezelés: Internet kapcsolat megszűnése esetén, a felhasználót pop-up ablakkal értesíteni kell.
+AFD eljárás(ok): 2.1.1
+I/O leírások:
+I/O szerkezetek:
+Követelménykatalógusra hivatkozás:
+Tömegszerűség: Aktív felhasználók számától függő.
+Lekérdezések:
+Közös feldolgozás:
+Dialógusnevek: 
+Szolgáltatás szint követelményei:
+Leírás: Egy poszt betöltési ideje
+Célérték 0.5mp
+Tartomány: 0 - 3 mp
+
+Funkció neve és azonosítója: Üzengetés, 2.1.2
+Funkció típusa: on-line felhasználói lekérdezés
+Felhasználói szerepkörök: bejelentkezett felhasználók
+Funkcióleírás: A felhasználó ismerőseinek üzeneteket küldhet, illetve a beszélgetést megtekintheti
+Hibakezelés: A sikertelen üzenet küldésről a felhasználót értesíteni kell.
+AFD eljárás(ok): 2.1.2
+I/O leírások:
+I/O szerkezetek:
+Követelménykatalógusra hivatkozás:
+Tömegszerűség: Aktív felhasználók számától függő.
+Lekérdezések:
+Közös feldolgozás:
+Dialógusnevek: 
+Szolgáltatás szint követelményei:
+Leírás: Egy üzenet kézbesítése
+Célérték 0.1mp
+Tartomány: 0 - 1 mp
+
+Funkció neve és azonosítója: Csoport böngészése, 2.1.3
+Funkció típusa: on-line felhasználói lekérdezés
+Felhasználói szerepkörök: bejelentkezett felhasználók
+Funkcióleírás: A felhasználó, a csatlakozott csoportokban lévő posztokat és kommenteket böngészheti
+Hibakezelés: Internet kapcsolat megszűnése esetén, a felhasználót pop-up ablakkal értesíteni kell.
+AFD eljárás(ok): 2.1.3
+I/O leírások:
+I/O szerkezetek:
+Követelménykatalógusra hivatkozás:
+Tömegszerűség: Aktív felhasználók számától függő.
+Lekérdezések:
+Közös feldolgozás:
+Dialógusnevek: 
+Szolgáltatás szint követelményei:
+Leírás: Egy csoport poszt betöltése
+Célérték 0.5mp
+Tartomány: 0 - 3 mp
+
+Funkció neve és azonosítója: Profil böngészése, 2.1.4
+Funkció típusa: on-line felhasználói lekérdezés
+Felhasználói szerepkörök: bejelentkezett felhasználók
+Funkcióleírás: A felhasználó megnézheti a saját és más felhasználók profilját, a saját profilját szerkesztheti is.
+Hibakezelés: Internet kapcsolat megszűnése esetén, a felhasználót pop-up ablakkal értesíteni kell.
+AFD eljárás(ok): 2.1.4
+I/O leírások:
+I/O szerkezetek:
+Követelménykatalógusra hivatkozás:
+Tömegszerűség: Aktív felhasználók számától függő.
+Lekérdezések:
+Közös feldolgozás:
+Dialógusnevek: 
+Szolgáltatás szint követelményei:
+Leírás: Egy profil betöltése
+Célérték 0.5mp
+Tartomány: 0 - 3 mp
+
+Funkció neve és azonosítója: Adatok kezelése, 3.1
+Funkció típusa: on-line felhasználói lekérdezés
+Felhasználói szerepkörök: bejelentkezett adminisztrátorok
+Funkcióleírás: Az adminisztrátor az összes tartalmat (üzenetek, profilok, csoportok) böngészheti, törölheti és szerkesztheti.
+Hibakezelés: Az adminisztrátoroknak bármilyen backend / frontend hibát megjeleníthetünk pop-up ablakban.
+AFD eljárás(ok): 3.1
+I/O leírások:
+I/O szerkezetek:
+Követelménykatalógusra hivatkozás:
+Tömegszerűség: Aktív felhasználók számától függő.
+Lekérdezések:
+Közös feldolgozás:
+Dialógusnevek: 
+Szolgáltatás szint követelményei:
+Leírás: Egy tartalom módosítása
+Célérték 1mp
+Tartomány: 0 - 5 mp

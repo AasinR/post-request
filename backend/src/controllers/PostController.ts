@@ -14,7 +14,7 @@ class PostController {
     // get group post by ID
 
     // get public posts by userID
-    
+
     // get group post by groupID
 
     // delete public post by ID

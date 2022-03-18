@@ -2,7 +2,7 @@ import { Router, Request, Response, NextFunction } from "express";
 
 class GroupController {
     // create group
-    
+
     // get all groups
 
     // get group by ID

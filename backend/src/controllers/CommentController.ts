@@ -8,7 +8,7 @@ class CommentController {
     // get all public comments
 
     // get all group comments
-    
+
     // get public comments by postID
 
     // get group comments by postID

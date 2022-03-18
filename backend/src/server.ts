@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import session from "express-session";
+import UserRoutes from "./routes/UserRoutes"
 
 // initialize configuration
 dotenv.config();
@@ -20,6 +21,7 @@ const inProd = NODE_ENV === "production"
 server.use(bodyParser.urlencoded({ extended: true }));
 server.use(express.json());
 
+// setup session cookie
 server.use(session({
     name: SESSION_NAME,
     resave: false,
@@ -59,6 +61,9 @@ server.post("/testLogout", (req, res) => {
         res.status(200).send("Successful logout");
     })
 })
+
+// add route to server
+server.use("/user", UserRoutes.Router);
 
 
 // start server

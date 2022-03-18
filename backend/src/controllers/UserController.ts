@@ -1,15 +1,55 @@
 import { Router, Request, Response, NextFunction } from "express";
+import oracledb from "oracledb";
+
+if(process.platform === "win32") {
+    try {
+        oracledb.initOracleClient({libDir: "C:\\Oracle\\instantclient_21_3"});
+    } catch(error) {
+        // tslint:disable-next-line:no-console
+        console.error("ClientNotFound: "+error);
+    }
+}
+const host = "localhost";
+const port = 1521;
+const dbName = "xe"
 
 class UserController {
-    testRouter(req : Request, res : Response, next : NextFunction) {
-        const data = req.body.test;
-        res.json({
-            "test": "router",
-            "input": data
-        });
-    }
 
     // get all users
+    findAll(req : Request, res : Response, next : NextFunction) {
+        oracledb.getConnection(
+            {
+                user: "ADMIN",
+                password: "admin01",
+                connectString: `(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(Host=${host})(Port=${port}))(CONNECT_DATA=(SID=${dbName})))`
+            },
+            (err, connction) => {
+                if(err) {
+                    // tslint:disable-next-line:no-console
+                    console.error("NoDatabase: "+err.message);
+                    return;
+                }
+                connction.execute(
+                    'SELECT * FROM "User"',
+                    (connError, result) => {
+                        if(connError) {
+                            // tslint:disable-next-line:no-console
+                            console.error("FailedRequest: "+connError.message);
+                            connction.close(closeError => {
+                                if(closeError) {
+                                    // tslint:disable-next-line:no-console
+                                    console.error("FailedToClose: "+closeError.message);
+                                }
+                            })
+                        }
+                        res.json({
+                            "result": result
+                        });
+                    }
+                );
+            }
+        )
+    }
 
     // get user by ID
 

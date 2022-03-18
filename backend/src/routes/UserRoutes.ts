@@ -7,7 +7,7 @@ class UserRoutes {
     constructor() {
         this._Router = Router();
 
-        this._Router.post("/testRouter", UserController.testRouter);
+        this._Router.get("/all", UserController.findAll);
     }
 
     get Router() {

@@ -22,13 +22,15 @@
     "body-parser": "^1.19.2",
     "dotenv": "^10.0.0",
     "express": "^4.17.3",
-    "express-session": "^1.17.2"
+    "express-session": "^1.17.2",
+    "oracledb": "^5.3.0"
   },
   "devDependencies": {
     "@types/dotenv": "^8.2.0",
     "@types/express": "^4.17.13",
     "@types/fs-extra": "^9.0.13",
     "@types/node": "^16.11.26",
+    "@types/oracledb": "^5.2.3",
     "@types/shelljs": "^0.8.11",
     "fs-extra": "^10.0.1",
     "nodemon": "^2.0.15",

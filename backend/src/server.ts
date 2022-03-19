@@ -7,6 +7,7 @@ import PostRoutes from "./routes/PostRoutes";
 import MessageRoutes from "./routes/MessageRoutes";
 import GroupRoutes from "./routes/GroupRoutes";
 import CommentRoutes from "./routes/CommentRoutes";
+import AlbumRoutes from "./routes/AlbumRoutes";
 
 // initialize configuration
 dotenv.config();
@@ -72,6 +73,7 @@ server.use("/post", PostRoutes.Router);
 server.use("/message", MessageRoutes.Router);
 server.use("/group", GroupRoutes.Router);
 server.use("/comment", CommentRoutes.Router);
+server.use("/album", AlbumRoutes.Router);
 
 
 // start server

@@ -1,11 +1,11 @@
 export default class Picture {
     public ID : number;
-    public Content : string;
-    public AlbumID : number;
+    public CONTENT : string;
+    public ALBUMID : number;
 
     constructor() {
         this.ID = null;
-        this.Content = null;
-        this.AlbumID = null;
+        this.CONTENT = null;
+        this.ALBUMID = null;
     }
 }

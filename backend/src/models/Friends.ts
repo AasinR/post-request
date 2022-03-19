@@ -1,9 +1,9 @@
 export default class Friends {
-    public User1 : number;
-    public User2 : number;
+    public USER1 : number;
+    public USER2 : number;
 
     constructor() {
-        this.User1 = null;
-        this.User2 = null;
+        this.USER1 = null;
+        this.USER2 = null;
     }
 }

@@ -1,9 +1,9 @@
 export default class GroupMember {
-    public UserID : number;
-    public GroupID : number;
+    public USERID : number;
+    public GROUPID : number;
 
     constructor() {
-        this.UserID = null;
-        this.GroupID = null;
+        this.USERID = null;
+        this.GROUPID = null;
     }
 }

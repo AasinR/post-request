@@ -1,19 +1,19 @@
 export default class UserData {
     public ID : number;
-    public Gender : string;
-    public ProfilePicture : string;
-    public BirthDate : string;
-    public PhoneNumber : string;
-    public Profession : string;
-    public UserID : number;
+    public GENDER : string;
+    public PROFILEPICTURE : string;
+    public BIRTHDATE : string;
+    public PHONENUMBER : string;
+    public PROFESSION : string;
+    public USERID : number;
 
     constructor() {
         this.ID = null;
-        this.Gender = null;
-        this.ProfilePicture = null;
-        this.BirthDate = null;
-        this.PhoneNumber = null;
-        this.Profession = null;
-        this.UserID = null;
+        this.GENDER = null;
+        this.PROFILEPICTURE = null;
+        this.BIRTHDATE = null;
+        this.PHONENUMBER = null;
+        this.PROFESSION = null;
+        this.USERID = null;
     }
 }

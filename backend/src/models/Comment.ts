@@ -1,15 +1,15 @@
 export default class Comment {
     public ID : number;
-    public Content : string;
-    public TimeStamp : string;
-    public PostID : number;
-    public UserID : number;
+    public CONTENT : string;
+    public TIMESTAMP : string;
+    public POSTID : number;
+    public USERID : number;
 
     constructor() {
         this.ID = null;
-        this.Content = null;
-        this.TimeStamp = null;
-        this.PostID = null;
-        this.UserID = null;
+        this.CONTENT = null;
+        this.TIMESTAMP = null;
+        this.POSTID = null;
+        this.USERID = null;
     }
 }

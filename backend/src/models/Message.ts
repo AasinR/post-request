@@ -1,15 +1,15 @@
 export default class Message {
     public ID : number;
-    public Content : string;
-    public TimeStamp : string;
-    public ToUser : number;
-    public FromUser : number;
+    public CONTENT : string;
+    public TIMESTAMP : string;
+    public TOUSER : number;
+    public FROMUSER : number;
 
     constructor() {
         this.ID = null;
-        this.Content = null;
-        this.TimeStamp = null;
-        this.ToUser = null;
-        this.FromUser = null;
+        this.CONTENT = null;
+        this.TIMESTAMP = null;
+        this.TOUSER = null;
+        this.FROMUSER = null;
     }
 }

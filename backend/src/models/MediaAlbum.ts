@@ -1,11 +1,11 @@
 export default class MediaAlbum {
     public ID : number;
-    public Name : string;
-    public UserID: number;
+    public NAME : string;
+    public USERID: number;
 
     constructor() {
         this.ID = null;
-        this.Name = null;
-        this.UserID = null;
+        this.NAME = null;
+        this.USERID = null;
     }
 }

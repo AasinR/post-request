@@ -1,13 +1,13 @@
 export default class Group {
     public ID : number;
-    public Name : string;
-    public Logo : string;
-    public OwnerID : number;
+    public NAME : string;
+    public LOGO : string;
+    public OWNERID : number;
 
     constructor() {
         this.ID = null;
-        this.Name = null;
-        this.Logo = null;
-        this.OwnerID = null;
+        this.NAME = null;
+        this.LOGO = null;
+        this.OWNERID = null;
     }
 }

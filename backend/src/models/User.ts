@@ -1,10 +1,10 @@
 export default class User {
-    public ID : number;
-    public Password : string;
-    public Email : string;
-    public Permission : number;
-    public FirstName : string;
-    public LastName : string;
+    public ID : unknown;
+    public Password : unknown;
+    public Email : unknown;
+    public Permission : unknown;
+    public FirstName : unknown;
+    public LastName : unknown;
 
     constructor() {
         this.ID = null;

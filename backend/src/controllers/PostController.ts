@@ -1,6 +1,6 @@
 import { Router, Request, Response, NextFunction } from "express";
 import ConnectionConfig from "../config/ConnectionConfig";
-import Post from "../models/Post";
+import PublicPost from "../models/PublicPost";
 
 class PostController {
     // create public post
@@ -15,8 +15,8 @@ class PostController {
         try {
             connection = await ConnectionConfig.connect();
             const query = await connection.execute(FIND_ALL, [], {outFormat: oracledb.OBJECT});
-            const result: Post[] = [];
-            query.rows.forEach((data : Post) => {
+            const result: PublicPost[] = [];
+            query.rows.forEach((data : PublicPost) => {
                 result.push(data);
             })
             res.json({

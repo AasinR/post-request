@@ -1,15 +1,17 @@
-export default class Post {
+export default class GroupPost {
     public ID : number;
     public TEXT : string;
-    public TIMESTAMP : string;
     public PICTURE : string;
+    public TIMESTAMP : string;
+    public GROUPID : number;
     public USERID : number;
 
     constructor() {
         this.ID = null;
         this.TEXT = null;
-        this.TIMESTAMP = null;
         this.PICTURE = null;
+        this.TIMESTAMP = null;
+        this.GROUPID = null;
         this.USERID = null;
     }
 }

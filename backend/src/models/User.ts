@@ -1,5 +1,3 @@
-import { userInfo } from "os";
-
 export default class User {
     public ID : number;
     public PASSWORD : string;

@@ -1,6 +1,5 @@
 import { Router } from "express";
 import MessageController from "../controllers/MessageController";
-import UserController from "../controllers/UserController";
 
 class MessageRoutes {
     private _Router : Router;

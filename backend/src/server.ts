@@ -5,6 +5,7 @@ import session from "express-session";
 import UserRoutes from "./routes/UserRoutes"
 import PostRoutes from "./routes/PostRoutes";
 import MessageRoutes from "./routes/MessageRoutes";
+import GroupRoutes from "./routes/GroupRoutes";
 
 // initialize configuration
 dotenv.config();
@@ -68,6 +69,7 @@ server.post("/testLogout", (req, res) => {
 server.use("/user", UserRoutes.Router);
 server.use("/post", PostRoutes.Router);
 server.use("/message", MessageRoutes.Router);
+server.use("/group", GroupRoutes.Router);
 
 
 // start server

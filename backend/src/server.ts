@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import session from "express-session";
 import UserRoutes from "./routes/UserRoutes"
+import PostRoutes from "./routes/PostRoutes";
 
 // initialize configuration
 dotenv.config();
@@ -64,6 +65,7 @@ server.post("/testLogout", (req, res) => {
 
 // add route to server
 server.use("/user", UserRoutes.Router);
+server.use("/post", PostRoutes.Router);
 
 
 // start server

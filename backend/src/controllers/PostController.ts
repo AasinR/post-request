@@ -1,4 +1,6 @@
 import { Router, Request, Response, NextFunction } from "express";
+import ConnectionConfig from "../config/ConnectionConfig";
+import Post from "../models/Post";
 
 class PostController {
     // create public post
@@ -6,6 +8,31 @@ class PostController {
     // create group post
 
     // get all public post
+    async findAll(req : Request, res : Response, next : NextFunction) {
+        const FIND_ALL = 'SELECT * FROM publicpost'
+        let connection;
+        const oracledb = require('oracledb');
+        try {
+            connection = await ConnectionConfig.connect();
+            const query = await connection.execute(FIND_ALL, [], {outFormat: oracledb.OBJECT});
+            const result: Post[] = [];
+            console.log(query.rows);
+            query.rows.forEach((data : Post) => {
+                result.push(data);
+            })
+            res.json({
+                "result": result
+            });
+        } catch(error) {
+            console.error("Error: "+error);
+        } finally {
+            try {
+                connection.close();
+            } catch(closeError) {
+                console.error("CloseError: "+closeError)
+            }
+        }
+    }
 
     // get all group post
 

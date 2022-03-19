@@ -8,31 +8,23 @@ class UserController {
     async findAll(req : Request, res : Response, next : NextFunction) {
         const FIND_ALL = 'SELECT * FROM "User"'
         let connection;
+        const oracledb = require('oracledb');
         try {
             connection = await ConnectionConfig.connect();
-            const query = await connection.execute(FIND_ALL);
+            const query = await connection.execute(FIND_ALL, [], {outFormat: oracledb.OBJECT});
             const result: User[] = [];
-            query.rows.forEach((data: (string|number)[]) => {
-                const user = new User();
-                user.ID = data[0];
-                user.Password = data[1];
-                user.Email = data[2];
-                user.Permission = data[3];
-                user.FirstName = data[4];
-                user.LastName = data[5];
-                result.push(user);
+            query.rows.forEach((data: User) => {
+                result.push(data);
             })
             res.json({
                 "result": result
             });
         } catch(error) {
-            // tslint:disable-next-line:no-console
             console.error("Error: "+error);
         } finally {
             try {
                 connection.close();
             } catch(closeError) {
-                // tslint:disable-next-line:no-console
                 console.error("CloseError: "+closeError)
             }
         }

@@ -1,17 +1,19 @@
+import { userInfo } from "os";
+
 export default class User {
-    public ID : unknown;
-    public Password : unknown;
-    public Email : unknown;
-    public Permission : unknown;
-    public FirstName : unknown;
-    public LastName : unknown;
+    public ID : number;
+    public PASSWORD : string;
+    public EMAIL : string;
+    public PERMISSION : number;
+    public FIRSTNAME : string;
+    public LASTNAME : string;
 
     constructor() {
         this.ID = null;
-        this.Password = null;
-        this.Email = null;
-        this.Permission = null;
-        this.FirstName = null;
-        this.LastName = null;
+        this.PASSWORD = null;
+        this.EMAIL = null;
+        this.PERMISSION = null;
+        this.FIRSTNAME = null;
+        this.LASTNAME = null;
     }
 }

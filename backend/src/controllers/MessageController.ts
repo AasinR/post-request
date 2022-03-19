@@ -14,7 +14,6 @@ class MessageController {
             connection = await ConnectionConfig.connect();
             const query = await connection.execute(FIND_ALL, [], {outFormat: oracledb.OBJECT});
             const result: Message[] = [];
-            console.log(query.rows);
             query.rows.forEach((data : Message) => {
                 result.push(data);
             })

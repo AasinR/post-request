@@ -6,7 +6,6 @@ class GroupRoutes {
 
     constructor() {
         this._Router = Router();
-
         this._Router.get("/all", GroupController.findAll);
     }
 

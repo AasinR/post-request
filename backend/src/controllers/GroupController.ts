@@ -14,7 +14,6 @@ class GroupController {
             connection = await ConnectionConfig.connect();
             const query = await connection.execute(FIND_ALL, [], {outFormat: oracledb.OBJECT});
             const result: Group[] = [];
-            console.log(query.rows);
             query.rows.forEach((data : Group) => {
                 result.push(data);
             })

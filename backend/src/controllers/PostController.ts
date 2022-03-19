@@ -16,7 +16,6 @@ class PostController {
             connection = await ConnectionConfig.connect();
             const query = await connection.execute(FIND_ALL, [], {outFormat: oracledb.OBJECT});
             const result: Post[] = [];
-            console.log(query.rows);
             query.rows.forEach((data : Post) => {
                 result.push(data);
             })

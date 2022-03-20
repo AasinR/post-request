@@ -64,7 +64,7 @@ export default {
   right: 0;
   height: 100vh;
   width: 55%;
-  background-color: #253f58;
+  background-color: var(--light-bg-color);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -72,14 +72,14 @@ export default {
 
   .input-fields {
     width: 40%;
-    border: solid lightblue 2px;
+    border: solid 2px var(--ouline-color);
     border-radius: 30px;
     padding: 5% 5% 2% 5%;
     font-size: 1.5rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    box-shadow: 10px 10px lightblue;
+    box-shadow: 10px 10px var(--ouline-color);
 
     .input-group{
       width: 100%;
@@ -114,8 +114,8 @@ export default {
         margin-bottom: 5%;
         font-size: 1.6rem;
         height: 3.5rem;
-        background-color: #007acc;
-        color: white;
+        background-color: var(--accent-color);
+        color: var(--font-color);
         border: none;
         border-radius: 20px;
         font-weight: bold;

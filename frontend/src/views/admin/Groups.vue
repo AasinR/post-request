@@ -1,0 +1,80 @@
+<template>
+  <div class="groups">
+    <AdminNavbar current="groups"/>
+    <DataTable :table-headers="tableHeaders" :table-values="tableValues" />
+  </div>
+</template>
+
+<script>
+import DataTable from '@/components/Data-Table'
+import AdminNavbar from '@/components/Admin-Navbar'
+
+export default {
+  name: "Groups",
+  components: {
+    DataTable,
+    AdminNavbar,
+  },
+  data() {
+    return {
+      tableHeaders: [
+        {
+          label: "ID",
+          key: "ID"
+        },
+        {
+          label: "Name",
+          key: "NAME"
+        },
+        {
+          label: "Logo",
+          key: "LOGO"
+        },
+        {
+          label: "Owner ID",
+          key: 'OWNERID'
+        },
+
+      ],
+      tableValues: [
+        {
+          ID: 1,
+          NAME: "Flat Earthers",
+          LOGO: "",
+          OWNERID: "1212",
+        },
+        {
+          ID: 2,
+          NAME: "The Cool Ones",
+          LOGO: "https://pamutlabor.hu/wp-content/uploads/2017/10/plab0003344-afeaturedimage-sand.jpg",
+          OWNERID: "1453",
+        }
+      ]
+    }
+  },
+  methods:{
+    initTable(){
+      this.axios.get(`${this.$root.requestURL}/group/all`)
+          .then(({data: {result}}) => {
+            this.tableValues = result;
+          })
+          .catch((error) => {
+            console.log('Hiba a lekereskor:' + error);
+          });
+    }
+  },
+  mounted() {
+    this.initTable();
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+
+  .groups {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+</style>

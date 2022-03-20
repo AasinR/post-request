@@ -20,7 +20,31 @@ class DatabaseConfig {
             });
             return connection;
         } catch(error) {
-            console.error("ConnectionFailed: "+error);
+            console.error(error);
+            return null;
+        }
+    }
+
+    // returns the results of a query
+    async query(sql : string) {
+        let connection;
+        const db = require("oracledb");
+        try {
+            connection = await this.connect();
+            if(connection === null) {
+                throw new Error("Failed to connect to database!");
+            }
+            const result = await connection.execute(sql, [], {outFormat: db.OBJECT});
+            return result;
+        } catch(error) {
+            console.error(error)
+            return 500;
+        } finally {
+            try {
+                connection.close()
+            } catch(closeError) {
+                console.log(closeError)
+            }
         }
     }
 }

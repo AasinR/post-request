@@ -1,6 +1,6 @@
-import { Router, Request, Response, NextFunction } from "express";
-import MediaAlbum from "../models/MediaAlbum";
+import { Request, Response, NextFunction } from "express";
 import ConnectionConfig from "../config/ConnectionConfig";
+import MediaAlbum from "../models/MediaAlbum";
 
 class AlbumController {
     // create album
@@ -8,27 +8,18 @@ class AlbumController {
     // get all albums
     async findAll(req : Request, res : Response, next : NextFunction) {
         const FIND_ALL = 'SELECT * FROM MediaAlbum';
-        let connection;
-        const oracledb = require('oracledb');
-        try {
-            connection = await ConnectionConfig.connect();
-            const query = await connection.execute(FIND_ALL, [], {outFormat: oracledb.OBJECT});
-            const result: MediaAlbum[] = [];
-            query.rows.forEach((data : MediaAlbum) => {
-                result.push(data);
-            })
-            res.json({
-                "result": result
-            });
-        } catch(error) {
-            console.error("Error: "+error);
-        } finally {
-            try {
-                connection.close();
-            } catch(closeError) {
-                console.error("CloseError: "+closeError)
-            }
+        const query = await ConnectionConfig.query(FIND_ALL);
+        if(query === 500) {
+            res.sendStatus(500);
+            return;
         }
+        const result: MediaAlbum[] = [];
+        query.rows.forEach((data: MediaAlbum) => {
+            result.push(data);
+        })
+        res.json({
+            "result": result
+        });
     }
 
     // get album by ID

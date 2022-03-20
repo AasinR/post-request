@@ -2,7 +2,6 @@
   <div class="welcome-bar">
     <img class="logo" src="@/assets/logo.png" alt="logo">
     <h1>Welcome to <br/> <span>PostRequest!</span></h1>
-    <p>Description Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
   </div>
 </template>
 
@@ -19,7 +18,7 @@ export default {
     left: 0;
     height: 100vh;
     width: 45%;
-    background-color: #162233;
+    background-color: var(--dark-bg-color);
     font-family: "Century Gothic", sans-serif;
 
     .logo {
@@ -34,17 +33,10 @@ export default {
 
     h1{
       text-align: center;
-      margin-top: 20%;
+      margin-top: 30%;
       font-size: 4rem;
     }
 
-    p {
-      margin-top: 5%;
-      margin-left: 20%;
-      margin-right: 20%;
-      text-align: justify;
-      font-size: 1.1rem;
-    }
 
   }
 

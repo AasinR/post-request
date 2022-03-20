@@ -1,5 +1,6 @@
 import express from "express";
-import dotenv from "dotenv";
+import EnvConfig from "./config/EnvConfig";
+
 import bodyParser from "body-parser";
 import session from "express-session";
 import UserRoutes from "./routes/UserRoutes"
@@ -9,18 +10,8 @@ import GroupRoutes from "./routes/GroupRoutes";
 import CommentRoutes from "./routes/CommentRoutes";
 import AlbumRoutes from "./routes/AlbumRoutes";
 
-// initialize configuration
-dotenv.config();
-
 const server = express();
-const {
-    NODE_ENV = "development",
-    SERVER_PORT = 8080,
-    SESSION_LIFETIME = 86400000,
-    SESSION_NAME = "sid",
-    SESSION_SECRET = "I/have%no%idea%what%to%put/here"
-} = process.env;
-const inProd = NODE_ENV === "production"
+const inProd = EnvConfig.NODE_ENV === "production"
 
 // use bodyParser to read post body
 server.use(bodyParser.urlencoded({ extended: true }));
@@ -28,23 +19,16 @@ server.use(express.json());
 
 // setup session cookie
 server.use(session({
-    name: SESSION_NAME,
+    name: EnvConfig.SESSION_NAME,
     resave: false,
     saveUninitialized: false,
-    secret: SESSION_SECRET,
+    secret: EnvConfig.SESSION_SECRET,
     cookie: {
-        maxAge: 86400000,
+        maxAge: EnvConfig.SESSION_LIFETIME,
         sameSite: true,
         secure: inProd
     }
 }))
-
-// route handler
-server.get("/", (req, res) => {
-    res.json({
-        "hello": "world!"
-    });
-})
 
 // test login
 server.post("/testPost", (req, res) => {
@@ -62,7 +46,7 @@ server.post("/testLogout", (req, res) => {
         if(err) {
             res.status(500).send("Login failed");
         }
-        res.clearCookie(SESSION_NAME);
+        res.clearCookie(EnvConfig.SESSION_NAME);
         res.status(200).send("Successful logout");
     })
 })
@@ -77,7 +61,7 @@ server.use("/album", AlbumRoutes.Router);
 
 
 // start server
-server.listen(SERVER_PORT, () => {
+server.listen(EnvConfig.SERVER_PORT, () => {
     // tslint:disable-next-line:no-console
-    console.log(`Server started at: http://localhost:${SERVER_PORT}`);
+    console.log(`Server started at: http://localhost:${EnvConfig.SERVER_PORT}`);
 })

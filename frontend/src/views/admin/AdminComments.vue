@@ -1,19 +1,23 @@
 <template>
-  <div class="groups">
-    <AdminNavbar current="groups"/>
-    <DataTable :table-headers="tableHeaders" :table-values="tableValues" />
+  <div class="admin-comments">
+    <div class="rowflex">
+      <AdminNavbar current="comments"/>
+      <DataTable :table-headers="tableHeaders" :table-values="tableValues" />
+    </div>
   </div>
 </template>
 
 <script>
 import DataTable from '@/components/Data-Table'
 import AdminNavbar from '@/components/Admin-Navbar'
+import Navbar from "@/components/Navbar";
 
 export default {
-  name: "Groups",
+  name: "Comments",
   components: {
     DataTable,
     AdminNavbar,
+    Navbar,
   },
   data() {
     return {
@@ -23,38 +27,44 @@ export default {
           key: "ID"
         },
         {
-          label: "Name",
-          key: "NAME"
+          label: "Content",
+          key: "CONTENT"
         },
         {
-          label: "Logo",
-          key: "LOGO"
+          label: "Time",
+          key: "TIMESTAMP"
         },
         {
-          label: "Owner ID",
-          key: 'OWNERID'
+          label: "Post ID",
+          key: 'POSTID'
+        },
+        {
+          label: "User ID",
+          key: 'USERID'
         },
 
       ],
       tableValues: [
         {
           ID: 1,
-          NAME: "Flat Earthers",
-          LOGO: "",
-          OWNERID: "1212",
+          CONTENT: "good post",
+          TIMESTAMP: "2021-05-01 15:00:00",
+          POSTID: "1212",
+          USERID: "5464",
         },
         {
           ID: 2,
-          NAME: "The Cool Ones",
-          LOGO: "https://pamutlabor.hu/wp-content/uploads/2017/10/plab0003344-afeaturedimage-sand.jpg",
-          OWNERID: "1453",
+          CONTENT: "go off queen",
+          TIMESTAMP: "2021-11-21 19:00:00",
+          POSTID: "4786",
+          USERID: "7485",
         }
       ]
     }
   },
   methods:{
     initTable(){
-      this.axios.get(`${this.$root.requestURL}/group/all`)
+      this.axios.get(`${this.$root.requestURL}/comment/all`)
           .then(({data: {result}}) => {
             this.tableValues = result;
           })
@@ -70,8 +80,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-  .groups {
+  .rowflex {
     display: flex;
     flex-direction: row;
     align-items: flex-start;

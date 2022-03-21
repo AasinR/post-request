@@ -23,6 +23,31 @@ const routes = [
     component: () => import('@/views/Register')
   },
   {
+    name: "Profile",
+    path: "/profile",
+    component: () => import('@/views/Profile')
+  },
+  {
+    name: "Friends",
+    path: "/friends",
+    component: () => import('@/views/Friends')
+  },
+  {
+    name: "Groups",
+    path: "/groups",
+    component: () => import('@/views/Groups')
+  },
+  {
+    name: "Messages",
+    path: "/messages",
+    component: () => import('@/views/Messages')
+  },
+  {
+    name: "Photos",
+    path: "/photos",
+    component: () => import('@/views/Photos')
+  },
+  {
     name: "Admin",
     path: "/admin",
     component: () => import('@/views/Admin'),
@@ -36,36 +61,41 @@ const routes = [
       {
         name: "AdminUsers",
         path: "users",
-        component: () => import('@/views/admin/Users'),
+        component: () => import('@/views/admin/AdminUsers'),
       },
       {
         name: "AdminPosts",
         path: "posts",
-        component: () => import('@/views/admin/Posts')
+        component: () => import('@/views/admin/AdminPosts')
       },
       {
         name: "AdminMessages",
         path: "messages",
-        component: () => import('@/views/admin/Messages')
+        component: () => import('@/views/admin/AdminMessages')
       },
       {
         name: "AdminGroups",
         path: "groups",
-        component: () => import('@/views/admin/Groups')
+        component: () => import('@/views/admin/AdminGroups')
       },
       {
         name: "AdminComments",
         path: "comments",
-        component: () => import('@/views/admin/Comments')
+        component: () => import('@/views/admin/AdminComments')
       },
       {
         name: "AdminAlbums",
         path: "albums",
-        component: () => import('@/views/admin/Albums')
+        component: () => import('@/views/admin/AdminAlbums')
       },
 
     ]
-  }
+  },
+  {
+    name: "Search",
+    path: "/search",
+    component: () => import('@/views/Search')
+  },
 ]
 
 const router = new VueRouter({

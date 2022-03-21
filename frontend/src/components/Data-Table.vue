@@ -26,7 +26,7 @@ export default {
 <style scoped lang="scss">
 .table{
   table{
-    width: 50vw;
+    width: 48.5vw;
     background-color: var(--light-bg-color);
     table-layout: fixed;
   }

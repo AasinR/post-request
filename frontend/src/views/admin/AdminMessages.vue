@@ -1,19 +1,23 @@
 <template>
-  <div class="messages">
-    <AdminNavbar current="messages"/>
-    <DataTable :table-headers="tableHeaders" :table-values="tableValues" />
+  <div class="admin-messages">
+    <div class="rowflex">
+      <AdminNavbar current="messages"/>
+      <DataTable :table-headers="tableHeaders" :table-values="tableValues" />
+    </div>
   </div>
 </template>
 
 <script>
 import DataTable from '@/components/Data-Table'
 import AdminNavbar from '@/components/Admin-Navbar'
+import Navbar from "@/components/Navbar";
 
 export default {
   name: "Messages",
   components: {
     DataTable,
     AdminNavbar,
+    Navbar,
   },
   data() {
     return {
@@ -77,7 +81,7 @@ export default {
 
 <style lang="scss" scoped>
 
-  .messages {
+  .rowflex {
     display: flex;
     flex-direction: row;
     align-items: flex-start;

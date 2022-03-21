@@ -1,17 +1,21 @@
 <template>
-  <div class="albums">
-    <AdminNavbar current="albums"/>
-    <DataTable :table-headers="tableHeaders" :table-values="tableValues" />
+  <div class="admin-albums">
+    <div class="rowflex">
+      <AdminNavbar current="albums"/>
+      <DataTable :table-headers="tableHeaders" :table-values="tableValues" />
+    </div>
   </div>
 </template>
 
 <script>
 import DataTable from '@/components/Data-Table'
 import AdminNavbar from '@/components/Admin-Navbar'
+import Navbar from "@/components/Navbar";
 
 export default {
   name: "Albums",
   components: {
+    Navbar,
     DataTable,
     AdminNavbar,
   },
@@ -65,11 +69,11 @@ export default {
 
 <style lang="scss" scoped>
 
-
-  .albums {
+  .rowflex {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
+
   }
 
 </style>

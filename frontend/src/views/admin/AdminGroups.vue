@@ -1,19 +1,23 @@
 <template>
-  <div class="posts">
-    <AdminNavbar current="posts"/>
-    <DataTable :table-headers="tableHeaders" :table-values="tableValues" />
+  <div class="admin-groups">
+    <div class="rowflex">
+      <AdminNavbar current="groups"/>
+      <DataTable :table-headers="tableHeaders" :table-values="tableValues" />
+    </div>
   </div>
 </template>
 
 <script>
 import DataTable from '@/components/Data-Table'
 import AdminNavbar from '@/components/Admin-Navbar'
+import Navbar from "@/components/Navbar";
 
 export default {
-  name: "Posts",
+  name: "Groups",
   components: {
     DataTable,
     AdminNavbar,
+    Navbar,
   },
   data() {
     return {
@@ -23,44 +27,38 @@ export default {
           key: "ID"
         },
         {
-          label: "Content",
-          key: "TEXT"
+          label: "Name",
+          key: "NAME"
         },
         {
-          label: "Time",
-          key: "TIMESTAMP"
+          label: "Logo",
+          key: "LOGO"
         },
         {
-          label: "Photo ID",
-          key: 'PICTURE'
-        },
-        {
-          label: "User ID",
-          key: "USERID"
+          label: "Owner ID",
+          key: 'OWNERID'
         },
 
       ],
       tableValues: [
         {
           ID: 1,
-          TEXT: "Heló beló",
-          TIMESTAMP: "2022-03-20 00:00:00",
-          PICTURE: "1234",
-          USERID: "1111",
+          NAME: "Flat Earthers",
+          LOGO: "",
+          OWNERID: "1212",
         },
         {
           ID: 2,
-          TEXT: "felt cute might delete later",
-          TIMESTAMP: "2022-02-20 12:00:00",
-          PICTURE: "1485",
-          USERID: "2525",
+          NAME: "The Cool Ones",
+          LOGO: "https://pamutlabor.hu/wp-content/uploads/2017/10/plab0003344-afeaturedimage-sand.jpg",
+          OWNERID: "1453",
         }
       ]
     }
   },
   methods:{
     initTable(){
-      this.axios.get(`${this.$root.requestURL}/post/all`)
+      this.axios.get(`${this.$root.requestURL}/group/all`)
           .then(({data: {result}}) => {
             this.tableValues = result;
           })
@@ -76,9 +74,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .posts {
+
+  .rowflex {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
   }
+
 </style>

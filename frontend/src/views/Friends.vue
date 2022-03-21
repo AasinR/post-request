@@ -1,34 +1,34 @@
 <template>
-  <div class="admin">
+  <div class="friends">
     <Header/>
-    <Navbar current="admin"/>
+    <Navbar current="friends"/>
     <div class="content">
-      <router-view></router-view>
+
+
+
     </div>
-	  <Footer/>
+    <Footer/>
   </div>
 </template>
 
 <script>
-
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
-import Navbar from "@/components/Navbar"
+import Header from "@/components/Header";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 export default {
-  name: "Admin",
+  name: "Friends",
   components: {
+    Header,
     Navbar,
     Footer,
-	  Header,
-  },
-
+  }
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 
-  .admin{
+  .friends{
     padding-top: 8vh;
     padding-bottom: 10vh;
     .content {

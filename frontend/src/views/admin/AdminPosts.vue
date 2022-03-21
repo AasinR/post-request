@@ -1,19 +1,23 @@
 <template>
-  <div class="comments">
-    <AdminNavbar current="comments"/>
-    <DataTable :table-headers="tableHeaders" :table-values="tableValues" />
+  <div class="admin-posts">
+    <div class="rowflex">
+      <AdminNavbar current="posts"/>
+      <DataTable :table-headers="tableHeaders" :table-values="tableValues" />
+    </div>
   </div>
 </template>
 
 <script>
 import DataTable from '@/components/Data-Table'
 import AdminNavbar from '@/components/Admin-Navbar'
+import Navbar from "@/components/Navbar";
 
 export default {
-  name: "Comments",
+  name: "Posts",
   components: {
     DataTable,
     AdminNavbar,
+    Navbar,
   },
   data() {
     return {
@@ -24,43 +28,43 @@ export default {
         },
         {
           label: "Content",
-          key: "CONTENT"
+          key: "TEXT"
         },
         {
           label: "Time",
           key: "TIMESTAMP"
         },
         {
-          label: "Post ID",
-          key: 'POSTID'
+          label: "Photo ID",
+          key: 'PICTURE'
         },
         {
           label: "User ID",
-          key: 'USERID'
+          key: "USERID"
         },
 
       ],
       tableValues: [
         {
           ID: 1,
-          CONTENT: "good post",
-          TIMESTAMP: "2021-05-01 15:00:00",
-          POSTID: "1212",
-          USERID: "5464",
+          TEXT: "Heló beló",
+          TIMESTAMP: "2022-03-20 00:00:00",
+          PICTURE: "1234",
+          USERID: "1111",
         },
         {
           ID: 2,
-          CONTENT: "go off queen",
-          TIMESTAMP: "2021-11-21 19:00:00",
-          POSTID: "4786",
-          USERID: "7485",
+          TEXT: "felt cute might delete later",
+          TIMESTAMP: "2022-02-20 12:00:00",
+          PICTURE: "1485",
+          USERID: "2525",
         }
       ]
     }
   },
   methods:{
     initTable(){
-      this.axios.get(`${this.$root.requestURL}/comment/all`)
+      this.axios.get(`${this.$root.requestURL}/post/all`)
           .then(({data: {result}}) => {
             this.tableValues = result;
           })
@@ -76,10 +80,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .comments {
+  .rowflex {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
   }
-
 </style>

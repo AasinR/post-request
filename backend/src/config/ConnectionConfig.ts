@@ -37,13 +37,33 @@ class DatabaseConfig {
             const result = await connection.execute(sql, [], {outFormat: db.OBJECT});
             return result;
         } catch(error) {
-            console.error(error)
+            console.error(error);
             return 500;
         } finally {
             try {
-                connection.close()
+                connection.close();
             } catch(closeError) {
-                console.log(closeError)
+                console.log(closeError);
+            }
+        }
+    }
+
+    async insert(sql: string) {
+        let connection;
+        try {
+            connection = await this.connect();
+            if(connection === null) {
+                throw new Error("Failed to connect to database!");
+            }
+            connection.execute(sql, [], {autoCommit: true});
+        } catch(error) {
+            console.log(error);
+            throw error;
+        } finally {
+            try {
+                connection.close();
+            } catch(closeError) {
+                console.log(closeError);
             }
         }
     }

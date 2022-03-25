@@ -10,8 +10,13 @@ import GroupRoutes from "./routes/GroupRoutes";
 import CommentRoutes from "./routes/CommentRoutes";
 import AlbumRoutes from "./routes/AlbumRoutes";
 
+import cors from "cors";
+import AuthRoutes from "./routes/AuthRoutes";
+
 const server = express();
 const inProd = EnvConfig.NODE_ENV === "production"
+
+server.use(cors())
 
 // use bodyParser to read post body
 server.use(bodyParser.urlencoded({ extended: true }));
@@ -30,28 +35,8 @@ server.use(session({
     }
 }))
 
-// test login
-server.post("/testPost", (req, res) => {
-    const { id, name } = req.body;
-    req.session.userId = id;
-    res.json({
-        "id": id,
-        "name": name,
-        "success": true
-    });
-})
-// logout test
-server.post("/testLogout", (req, res) => {
-    req.session.destroy(err => {
-        if(err) {
-            res.status(500).send("Login failed");
-        }
-        res.clearCookie(EnvConfig.SESSION_NAME);
-        res.status(200).send("Successful logout");
-    })
-})
-
 // add route to server
+server.use(AuthRoutes.Router);
 server.use("/user", UserRoutes.Router);
 server.use("/post", PostRoutes.Router);
 server.use("/message", MessageRoutes.Router);

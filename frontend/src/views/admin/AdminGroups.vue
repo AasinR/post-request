@@ -40,20 +40,7 @@ export default {
         },
 
       ],
-      tableValues: [
-        {
-          ID: 1,
-          NAME: "Flat Earthers",
-          LOGO: "",
-          OWNERID: "1212",
-        },
-        {
-          ID: 2,
-          NAME: "The Cool Ones",
-          LOGO: "https://pamutlabor.hu/wp-content/uploads/2017/10/plab0003344-afeaturedimage-sand.jpg",
-          OWNERID: "1453",
-        }
-      ]
+      tableValues: []
     }
   },
   methods:{

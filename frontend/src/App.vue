@@ -7,11 +7,13 @@
 <style lang="scss">
 @import url("style/colors.css");
 
-#app {
+body {
     margin: 0;
     padding: 0;
     color: var(--font-color);
     background-color: var(--dark-bg-color);
 }
+
+
 
 </style>

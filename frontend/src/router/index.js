@@ -79,9 +79,14 @@ const routes = [
         component: () => import('@/views/admin/AdminGroups')
       },
       {
-        name: "AdminComments",
-        path: "comments",
-        component: () => import('@/views/admin/AdminComments')
+        name: "AdminPublicComments",
+        path: "public-comments",
+        component: () => import('@/views/admin/AdminPublicComments')
+      },
+      {
+        name: "AdminGroupComments",
+        path: "group-comments",
+        component: () => import('@/views/admin/AdminGroupComments')
       },
       {
         name: "AdminAlbums",

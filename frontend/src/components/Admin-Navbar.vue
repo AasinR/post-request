@@ -13,7 +13,10 @@
       <router-link :class="current === 'groups' ? 'current' : ''" :to="{name: 'AdminGroups'}">Groups</router-link>
     </div>
     <div class="navbar-link">
-      <router-link :class="current === 'comments' ? 'current' : ''" :to="{name: 'AdminComments'}">Comments</router-link>
+      <router-link :class="current === 'public_comments' ? 'current' : ''" :to="{name: 'AdminPublicComments'}">Public Comments</router-link>
+    </div>
+    <div class="navbar-link">
+    <router-link :class="current === 'group_comments' ? 'current' : ''" :to="{name: 'AdminGroupComments'}">Group Comments</router-link>
     </div>
     <div class="navbar-link">
       <router-link :class="current === 'albums' ? 'current' : ''" :to="{name: 'AdminAlbums'}">Albums</router-link>
@@ -33,7 +36,8 @@ export default {
 <style scoped lang="scss">
 .admin-navbar{
   margin-bottom: 2%;
-  margin-right: 10%;
+  margin-right: 3%;
+  width: 20vh;
   .navbar-link {
     margin-bottom: 10%;
     a {

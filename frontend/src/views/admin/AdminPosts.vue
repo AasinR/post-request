@@ -44,22 +44,7 @@ export default {
         },
 
       ],
-      tableValues: [
-        {
-          ID: 1,
-          TEXT: "Heló beló",
-          TIMESTAMP: "2022-03-20 00:00:00",
-          PICTURE: "1234",
-          USERID: "1111",
-        },
-        {
-          ID: 2,
-          TEXT: "felt cute might delete later",
-          TIMESTAMP: "2022-02-20 12:00:00",
-          PICTURE: "1485",
-          USERID: "2525",
-        }
-      ]
+      tableValues: []
     }
   },
   methods:{

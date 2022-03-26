@@ -44,22 +44,7 @@ export default {
         },
 
       ],
-      tableValues: [
-        {
-          ID: 1,
-          CONTENT: "Hi hello love you",
-          TIMESTAMP: "2022-01-01 00:00:00",
-          TOUSER: "1234",
-          FROMUSER: "1111",
-        },
-        {
-          ID: 2,
-          CONTENT: "sliding into the dms",
-          TIMESTAMP: "2022-02-20 12:00:00",
-          TOUSER: "1485",
-          FROMUSER: "2525",
-        }
-      ]
+      tableValues: []
     }
   },
   methods:{

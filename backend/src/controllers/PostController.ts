@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import GroupPost from "../models/GroupPost";
 import ConnectionConfig from "../config/ConnectionConfig";
 import PublicPost from "../models/PublicPost";
 
@@ -8,7 +9,7 @@ class PostController {
     // create group post
 
     // get all public post
-    async findAll(req : Request, res : Response, next : NextFunction) {
+    async findAllPublic(req : Request, res : Response, next : NextFunction) {
         const FIND_ALL = 'SELECT * FROM publicpost'
         try {
             const query = await ConnectionConfig.query(FIND_ALL);
@@ -31,6 +32,27 @@ class PostController {
     }
 
     // get all group post
+    async findAllGroup(req : Request, res : Response, next : NextFunction) {
+        const FIND_ALL = 'SELECT * FROM GroupPost'
+        try {
+            const query = await ConnectionConfig.query(FIND_ALL);
+            const result: GroupPost[] = [];
+            query.rows.forEach((data: GroupPost) => {
+                result.push(data);
+            });
+            res.json({
+                "result": result
+            });
+        } catch(error) {
+            switch(error) {
+                case 500:
+                    res.sendStatus(500);
+                    break;
+                default:
+                    console.error(error);
+            }
+        }
+    }
 
     // get public post by ID
 

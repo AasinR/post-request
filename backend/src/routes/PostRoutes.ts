@@ -6,7 +6,8 @@ class PostRoutes {
 
     constructor() {
         this._Router = Router();
-        this._Router.get("/all", PostController.findAll);
+        this._Router.get("/public/all", PostController.findAllPublic);
+        this._Router.get("/group/all", PostController.findAllGroup);
     }
 
     get Router() {

@@ -10,18 +10,24 @@ class PostController {
     // get all public post
     async findAll(req : Request, res : Response, next : NextFunction) {
         const FIND_ALL = 'SELECT * FROM publicpost'
-        const query = await ConnectionConfig.query(FIND_ALL);
-        if(query === 500) {
-            res.sendStatus(500);
-            return;
+        try {
+            const query = await ConnectionConfig.query(FIND_ALL);
+            const result: PublicPost[] = [];
+            query.rows.forEach((data: PublicPost) => {
+                result.push(data);
+            });
+            res.json({
+                "result": result
+            });
+        } catch(error) {
+            switch(error) {
+                case 500:
+                    res.sendStatus(500);
+                    break;
+                default:
+                    console.error(error);
+            }
         }
-        const result: PublicPost[] = [];
-        query.rows.forEach((data: PublicPost) => {
-            result.push(data);
-        })
-        res.json({
-            "result": result
-        });
     }
 
     // get all group post

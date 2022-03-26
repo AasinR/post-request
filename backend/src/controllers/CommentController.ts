@@ -10,35 +10,47 @@ class CommentController {
     // get all public comments
     async findAllPublic(req : Request, res : Response, next : NextFunction) {
         const FIND_ALL = 'SELECT * FROM PublicComment';
-        const query = await ConnectionConfig.query(FIND_ALL);
-        if(query === 500) {
-            res.sendStatus(500);
-            return;
+        try {
+            const query = await ConnectionConfig.query(FIND_ALL);
+            const result: Comment[] = [];
+            query.rows.forEach((data: Comment) => {
+                result.push(data);
+            });
+            res.json({
+                "result": result
+            });
+        } catch(error) {
+            switch(error) {
+                case 500:
+                    res.sendStatus(500);
+                    break;
+                default:
+                    console.error(error);
+            }
         }
-        const result: Comment[] = [];
-        query.rows.forEach((data: Comment) => {
-            result.push(data);
-        })
-        res.json({
-            "result": result
-        });
     }
 
     // get all group comments
     async findAllGroup(req : Request, res : Response, next : NextFunction) {
         const FIND_ALL = 'SELECT * FROM GroupComment';
-        const query = await ConnectionConfig.query(FIND_ALL);
-        if(query === 500) {
-            res.sendStatus(500);
-            return;
+        try {
+            const query = await ConnectionConfig.query(FIND_ALL);
+            const result: Comment[] = [];
+            query.rows.forEach((data: Comment) => {
+                result.push(data);
+            });
+            res.json({
+                "result": result
+            });
+        } catch(error) {
+            switch(error) {
+                case 500:
+                    res.sendStatus(500);
+                    break;
+                default:
+                    console.error(error);
+            }
         }
-        const result: Comment[] = [];
-        query.rows.forEach((data: Comment) => {
-            result.push(data);
-        })
-        res.json({
-            "result": result
-        });
     }
 
     // get public comments by postID

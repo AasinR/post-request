@@ -8,18 +8,24 @@ class GroupController {
     // get all groups
     async findAll(req : Request, res : Response, next : NextFunction) {
         const FIND_ALL = 'SELECT * FROM "Group"';
-        const query = await ConnectionConfig.query(FIND_ALL);
-        if(query === 500) {
-            res.sendStatus(500);
-            return;
+        try {
+            const query = await ConnectionConfig.query(FIND_ALL);
+            const result: Group[] = [];
+            query.rows.forEach((data: Group) => {
+                result.push(data);
+            });
+            res.json({
+                "result": result
+            });
+        } catch(error) {
+            switch(error) {
+                case 500:
+                    res.sendStatus(500);
+                    break;
+                default:
+                    console.error(error);
+            }
         }
-        const result: Group[] = [];
-        query.rows.forEach((data: Group) => {
-            result.push(data);
-        })
-        res.json({
-            "result": result
-        });
     }
 
     // get group by ID

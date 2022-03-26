@@ -8,18 +8,24 @@ class AlbumController {
     // get all albums
     async findAll(req : Request, res : Response, next : NextFunction) {
         const FIND_ALL = 'SELECT * FROM MediaAlbum';
-        const query = await ConnectionConfig.query(FIND_ALL);
-        if(query === 500) {
-            res.sendStatus(500);
-            return;
+        try {
+            const query = await ConnectionConfig.query(FIND_ALL);
+            const result: MediaAlbum[] = [];
+            query.rows.forEach((data: MediaAlbum) => {
+                result.push(data);
+            });
+            res.json({
+                "result": result
+            });
+        } catch(error) {
+            switch(error) {
+                case 500:
+                    res.sendStatus(500);
+                    break;
+                default:
+                    console.error(error);
+            }
         }
-        const result: MediaAlbum[] = [];
-        query.rows.forEach((data: MediaAlbum) => {
-            result.push(data);
-        })
-        res.json({
-            "result": result
-        });
     }
 
     // get album by ID

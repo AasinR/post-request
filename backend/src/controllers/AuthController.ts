@@ -18,57 +18,77 @@ class AuthController {
 
         try {
             const query = await ConnectionConfig.query(FIND_ALL);
-            if(query === 500) {
-                res.sendStatus(500);
-                return;
-            }
             query.rows.forEach((data: User) => {
                 if(data.EMAIL === user.email) {
-                    res.status(500).send("Email is already in use!");
-                    return;
+                    throw 520;
                 }
             });
 
             ConnectionConfig.insert(INSERT_USER);
-            res.send("Successful registration!");
+            throw 200;
 
         } catch(error) {
-            console.log(error);
-            res.sendStatus(500);
+            switch(error) {
+                case 200:
+                    res.send("Success!");
+                    break;
+                case 500:
+                    res.sendStatus(500);
+                    break;
+                case 520:
+                    res.status(520).send("Email is already in use!");
+                    break;
+                default:
+                    console.log(error);
+                    break;
+            }
         }
     }
 
     // login
     async login(req : Request, res : Response, next : NextFunction) {
-        const user = {
+        const reqData = {
             email: req.body.email,
             password: req.body.password
         };
 
-        const FIND_ALL = 'SELECT * FROM "User"';
-        const query = await ConnectionConfig.query(FIND_ALL);
-        if(query === 500) {
-            res.sendStatus(500);
-            return;
-        }
-        query.rows.forEach((data: User) => {
-            if(data.EMAIL === user.email && data.PASSWORD === user.password) {
-                req.session.userId = data.ID;
-                return;
+        try {
+            const FIND_ALL = 'SELECT * FROM "User"';
+            const query = await ConnectionConfig.query(FIND_ALL);
+            query.rows.forEach((data: User) => {
+                if(data.EMAIL === reqData.email && data.PASSWORD === reqData.password) {
+                    req.session.userId = data.ID;
+                    throw 200;
+                }
+            });
+            throw 520;
+        } catch(error) {
+            switch(error) {
+                case 200:
+                    res.send("Success!");
+                    break;
+                case 500:
+                    res.sendStatus(500);
+                    break;
+                case 520:
+                    res.status(520).send("Invalid email or password!");
+                    break;
+                default:
+                    console.log(error);
+                    break;
             }
-        });
-        res.send("Invalid email or password!").status(500);
+
+        }
     }
 
     // logout
     logout(req : Request, res : Response, next : NextFunction) {
         req.session.destroy(err => {
             if(err) {
-                res.send("Failed to logout!").status(500);
-                return;
+                return res.status(500).send("Failed to logout!");
             }
             res.clearCookie(EnvConfig.SESSION_NAME);
-            res.send("User has logged out!").status(200);
+            res.send("User has logged out!");
         });
     }
 }

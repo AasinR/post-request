@@ -38,7 +38,7 @@ class DatabaseConfig {
             return result;
         } catch(error) {
             console.error(error);
-            return 500;
+            throw 500;
         } finally {
             try {
                 connection.close();

@@ -12,6 +12,7 @@ import AlbumRoutes from "./routes/AlbumRoutes";
 
 import cors from "cors";
 import AuthRoutes from "./routes/AuthRoutes";
+import UserDataRoutes from "./routes/UserDataRoutes";
 
 const server = express();
 const inProd = EnvConfig.NODE_ENV === "production"
@@ -43,6 +44,7 @@ server.use("/message", MessageRoutes.Router);
 server.use("/group", GroupRoutes.Router);
 server.use("/comment", CommentRoutes.Router);
 server.use("/album", AlbumRoutes.Router);
+server.use("/userdata", UserDataRoutes.Router);
 
 
 // start server

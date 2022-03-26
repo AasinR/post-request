@@ -58,96 +58,103 @@ export default {
 
 <style lang="scss" scoped>
 
-.login-form {
-  position: absolute;
-  top: 0;
-  right: 0;
-  height: 100vh;
-  width: 55%;
-  background-color: var(--light-bg-color);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-family: "Cambria",sans-serif;
+.login {
+  height: 100%;
 
-  .input-fields {
-    width: 40%;
-    border: solid 2px var(--ouline-color);
-    border-radius: 30px;
-    padding: 5% 5% 2% 5%;
-    font-size: 1.5rem;
+  .login-form {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: 55%;
+    background-color: var(--light-bg-color);
     display: flex;
     flex-direction: column;
     align-items: center;
-    box-shadow: 10px 10px var(--ouline-color);
+    font-family: "Cambria", sans-serif;
 
-    .input-group{
-      width: 100%;
-      margin: 5% 0 5% 0;
-      .input-field {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
-      input {
-        width: 95%;
-        font-size: 1.5rem;
-        margin-top: 2%;
-        padding: 3% 0 3% 3%;
-        border: none;
-        border-radius: 20px;
-      }
-    }
-
-    hr {
-      width: 100%;
-    }
-
-    .to-register-btn, .login-btn {
-      width: 100%;
+    .input-fields {
+      width: 40%;
+      border: solid 2px var(--ouline-color);
+      border-radius: 30px;
+      padding: 5% 5% 2% 5%;
+      font-size: 1.5rem;
       display: flex;
       flex-direction: column;
       align-items: center;
+      box-shadow: 10px 10px var(--ouline-color);
 
-      button {
-        margin-top: 3%;
-        margin-bottom: 5%;
-        font-size: 1.6rem;
-        height: 3.5rem;
-        background-color: var(--accent-color);
-        color: var(--font-color);
-        border: none;
-        border-radius: 20px;
-        font-weight: bold;
-        font-family: "Cambria",sans-serif;
-        &:hover {
-          cursor: pointer;
-          -webkit-filter: brightness(90%);
-          transition: all 100ms ease;
+      .input-group {
+        width: 100%;
+        margin: 5% 0 5% 0;
+
+        .input-field {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+
+        input {
+          width: 95%;
+          font-size: 1.5rem;
+          margin-top: 2%;
+          padding: 3% 0 3% 3%;
+          border: none;
+          border-radius: 20px;
         }
       }
-    }
 
-    .login-btn {
-      button {
+      hr {
+        width: 100%;
+      }
+
+      .to-register-btn, .login-btn {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        button {
+          margin-top: 3%;
+          margin-bottom: 5%;
+          font-size: 1.6rem;
+          height: 3.5rem;
+          background-color: var(--accent-color);
+          color: var(--font-color);
+          border: none;
+          border-radius: 20px;
+          font-weight: bold;
+          font-family: "Cambria", sans-serif;
+
+          &:hover {
+            cursor: pointer;
+            -webkit-filter: brightness(90%);
+            transition: all 100ms ease;
+          }
+        }
+      }
+
+      .login-btn {
+        button {
           width: 50%;
         }
-    }
-
-    .to-register-btn {
-      button {
-        width: 70%;
       }
+
+      .to-register-btn {
+        button {
+          width: 70%;
+        }
+      }
+
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-top: 15%;
+      margin-bottom: 10%
     }
 
   }
-
-  h1 {
-    font-size: 2.5rem;
-    margin-top: 25%;
-    margin-bottom: 15%
-  }
-
 }
 
 </style>

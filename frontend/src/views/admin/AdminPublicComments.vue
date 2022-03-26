@@ -1,7 +1,7 @@
 <template>
-  <div class="admin-albums">
+  <div class="admin-comments">
     <div class="rowflex">
-      <AdminNavbar current="albums"/>
+      <AdminNavbar current="public_comments"/>
       <DataTable :table-headers="tableHeaders" :table-values="tableValues" />
     </div>
   </div>
@@ -13,11 +13,11 @@ import AdminNavbar from '@/components/Admin-Navbar'
 import Navbar from "@/components/Navbar";
 
 export default {
-  name: "Albums",
+  name: "Comments",
   components: {
-    Navbar,
     DataTable,
     AdminNavbar,
+    Navbar,
   },
   data() {
     return {
@@ -27,12 +27,20 @@ export default {
           key: "ID"
         },
         {
-          label: "Name",
-          key: "NAME"
+          label: "Content",
+          key: "CONTENT"
+        },
+        {
+          label: "Time",
+          key: "TIMESTAMP"
+        },
+        {
+          label: "Post ID",
+          key: 'POSTID'
         },
         {
           label: "User ID",
-          key: "USERID"
+          key: 'USERID'
         },
 
       ],
@@ -41,7 +49,7 @@ export default {
   },
   methods:{
     initTable(){
-      this.axios.get(`${this.$root.requestURL}/album/all`)
+      this.axios.get(`${this.$root.requestURL}/comment/public/all`)
           .then(({data: {result}}) => {
             this.tableValues = result;
           })
@@ -57,12 +65,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-  .rowflex {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-
-  }
+.rowflex {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
 
 </style>

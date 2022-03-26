@@ -1,7 +1,7 @@
 <template>
   <div class="admin-comments">
     <div class="rowflex">
-      <AdminNavbar current="comments"/>
+      <AdminNavbar current="group_comments"/>
       <DataTable :table-headers="tableHeaders" :table-values="tableValues" />
     </div>
   </div>
@@ -44,27 +44,12 @@ export default {
         },
 
       ],
-      tableValues: [
-        {
-          ID: 1,
-          CONTENT: "good post",
-          TIMESTAMP: "2021-05-01 15:00:00",
-          POSTID: "1212",
-          USERID: "5464",
-        },
-        {
-          ID: 2,
-          CONTENT: "go off queen",
-          TIMESTAMP: "2021-11-21 19:00:00",
-          POSTID: "4786",
-          USERID: "7485",
-        }
-      ]
+      tableValues: []
     }
   },
   methods:{
     initTable(){
-      this.axios.get(`${this.$root.requestURL}/comment/all`)
+      this.axios.get(`${this.$root.requestURL}/comment/group/all`)
           .then(({data: {result}}) => {
             this.tableValues = result;
           })
@@ -80,10 +65,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .rowflex {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-  }
+.rowflex {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
 
 </style>

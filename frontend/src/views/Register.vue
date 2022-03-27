@@ -68,7 +68,7 @@
 <!--          </div>-->
 <!--        </div>-->
         <div class="register-btn">
-          <button type="submit">Sign up</button>
+          <button type="submit" @click="register">Sign up</button>
         </div>
         <div class="send-to-login">
           <p>
@@ -101,6 +101,22 @@ export default {
         // birthDate: '',
         // gender: 'male',
       },
+    }
+  },
+  methods: {
+    async register(){
+      try {
+        const result = await axios.post(`${this.$root.requestURL}/register`,{
+          firstname: this.inputData.firstName,
+          lastname: this.inputData.lastname,
+          email: this.inputData.email,
+          password: this.inputData.password,
+        })
+
+      } catch ({response: {data: { Msg }}}) {
+
+      }
+
     }
   },
 

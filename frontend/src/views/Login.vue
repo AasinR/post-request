@@ -19,7 +19,7 @@
           </div>
         </div>
         <div class="login-btn">
-          <button type="submit">Log in</button>
+          <button type="submit" @click="login">Log in</button>
         </div>
         <hr>
         <div class="to-register-btn">
@@ -51,6 +51,18 @@ export default {
   methods: {
     sendToRegister(){
       this.$router.replace({name: 'Register'});
+    },
+    async login(){
+      try {
+        const result = await axios.post(`${this.$root.requestURL}/login`,{
+          email: this.inputData.email,
+          password: this.inputData.password,
+        })
+
+      } catch ({response: {data: { Msg }}}) {
+
+      }
+
     }
   },
 }

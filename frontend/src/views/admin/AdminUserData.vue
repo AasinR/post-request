@@ -48,7 +48,7 @@ export default {
         },
         {
           label: "User ID",
-          key: "USERID "
+          key: "USERID"
         },
 
       ],

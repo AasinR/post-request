@@ -25,7 +25,19 @@
     <router-link :class="current === 'group_comments' ? 'current' : ''" :to="{name: 'AdminGroupComments'}">Group Comments</router-link>
     </div>
     <div class="navbar-link">
+      <router-link :class="current === 'pictures' ? 'current' : ''" :to="{name: 'AdminPictures'}">Pictures</router-link>
+    </div>
+    <div class="navbar-link">
       <router-link :class="current === 'albums' ? 'current' : ''" :to="{name: 'AdminAlbums'}">Albums</router-link>
+    </div>
+    <div class="navbar-link">
+      <router-link :class="current === 'friends' ? 'current' : ''" :to="{name: 'AdminFriends'}">Friends</router-link>
+    </div>
+    <div class="navbar-link">
+      <router-link :class="current === 'friend_requests' ? 'current' : ''" :to="{name: 'AdminFriendRequests'}">Friend Requests</router-link>
+    </div>
+    <div class="navbar-link">
+      <router-link :class="current === 'group_members' ? 'current' : ''" :to="{name: 'AdminGroupMembers'}">Group Members</router-link>
     </div>
   </div>
 </template>

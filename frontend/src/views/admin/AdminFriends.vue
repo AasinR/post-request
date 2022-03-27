@@ -1,0 +1,64 @@
+<template>
+  <div class="admin-friends">
+    <div class="rowflex">
+      <AdminNavbar current="friends"/>
+      <DataTable :table-headers="tableHeaders" :table-values="tableValues" />
+    </div>
+  </div>
+</template>
+
+<script>
+import DataTable from '@/components/Data-Table'
+import AdminNavbar from '@/components/Admin-Navbar'
+import Navbar from "@/components/Navbar";
+
+export default {
+  name: "Friends",
+  components: {
+    Navbar,
+    DataTable,
+    AdminNavbar,
+  },
+  data() {
+    return {
+      tableHeaders: [
+        {
+          label: "UserID 1",
+          key: "USERID1"
+        },
+        {
+          label: "UserID 2",
+          key: "USERID2"
+        },
+
+      ],
+      tableValues: []
+    }
+  },
+  methods:{
+    initTable(){
+      this.axios.get(`${this.$root.requestURL}/friends/all`)
+          .then(({data: {result}}) => {
+            this.tableValues = result;
+          })
+          .catch((error) => {
+            console.log('Hiba a lekereskor:' + error);
+          });
+    }
+  },
+  mounted() {
+    this.initTable();
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+
+.rowflex {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+
+}
+
+</style>

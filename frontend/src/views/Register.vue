@@ -106,14 +106,14 @@ export default {
   methods: {
     async register(){
       try {
-        const result = await axios.post(`${this.$root.requestURL}/register`,{
-          firstname: this.inputData.firstName,
-          lastname: this.inputData.lastname,
+        const result = await this.axios.post(`${this.$root.requestURL}/register`,{
+          firstName: this.inputData.firstName,
+          lastName: this.inputData.lastName,
           email: this.inputData.email,
           password: this.inputData.password,
         })
 
-      } catch ({response: {data: { Msg }}}) {
+      } catch (err) {
 
       }
 

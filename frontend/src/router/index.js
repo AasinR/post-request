@@ -99,9 +99,29 @@ const routes = [
         component: () => import('@/views/admin/AdminGroupComments')
       },
       {
+        name: "AdminPictures",
+        path: "pictures",
+        component: () => import('@/views/admin/AdminPictures')
+      },
+      {
         name: "AdminAlbums",
         path: "albums",
         component: () => import('@/views/admin/AdminAlbums')
+      },
+      {
+        name: "AdminFriends",
+        path: "friends",
+        component: () => import('@/views/admin/AdminFriends')
+      },
+      {
+        name: "AdminFriendRequests",
+        path: "friend-requests",
+        component: () => import('@/views/admin/AdminFriendRequests')
+      },
+      {
+        name: "AdminGroupMembers",
+        path: "group-members",
+        component: () => import('@/views/admin/AdminGroupMembers')
       },
 
     ]

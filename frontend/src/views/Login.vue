@@ -54,12 +54,12 @@ export default {
     },
     async login(){
       try {
-        const result = await axios.post(`${this.$root.requestURL}/login`,{
+        const result = await this.axios.post(`${this.$root.requestURL}/login`,{
           email: this.inputData.email,
           password: this.inputData.password,
         })
 
-      } catch ({response: {data: { Msg }}}) {
+      } catch (err) {
 
       }
 

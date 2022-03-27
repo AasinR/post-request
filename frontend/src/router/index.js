@@ -64,9 +64,19 @@ const routes = [
         component: () => import('@/views/admin/AdminUsers'),
       },
       {
-        name: "AdminPosts",
-        path: "posts",
-        component: () => import('@/views/admin/AdminPosts')
+        name: "AdminUserData",
+        path: "userdata",
+        component: () => import('@/views/admin/AdminUserData'),
+      },
+      {
+        name: "AdminPublicPosts",
+        path: "public-posts",
+        component: () => import('@/views/admin/AdminPublicPosts')
+      },
+      {
+        name: "AdminGroupPosts",
+        path: "group-posts",
+        component: () => import('@/views/admin/AdminGroupPosts')
       },
       {
         name: "AdminMessages",

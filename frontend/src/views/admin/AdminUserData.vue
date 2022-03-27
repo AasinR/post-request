@@ -1,7 +1,7 @@
 <template>
-  <div class="admin-posts">
+  <div class="admin-userdata">
     <div class="rowflex">
-      <AdminNavbar current="posts"/>
+      <AdminNavbar current="userdata"/>
       <DataTable :table-headers="tableHeaders" :table-values="tableValues" />
     </div>
   </div>
@@ -13,7 +13,7 @@ import AdminNavbar from '@/components/Admin-Navbar'
 import Navbar from "@/components/Navbar";
 
 export default {
-  name: "Posts",
+  name: "UserData",
   components: {
     DataTable,
     AdminNavbar,
@@ -27,20 +27,28 @@ export default {
           key: "ID"
         },
         {
-          label: "Content",
-          key: "TEXT"
+          label: "Gender",
+          key: "GENDER"
         },
         {
-          label: "Time",
-          key: "TIMESTAMP"
+          label: "Profile picture",
+          key: "PROFILEPICTURE"
         },
         {
-          label: "Photo ID",
-          key: 'PICTURE'
+          label: "Birthdate",
+          key: 'BIRTHDATE'
+        },
+        {
+          label: "Phone Number",
+          key: "PHONENUMBER"
+        },
+        {
+          label: "Profession",
+          key: "PROFESSION"
         },
         {
           label: "User ID",
-          key: "USERID"
+          key: "USERID "
         },
 
       ],
@@ -49,7 +57,7 @@ export default {
   },
   methods:{
     initTable(){
-      this.axios.get(`${this.$root.requestURL}/post/all`)
+      this.axios.get(`${this.$root.requestURL}/userdata/all`)
           .then(({data: {result}}) => {
             this.tableValues = result;
           })
@@ -65,9 +73,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .rowflex {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-  }
+.rowflex {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
 </style>

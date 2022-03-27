@@ -4,7 +4,13 @@
       <router-link :class="current === 'users' ? 'current' : ''" :to="{name: 'AdminUsers'}">Users</router-link>
     </div>
     <div class="navbar-link">
-      <router-link :class="current === 'posts' ? 'current' : ''" :to="{name: 'AdminPosts'}">Posts</router-link>
+      <router-link :class="current === 'userdata' ? 'current' : ''" :to="{name: 'AdminUserData'}">User Data</router-link>
+    </div>
+    <div class="navbar-link">
+      <router-link :class="current === 'public_posts' ? 'current' : ''" :to="{name: 'AdminPublicPosts'}">Public Posts</router-link>
+    </div>
+    <div class="navbar-link">
+      <router-link :class="current === 'group_posts' ? 'current' : ''" :to="{name: 'AdminGroupPosts'}">Group Posts</router-link>
     </div>
     <div class="navbar-link">
       <router-link :class="current === 'messages' ? 'current' : ''" :to="{name: 'AdminMessages'}">Messages</router-link>

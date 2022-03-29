@@ -18,7 +18,7 @@ class EnvConfig {
 
         const {
             NODE_ENV = "development",
-            SERVER_PORT = "8080",
+            SERVER_PORT = "5376",
             // session
             SESSION_LIFETIME = "86400000",
             SESSION_NAME="sid",

@@ -12,6 +12,7 @@ import GroupRoutes from "./routes/GroupRoutes";
 import CommentRoutes from "./routes/CommentRoutes";
 import AlbumRoutes from "./routes/AlbumRoutes";
 import AuthRoutes from "./routes/AuthRoutes";
+import TempRoutes from "./routes/TempRoute";
 
 const server = express();
 
@@ -45,6 +46,7 @@ server.use("/group", GroupRoutes.Router);
 server.use("/comment", CommentRoutes.Router);
 server.use("/album", AlbumRoutes.Router);
 server.use("/userdata", UserDataRoutes.Router);
+server.use(TempRoutes.Router);
 
 // start server
 server.listen(EnvConfig.SERVER_PORT, () => {

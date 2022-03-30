@@ -24,11 +24,11 @@ export default {
       tableHeaders: [
         {
           label: "UserID 1",
-          key: "USERID1"
+          key: "USER1"
         },
         {
           label: "UserID 2",
-          key: "USERID2"
+          key: "USER2"
         },
         {
           label: "Approved",

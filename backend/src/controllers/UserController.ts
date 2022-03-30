@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import ConnectionConfig from "../config/ConnectionConfig";
+import CloudConfig from "../config/CloudConfig";
 import User from "../models/User";
 
 class UserController {
@@ -25,6 +26,13 @@ class UserController {
                     console.error(error);
             }
         }
+    }
+
+    // upload profile picture
+    async uploadImg(req : Request, res : Response, next : NextFunction) {
+        console.log(req.file)
+        /* const link = await CloudConfig.upload(req.body.folder);
+        res.send(link); */
     }
 
     // get user by ID

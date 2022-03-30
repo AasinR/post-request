@@ -1,7 +1,7 @@
 <template>
   <div class="admin-group-posts">
     <div class="rowflex">
-      <AdminNavbar current="group-posts"/>
+      <AdminNavbar current="group_posts"/>
       <DataTable :table-headers="tableHeaders" :table-values="tableValues" />
     </div>
   </div>

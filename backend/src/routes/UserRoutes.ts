@@ -1,0 +1,25 @@
+import { Router } from "express";
+import UserController from "../controllers/UserController";
+import multer from "multer";
+
+class UserRoutes {
+    private _Router : Router;
+
+    constructor() {
+        const storage = multer.memoryStorage();
+        const upload = multer({
+            storage
+        });
+
+        this._Router = Router();
+
+        this._Router.get("/all", UserController.findAll);
+        this._Router.post("/img/upload", upload.single("image"), UserController.uploadImg);
+    }
+
+    get Router() {
+        return this._Router;
+    }
+}
+
+export default new UserRoutes();

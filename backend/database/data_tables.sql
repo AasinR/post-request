@@ -14,7 +14,7 @@ CREATE TABLE UserData (
     Gender VARCHAR2(6),
     ProfilePicture VARCHAR2(128),
     BirthDate DATE,
-    PhoneNumber NUMBER,
+    PhoneNumber VARCHAR2(32),
     Profession VARCHAR2(128),
     UserID NUMBER,
     CONSTRAINT pk_userData PRIMARY KEY (ID),

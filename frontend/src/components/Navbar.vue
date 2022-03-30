@@ -55,18 +55,18 @@ export default {
       display: flex;
       flex-direction: row;
       align-items: center;
-      width: 10rem;
-      height: 5rem;
+      width: 8rem;
+      height: 4rem;
 
       a {
         display: block;
         width: 100%;
         height: 100%;
-        font-size: 1.5rem;
+        font-size: 1.2rem;
         color: var(--font-color);
         text-decoration: none;
         text-align: center;
-        line-height: 5rem;
+        line-height: 4rem;
       }
 
       .current {

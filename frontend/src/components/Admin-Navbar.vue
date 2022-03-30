@@ -60,7 +60,7 @@ export default {
     margin-bottom: 10%;
     a {
       color: white;
-      font-size: 1.5rem;
+      font-size: 1rem;
       text-decoration: none;
 
       &:hover{

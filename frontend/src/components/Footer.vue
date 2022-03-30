@@ -31,7 +31,7 @@ export default {
 
     .names {
       color: grey;
-      font-size: 1rem;
+      font-size: 0.7rem;
       margin-right: 2%;
     }
 

@@ -14,6 +14,10 @@ body {
     background-color: var(--dark-bg-color);
 }
 
+html {
+  font-size: 16px;
+}
+
 
 
 </style>

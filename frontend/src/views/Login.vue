@@ -89,8 +89,8 @@ export default {
       width: 40%;
       border: solid 2px var(--ouline-color);
       border-radius: 30px;
-      padding: 5% 5% 2% 5%;
-      font-size: 1.5rem;
+      padding: 3% 5% 2% 5%;
+      font-size: 1.2rem;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -98,7 +98,7 @@ export default {
 
       .input-group {
         width: 100%;
-        margin: 5% 0 5% 0;
+        margin: 2% 0 2% 0;
 
         .input-field {
           display: flex;
@@ -108,9 +108,9 @@ export default {
 
         input {
           width: 95%;
-          font-size: 1.5rem;
+          font-size: 1rem;
           margin-top: 2%;
-          padding: 3% 0 3% 3%;
+          padding: 2% 2% 2% 3%;
           border: none;
           border-radius: 20px;
         }
@@ -127,8 +127,9 @@ export default {
         align-items: center;
 
         button {
-          margin-top: 3%;
-          margin-bottom: 5%;
+          width: 50%;
+          margin-top: 5%;
+          margin-bottom: 3%;
           font-size: 1.6rem;
           height: 3.5rem;
           background-color: var(--accent-color);
@@ -161,7 +162,7 @@ export default {
     }
 
     h1 {
-      font-size: 2.5rem;
+      font-size: 2rem;
       margin-top: 15%;
       margin-bottom: 10%
     }

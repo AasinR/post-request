@@ -7,6 +7,7 @@ class GroupRoutes {
     constructor() {
         this._Router = Router();
         this._Router.get("/all", GroupController.findAll);
+        this._Router.get("/member/all", GroupController.findAllMember);
     }
 
     get Router() {

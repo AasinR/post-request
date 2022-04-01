@@ -14,6 +14,8 @@ class UserRoutes {
         this._Router = Router();
 
         this._Router.get("/all", UserController.findAll);
+        this._Router.get("/data/all", UserController.findAllData);
+
         this._Router.post("/img/upload", upload.single("image"), UserController.uploadImg);
     }
 

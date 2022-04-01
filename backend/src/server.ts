@@ -5,14 +5,14 @@ import cors from "cors";
 
 import EnvConfig from "./config/EnvConfig";
 import UserRoutes from "./routes/UserRoutes"
-import UserDataRoutes from "./routes/UserDataRoutes";
 import PostRoutes from "./routes/PostRoutes";
 import MessageRoutes from "./routes/MessageRoutes";
 import GroupRoutes from "./routes/GroupRoutes";
 import CommentRoutes from "./routes/CommentRoutes";
 import AlbumRoutes from "./routes/AlbumRoutes";
 import AuthRoutes from "./routes/AuthRoutes";
-import TempRoutes from "./routes/TempRoute";
+import PictureRoutes from "./routes/PictureRoutes";
+import FriendRoutes from "./routes/FriendRoutes";
 
 const server = express();
 
@@ -41,15 +41,14 @@ server.use(session({
 server.use(AuthRoutes.Router);
 server.use("/user", UserRoutes.Router);
 server.use("/post", PostRoutes.Router);
+server.use("/img", PictureRoutes.Router);
 server.use("/message", MessageRoutes.Router);
 server.use("/group", GroupRoutes.Router);
+server.use("/friend", FriendRoutes.Router);
 server.use("/comment", CommentRoutes.Router);
 server.use("/album", AlbumRoutes.Router);
-server.use("/userdata", UserDataRoutes.Router);
-server.use(TempRoutes.Router);
 
 // start server
 server.listen(EnvConfig.SERVER_PORT, () => {
-    // tslint:disable-next-line:no-console
     console.log(`Server started at: http://localhost:${EnvConfig.SERVER_PORT}`);
 })

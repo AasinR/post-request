@@ -1,13 +1,13 @@
 import { Request, Response, NextFunction } from "express";
-import MessageDAO from "../dao/MessageDAO";
+import PictureDAO from "../dao/PictureDAO";
 
-class MessageController {
+class PictureController {
 
-    // get all messages
+    // get all pictures
     async findAll(req : Request, res : Response, next : NextFunction) {
         let result;
         try {
-            result = await MessageDAO.findAll();
+            result = await PictureDAO.findAll();
             if (result === null) {
                 throw new Error("Failed to execute query!");
             }
@@ -28,4 +28,4 @@ class MessageController {
     }
 }
 
-export default new MessageController();
+export default new PictureController();

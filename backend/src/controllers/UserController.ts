@@ -1,29 +1,54 @@
 import { Request, Response, NextFunction } from "express";
-import ConnectionConfig from "../config/ConnectionConfig";
+import UserDAO from "../dao/UserDAO";
+import UserDataDAO from "../dao/UserDataDAO";
 import CloudConfig from "../config/CloudConfig";
-import User from "../models/User";
 
 class UserController {
 
     // get all users
     async findAll(req : Request, res : Response, next : NextFunction) {
-        const FIND_ALL = 'SELECT * FROM "User"';
+        let result;
         try {
-            const query = await ConnectionConfig.query(FIND_ALL);
-            const result: User[] = [];
-            query.rows.forEach((data: User) => {
-                result.push(data);
-            });
-            res.json({
-                "result": result
-            });
-        } catch(error) {
-            switch(error) {
-                case 500:
-                    res.sendStatus(500);
+            result = await UserDAO.findAll();
+            if (result === null) {
+                throw new Error("Failed to execute query!");
+            }
+            throw 200;
+        } catch(status) {
+            switch(status) {
+                case 200:
+                    res.json({
+                        "result": result
+                    });
                     break;
                 default:
-                    console.error(error);
+                    res.sendStatus(500);
+                    console.error(status);
+                    break;
+            }
+        }
+    }
+
+    // get all user data
+    async findAllData(req : Request, res : Response, next : NextFunction) {
+        let result;
+        try {
+            result = await UserDataDAO.findAll();
+            if (result === null) {
+                throw new Error("Failed to execute query!");
+            }
+            throw 200;
+        } catch(status) {
+            switch(status) {
+                case 200:
+                    res.json({
+                        "result": result
+                    });
+                    break;
+                default:
+                    res.sendStatus(500);
+                    console.error(status);
+                    break;
             }
         }
     }
@@ -34,26 +59,6 @@ class UserController {
         /* const link = await CloudConfig.upload(req.body.folder);
         res.send(link); */
     }
-
-    // get user by ID
-
-    // get userData by userID
-
-    // update user and UserData by ID
-
-    // delete user by ID
-
-    // delete userData by userID
-
-    // get friends by ID
-
-    // get friend requests by ID
-
-    // add friend request
-
-    // update friend requests
-
-    // delete friend by ID
 }
 
 export default new UserController();

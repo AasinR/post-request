@@ -85,8 +85,18 @@ class CloudConfig {
     }
 
     // delete a file from google drive
-    delete() {
-        //
+    async delete(ID: string): Promise<string> {
+        const response = await this._drive.files.delete({
+            fileId: ID
+        });
+
+        switch(response.status) {
+            case 204:
+                return "File deleted!";
+            default:
+                console.error(response);
+                throw new Error("Failed to delete file!");
+        }
     }
 }
 

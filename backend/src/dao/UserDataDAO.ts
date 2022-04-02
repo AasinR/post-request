@@ -1,5 +1,6 @@
 import ConnectionConfig from "../config/ConnectionConfig";
 import UserData from "../models/UserData";
+import CloudConfig from "../config/CloudConfig";
 
 class UserDataDAO {
     // get all user data from database
@@ -57,6 +58,11 @@ class UserDataDAO {
             const rowExists = await this.getByUserID(userData.USERID);
             if (rowExists) {
                 profilepicture = profilepicture ? profilepicture : ((rowExists.PROFILEPICTURE) ? `'${rowExists.PROFILEPICTURE}'` : null);
+
+                if (profilepicture !== rowExists.PROFILEPICTURE) {
+                    const fileID = rowExists.PROFILEPICTURE.split("=")[2];
+                    CloudConfig.delete(fileID);
+                }
 
                 const UPDATE_DATA = `UPDATE userdata SET gender = ${gender}, profilepicture = ${profilepicture}, birthdate = ${birthdate}, phonenumber = ${phonenumber}, profession = ${profession} WHERE userid = ${userData.USERID}`;
 

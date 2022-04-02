@@ -64,10 +64,11 @@ class UserController {
         userData.PROFESSION = req.body.profession;
 
         const file = (req.file === undefined) ? null : req.file.buffer;
+        let link;
 
         try {
             if (file) {
-                const link = await CloudConfig.upload("user", file);
+                link = await CloudConfig.upload("user", file);
                 userData.PROFILEPICTURE = link;
             }
 
@@ -84,6 +85,9 @@ class UserController {
                 default:
                     res.sendStatus(500);
                     console.error(status);
+
+                    const fileID = link.split("=")[2]
+                    CloudConfig.delete(fileID)
                     break;
             }
         }

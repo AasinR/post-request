@@ -23,9 +23,10 @@ class UserDAO {
 
     // insert user
     async save(user: User): Promise<User> {
-        const INSERT_USER = `INSERT INTO "User" (password, email, permission, firstname, lastname) VALUES ('${user.PASSWORD}', '${user.EMAIL}', 0, '${user.FIRSTNAME}', '${user.LASTNAME}')`;
+        const INSERT_USER = `INSERT INTO "User" (password, email, permission, firstname, lastname) VALUES ('${user.PASSWORD}', '${user.EMAIL}', 0, '${user.FIRSTNAME}', '${user.LASTNAME}') RETURNING id INTO :id`;
         try {
-            ConnectionConfig.insert(INSERT_USER);
+            const result = await ConnectionConfig.modify(INSERT_USER, true);
+            user.ID = result;
             return user;
         } catch(error) {
             console.error(error);

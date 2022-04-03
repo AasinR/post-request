@@ -21,13 +21,65 @@ class UserDAO {
         }
     }
 
+    // get user by ID
+    async get(ID: number): Promise<User> {
+        const FIND_USER = `SELECT * FROM "User" WHERE id = ${ID}`;
+        try {
+            const query: {[k: string]: any} = await ConnectionConfig.query(FIND_USER);
+            if (query === null) {
+                throw new Error("Query failed!");
+            }
+            if (query.rows.length === 0) {
+                throw new Error("No data found!");
+            }
+            const result = new User();
+            result.ID = query.rows[0].ID;
+            result.PASSWORD = query.rows[0].PASSWORD;
+            result.EMAIL = query.rows[0].EMAIL;
+            result.PERMISSION = query.rows[0].PERMISSION;
+            result.FIRSTNAME = query.rows[0].FIRSTNAME;
+            result.LASTNAME = query.rows[0].LASTNAME;
+
+            return result;
+        } catch(error) {
+            console.error(error);
+            return null;
+        }
+    }
+
     // insert user
-    async save(user: User): Promise<User> {
+    async create(user: User): Promise<User> {
         const INSERT_USER = `INSERT INTO "User" (password, email, permission, firstname, lastname) VALUES ('${user.PASSWORD}', '${user.EMAIL}', 0, '${user.FIRSTNAME}', '${user.LASTNAME}') RETURNING id INTO :id`;
         try {
             const result = await ConnectionConfig.modify(INSERT_USER, true);
             user.ID = result;
             return user;
+        } catch(error) {
+            console.error(error);
+            return null;
+        }
+    }
+
+    // update user by ID;
+    async update(user: User): Promise<User> {
+        const UPDATE_USER = `UPDATE "User" SET password = '${user.PASSWORD}', email = '${user.EMAIL}', permission = '${user.PERMISSION}', firstname = '${user.FIRSTNAME}', lastname = '${user.LASTNAME}' WHERE id = ${user.ID}`;
+
+        try {
+            ConnectionConfig.modify(UPDATE_USER, false);
+            return user;
+        } catch(error) {
+            console.error(error);
+            return null;
+        }
+    }
+
+    // delete user by ID
+    async delete(ID: number): Promise<number> {
+        const DELETE_USER = `DELETE FROM "User" WHERE id = ${ID}`;
+
+        try {
+            ConnectionConfig.modify(DELETE_USER, false);
+            return ID;
         } catch(error) {
             console.error(error);
             return null;

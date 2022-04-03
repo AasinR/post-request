@@ -23,7 +23,7 @@ class AuthController {
                 }
             });
 
-            const result = UserDAO.save(user);
+            const result = UserDAO.create(user);
             if (result === null) {
                 throw new Error("Failed to save user!");
             }

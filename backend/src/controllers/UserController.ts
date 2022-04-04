@@ -7,14 +7,49 @@ import User from "../models/User";
 
 class UserController {
 
-    // get all users
+    // get all users (admin)
     async findAll(req : Request, res : Response, next : NextFunction) {
         let result;
         try {
             result = await UserDAO.findAll();
             if (result === null) {
-                throw new Error("Failed to execute query!");
+                throw new Error("Failed to get users!");
             }
+            throw 200;
+        } catch(status) {
+            switch(status) {
+                case 200:
+                    res.json({
+                        "result": result
+                    });
+                    break;
+                default:
+                    res.sendStatus(500);
+                    console.error(status);
+                    break;
+            }
+        }
+    }
+
+    // get all users (user)
+    async findAllUser(req : Request, res : Response, next : NextFunction) {
+        const result: {[k: string]: any}[] = [];
+
+        try {
+            const users = await UserDAO.findAll();
+            if (users === null) {
+                throw new Error("Failed to get users!");
+            }
+
+            users.forEach((data: User) => {
+                result.push({
+                    ID: data.ID,
+                    EMAIL: data.EMAIL,
+                    PERMISSION: data.PERMISSION,
+                    FIRSTNAME: data.FIRSTNAME,
+                    LASTNAME: data.LASTNAME
+                });
+            });
             throw 200;
         } catch(status) {
             switch(status) {
@@ -57,11 +92,20 @@ class UserController {
 
     // get user by ID
     async getUser(req : Request, res : Response, next : NextFunction) {
+        const id = parseInt(req.params.id, 10);
         let result;
+
         try {
-            result = await UserDAO.get(req.session.userId);
-            if (result === null) {
+            const user = await UserDAO.get(id);
+            if (user === null) {
                 throw new Error("Failed to execute query!");
+            }
+            result = {
+                ID: user.ID,
+                EMAIL: user.EMAIL,
+                PERMISSION: user.PERMISSION,
+                FIRSTNAME: user.FIRSTNAME,
+                LASTNAME: user.LASTNAME
             }
             throw 200;
         } catch(status) {
@@ -81,9 +125,11 @@ class UserController {
 
     // get user data by userID
     async getData(req : Request, res : Response, next : NextFunction) {
+        const id = parseInt(req.params.id, 10);
         let result;
+
         try {
-            result = await UserDataDAO.getByUserID(req.session.userId);
+            result = await UserDataDAO.getByUserID(id);
             if (result === null) {
                 throw new Error("Failed to execute query!");
             }

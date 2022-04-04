@@ -1,5 +1,6 @@
 import { Router } from "express";
 import AuthController from "../controllers/AuthController";
+import SessionController from "../controllers/SessionController";
 
 class AuthRoutes {
     private _Router: Router
@@ -11,7 +12,7 @@ class AuthRoutes {
 
         this._Router.post("/login", AuthController.login);
 
-        this._Router.get("/logout", AuthController.logout);
+        this._Router.get("/logout", SessionController.isUser, AuthController.logout);
     }
 
     get Router() {

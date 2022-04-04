@@ -67,7 +67,9 @@ class AuthController {
         } catch(status) {
             switch(status) {
                 case 200:
-                    res.status(200).send("User has logged in!");
+                    res.json({
+                        "UserID": req.session.userId
+                    });
                     break;
                 case 400:
                     res.status(400).send("Invalid email or password!");

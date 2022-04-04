@@ -17,7 +17,13 @@ import FriendRoutes from "./routes/FriendRoutes";
 const server = express();
 
 // allow Cross-Origin Resource Sharing
-server.use(cors());
+server.use(cors({
+    origin: [
+        EnvConfig.CLIENT_URL
+    ],
+    credentials: true,
+    exposedHeaders: ["set-cookie"]
+}));
 
 // use bodyParser to read post body
 server.use(bodyParser.urlencoded({ extended: true }));

@@ -16,6 +16,7 @@ class SessionConfig {
             name: EnvConfig.SESSION_NAME,
             resave: false,
             saveUninitialized: false,
+            unset: "destroy",
             secret: EnvConfig.SESSION_SECRET,
             cookie: {
                 maxAge: EnvConfig.SESSION_LIFETIME,

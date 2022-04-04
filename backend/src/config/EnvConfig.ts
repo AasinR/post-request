@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 class EnvConfig {
     private _NODE_ENV: string;
     private _SERVER_PORT: number;
+    private _CLIENT_URL: string;
     private _SESSION_LIFETIME: number;
     private _SESSION_NAME: string;
     private _SESSION_SECRET: string;
@@ -16,13 +17,20 @@ class EnvConfig {
     constructor() {
         dotenv.config();
 
+        // default env setting
         const {
+            // server
             NODE_ENV = "development",
             SERVER_PORT = "5376",
+
+            // client
+            CLIENT_URL = "http://localhost:8080",
+
             // session
             SESSION_LIFETIME = "86400000",
             SESSION_NAME="sid",
             SESSION_SECRET="I/have%no%idea%what%to%put/here",
+
             // database
             DB_HOST = "localhost",
             DB_PORT = "1521",
@@ -34,9 +42,13 @@ class EnvConfig {
 
         this._NODE_ENV = NODE_ENV;
         this._SERVER_PORT = parseInt(SERVER_PORT, 10);
+
+        this._CLIENT_URL = CLIENT_URL;
+
         this._SESSION_LIFETIME = parseInt(SESSION_LIFETIME, 10);
         this._SESSION_NAME = SESSION_NAME;
         this._SESSION_SECRET = SESSION_SECRET;
+
         this._DB_HOST = DB_HOST;
         this._DB_PORT = parseInt(DB_PORT, 10);
         this._DB_SID = DB_SID;
@@ -50,6 +62,9 @@ class EnvConfig {
     }
     get SERVER_PORT() {
         return this._SERVER_PORT;
+    }
+    get CLIENT_URL() {
+        return this._CLIENT_URL;
     }
     get SESSION_LIFETIME() {
         return this._SESSION_LIFETIME;

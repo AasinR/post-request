@@ -1,14 +1,14 @@
 import { Request, Response, NextFunction } from "express";
-import PublicCommentDAO from "../dao/PublicCommentDAO";
-import GroupCommentDAO from "../dao/GroupCommentDAO";
+import FriendsDAO from "../dao/FriendsDAO";
+import FriendRequestDAO from "../dao/FriendRequestDAO";
 
-class CommentController {
+class FriendController {
 
-    // get all public comments
-    async findAllPublic(req : Request, res : Response, next : NextFunction) {
+    // get all friends
+    async findAll(req : Request, res : Response, next : NextFunction) {
         let result;
         try {
-            result = await PublicCommentDAO.findAll();
+            result = await FriendsDAO.findAll();
             if (result === null) {
                 throw new Error("Failed to execute query!");
             }
@@ -28,11 +28,11 @@ class CommentController {
         }
     }
 
-    // get all group comments
-    async findAllGroup(req : Request, res : Response, next : NextFunction) {
+    // get all friend requests
+    async findAllRequest(req : Request, res : Response, next : NextFunction) {
         let result;
         try {
-            result = await GroupCommentDAO.findAll();
+            result = await FriendRequestDAO.findAll();
             if (result === null) {
                 throw new Error("Failed to execute query!");
             }
@@ -53,4 +53,4 @@ class CommentController {
     }
 }
 
-export default new CommentController();
+export default new FriendController();

@@ -38,32 +38,40 @@ class DatabaseConfig {
             return result;
         } catch(error) {
             console.error(error);
-            throw 500;
+            return null;
         } finally {
             try {
                 connection.close();
             } catch(closeError) {
-                console.log(closeError);
+                console.error(closeError);
             }
         }
     }
 
-    async insert(sql: string) {
+    async modify(sql: string, returnID: boolean): Promise<number> {
         let connection;
         try {
             connection = await this.connect();
             if(connection === null) {
                 throw new Error("Failed to connect to database!");
             }
-            connection.execute(sql, [], {autoCommit: true});
+            let result;
+            if (returnID) {
+                result = await connection.execute(sql, {id: {type: oracledb.NUMBER, dir: oracledb.BIND_OUT}}, {autoCommit: true});
+                const outBinds: {[k: string]: any} = result.outBinds;
+                return outBinds.id[0];
+            }
+            else {
+                await connection.execute(sql, [], {autoCommit: true});
+                return null;
+            }
         } catch(error) {
-            console.log(error);
-            throw error;
+            console.error(error);
         } finally {
             try {
                 connection.close();
             } catch(closeError) {
-                console.log(closeError);
+                console.error(closeError);
             }
         }
     }

@@ -1,13 +1,13 @@
 import { Router } from "express";
-import MessageController from "../controllers/MessageController";
+import PictureController from "../controllers/PictureController";
 import SessionController from "../controllers/SessionController";
 
-class MessageRoutes {
+class PictureRoutes {
     private _Router : Router;
 
     constructor() {
         this._Router = Router();
-        this._Router.get("/all", SessionController.isAdmin, MessageController.findAll);
+        this._Router.get("/all", SessionController.isAdmin, PictureController.findAll);
     }
 
     get Router() {
@@ -15,4 +15,4 @@ class MessageRoutes {
     }
 }
 
-export default new MessageRoutes();
+export default new PictureRoutes();

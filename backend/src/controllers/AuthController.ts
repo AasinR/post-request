@@ -1,45 +1,45 @@
 import { Request, Response, NextFunction } from "express";
-import ConnectionConfig from "../config/ConnectionConfig";
+import UserDAO from "../dao/UserDAO";
 import EnvConfig from "../config/EnvConfig";
 import User from "../models/User";
 
 class AuthController {
     // register
     async register(req : Request, res : Response, next : NextFunction) {
-        const user = {
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            email: req.body.email,
-            password: req.body.password
-        };
-
-        const FIND_ALL = 'SELECT * FROM "User"';
-        const INSERT_USER = `INSERT INTO "User" (password, email, permission, firstname, lastname) VALUES ('${user.password}', '${user.email}', 0, '${user.firstName}', '${user.lastName}')`;
+        const user = new User();
+        user.FIRSTNAME = req.body.firstName;
+        user.LASTNAME = req.body.lastName;
+        user.EMAIL = req.body.email;
+        user.PASSWORD = req.body.password;
 
         try {
-            const query = await ConnectionConfig.query(FIND_ALL);
-            query.rows.forEach((data: User) => {
-                if(data.EMAIL === user.email) {
-                    throw 520;
+            const users = await UserDAO.findAll();
+            if (users === null) {
+                throw new Error("Failed to execute query!");
+            }
+            users.forEach((data: User) => {
+                if(data.EMAIL === user.EMAIL) {
+                    throw 400;
                 }
             });
 
-            ConnectionConfig.insert(INSERT_USER);
+            const result = UserDAO.create(user);
+            if (result === null) {
+                throw new Error("Failed to save user!");
+            }
             throw 200;
 
         } catch(error) {
             switch(error) {
                 case 200:
-                    res.send("Success!");
+                    res.send("Successful registration!");
                     break;
-                case 500:
-                    res.sendStatus(500);
-                    break;
-                case 520:
-                    res.status(520).send("Email is already in use!");
+                case 400:
+                    res.status(400).send("Email is already in use!");
                     break;
                 default:
-                    console.log(error);
+                    res.sendStatus(500);
+                    console.error(error);
                     break;
             }
         }
@@ -53,31 +53,32 @@ class AuthController {
         };
 
         try {
-            const FIND_ALL = 'SELECT * FROM "User"';
-            const query = await ConnectionConfig.query(FIND_ALL);
-            query.rows.forEach((data: User) => {
+            const users = await UserDAO.findAll();
+            if (users === null) {
+                throw new Error("Failed to execute query!");
+            }
+            users.forEach((data: User) => {
                 if(data.EMAIL === reqData.email && data.PASSWORD === reqData.password) {
                     req.session.userId = data.ID;
                     throw 200;
                 }
             });
-            throw 520;
-        } catch(error) {
-            switch(error) {
+            throw 400;
+        } catch(status) {
+            switch(status) {
                 case 200:
-                    res.send("Success!");
+                    res.json({
+                        "UserID": req.session.userId
+                    });
                     break;
-                case 500:
-                    res.sendStatus(500);
-                    break;
-                case 520:
-                    res.status(520).send("Invalid email or password!");
+                case 400:
+                    res.status(400).send("Invalid email or password!");
                     break;
                 default:
-                    console.log(error);
+                    res.sendStatus(500);
+                    console.error(status);
                     break;
             }
-
         }
     }
 

@@ -53,12 +53,13 @@ export default {
   },
   methods:{
     initTable(){
-      this.axios.get(`${this.$root.requestURL}/user/all`)
+      this.axios.get(`${this.$root.requestURL}/user/all`, {withCredentials: true})
           .then(({data: {result}}) => {
             this.tableValues = result;
           })
           .catch((error) => {
-            console.log('Hiba a lekereskor:' + error);
+            console.log('Hiba a lekereskor:' + error.response.data);
+
           });
       }
     },

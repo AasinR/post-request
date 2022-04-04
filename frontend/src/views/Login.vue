@@ -54,13 +54,16 @@ export default {
     },
     async login(){
       try {
-        const result = await this.axios.post(`${this.$root.requestURL}/login`,{
+        const response = await this.axios.post(`${this.$root.requestURL}/login`,{
           email: this.inputData.email,
           password: this.inputData.password,
+        }, {
+          withCredentials: false
         })
-
+        //await this.$router.replace({name: 'Profile'});
+        console.log(response);
       } catch (err) {
-
+        console.log(err.response);
       }
 
     }

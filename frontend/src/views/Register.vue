@@ -6,6 +6,7 @@
         <h1>Registration</h1>
       </div>
       <div class="input-fields">
+        <p v-if="errorMsg">{{errorMsg}}</p>
         <div class="name-group">
           <div class="input-group firstname">
             <label for="firstname"> First name:</label> <br>
@@ -87,6 +88,9 @@
 import WelcomeBar from "@/components/Welcome-Bar";
 export default {
   name: "Register",
+  components: {
+    WelcomeBar
+  },
 
   data() {
     return {
@@ -101,28 +105,28 @@ export default {
         // birthDate: '',
         // gender: 'male',
       },
+
+      errorMsg: '',
     }
   },
   methods: {
     async register(){
       try {
-        const result = await this.axios.post(`${this.$root.requestURL}/register`,{
+        await this.axios.post(`${this.$root.requestURL}/register`,{
           firstName: this.inputData.firstName,
           lastName: this.inputData.lastName,
           email: this.inputData.email,
           password: this.inputData.password,
         })
-
+        await this.$router.replace({name: 'Login'});
       } catch (err) {
-
+        this.errorMsg = err.response.data;
+        console.log(err.response.data);
       }
 
-    }
+    },
   },
 
-  components: {
-    WelcomeBar
-  },
 }
 </script>
 

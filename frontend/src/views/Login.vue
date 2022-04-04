@@ -58,10 +58,10 @@ export default {
           email: this.inputData.email,
           password: this.inputData.password,
         }, {
-          withCredentials: false
+          //withCredentials: false
         })
-        //await this.$router.replace({name: 'Profile'});
-        console.log(response);
+        this.$cookies.set("UserID", response.data.UserID);
+        await this.$router.replace({name: 'Profile'});
       } catch (err) {
         console.log(err.response);
       }

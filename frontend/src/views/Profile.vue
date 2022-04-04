@@ -5,22 +5,21 @@
     <div class="content">
       <div class="profile-header">
         <div class="profile-picture-container">
-          <img class="profile-picture" :src="require(`@/assets/${userdata.profilePicture}.png`)" alt="profile picture"/>
+          <img class="profile-picture" src="@/assets/placeholder.png" alt="profile picture"/>
         </div>
         <div class="name-container">
           <p>{{user.firstName}} {{user.lastName}}</p>
         </div>
-        <button class="header-edit-btn" @click="editAbout">Edit</button>
+        <button class="header-edit-btn" @click="editProfile">Edit profile</button>
       </div>
       <div class="profile-content">
         <div class="about-container">
           <h2>About</h2>
           <p>Email: <span>{{user.email}}</span></p>
           <p>Date of birth: <span>{{userdata.birthDate}}</span></p>
-          <p>Gender: <span>{{userdata.gender === '1' ? "Male" : "Female"}}</span></p>
+          <p>Gender: <span>{{userdata.gender}}</span></p>
           <p>Phone number: <span>{{userdata.phoneNumber}}</span></p>
           <p>Workplace/school: <span>{{userdata.profession}}</span></p>
-          <button class="about-edit-btn" @click="editHeader">Edit</button>
         </div>
         <div class="posts-container">
           <div class="new-post">
@@ -52,16 +51,16 @@ export default {
   data() {
     return {
       user: {
-        firstName: 'Teszt',
-        lastName: 'Elek',
-        email: 'valaki@gmail.com',
+        firstName: '',
+        lastName: '',
+        email: '',
       },
       userdata: {
-        birthDate: '1969.04.20',
-        gender: '1',
-        phoneNumber: '+36204875222',
-        profession: 'Szegedi Tudományegyetem Programtervező Informatika Kar ',
-        profilePicture: 'placeholder',
+        birthDate: '',
+        gender: '',
+        phoneNumber: '',
+        profession: '',
+        profilePicture: '',
       },
 
       newPost: {
@@ -73,13 +72,43 @@ export default {
   },
 
   methods: {
-    editHeader(){
+    editProfile(){
 
     },
 
-    editAbout(){
+    initProfile(){
+      this.initUser();
+      this.initUserData();
+    },
+
+    async initUser(){
+      try {
+        const response = await this.axios.get(`${this.$root.requestURL}/user/get/${this.$cookies.get("UserID")}`);
+        this.user.firstName = response.data.result.FIRSTNAME;
+        this.user.lastName = response.data.result.LASTNAME;
+        this.user.email = response.data.result.EMAIL;
+      } catch (err) {
+        console.log(err.response.data);
+      }
 
     },
+
+    async initUserData(){
+      try {
+        const response = await this.axios.get(`${this.$root.requestURL}/user/data/get/${this.$cookies.get("UserID")}`);
+        this.userdata.birthDate = response.data.result.BIRTHDATE;
+        this.userdata.gender = response.data.result.GENDER;
+        this.userdata.phoneNumber = response.data.result.PHONENUMBER;
+        this.userdata.profession = response.data.result.PROFESSION;
+        this.userdata.profilePicture = response.data.result.PROFILEPICTURE;
+      } catch (err) {
+        console.log(err.response.data);
+      }
+    }
+  },
+
+  mounted() {
+    this.initProfile();
   }
 }
 </script>
@@ -181,29 +210,6 @@ export default {
             font-style: italic;
           }
         }
-
-        .about-edit-btn {
-          font-size: 20px;
-          line-height: 30px;
-          background-color: var(--accent-color);
-          color: var(--font-color);
-          border: none;
-          border-radius: 20px;
-          font-weight: bold;
-          font-family: "Cambria", sans-serif;
-          align-self: flex-end;
-          margin-left: auto;
-          margin-top: 5%;
-          padding-left: 9%;
-          padding-right: 9%;
-
-          &:hover {
-            cursor: pointer;
-            -webkit-filter: brightness(90%);
-            transition: all 100ms ease;
-          }
-        }
-
 
       }
 

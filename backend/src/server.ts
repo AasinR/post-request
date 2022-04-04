@@ -1,9 +1,9 @@
 import express from "express";
 import bodyParser from "body-parser";
-import session from "express-session";
 import cors from "cors";
 
 import EnvConfig from "./config/EnvConfig";
+import SessionConfig from "./config/SessionConfig";
 import UserRoutes from "./routes/UserRoutes"
 import PostRoutes from "./routes/PostRoutes";
 import MessageRoutes from "./routes/MessageRoutes";
@@ -24,18 +24,7 @@ server.use(bodyParser.urlencoded({ extended: true }));
 server.use(express.json());
 
 // setup session cookie
-const inProd = EnvConfig.NODE_ENV === "production";
-server.use(session({
-    name: EnvConfig.SESSION_NAME,
-    resave: false,
-    saveUninitialized: false,
-    secret: EnvConfig.SESSION_SECRET,
-    cookie: {
-        maxAge: EnvConfig.SESSION_LIFETIME,
-        sameSite: true,
-        secure: inProd
-    }
-}));
+server.use(SessionConfig.session);
 
 // add route to server
 server.use(AuthRoutes.Router);

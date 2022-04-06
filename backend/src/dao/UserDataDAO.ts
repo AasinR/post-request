@@ -27,6 +27,9 @@ class UserDataDAO {
         const FIND_DATA = `SELECT * FROM userdata WHERE userid = ${ID}`;
         try {
             const query: {[k: string]: any} = await ConnectionConfig.query(FIND_DATA);
+            if (query === null) {
+                throw Error("Query failed!");
+            }
             if (query.rows.length === 0) {
                 throw new Error("No data found!");
             }

@@ -21,6 +21,26 @@ class PictureDAO {
         }
     }
 
+    // get all image by userID
+    async getAll(ID: number): Promise<Picture[]> {
+        const GET_ALL = `SELECT * FROM publicpicture WHERE userid = ${ID}`;
+
+        try {
+            const query = await ConnectionConfig.query(GET_ALL);
+            if (query === null) {
+                throw new Error("Query failed!");
+            }
+            const result: Picture[] = [];
+            query.rows.forEach((data: Picture) => {
+                result.push(data);
+            });
+            return result;
+        } catch(error) {
+            console.error(error);
+            return null;
+        }
+    }
+
     // get picture by id
     async get(ID: number): Promise<Picture> {
         const GET_IMG = `SELECT * FROM publicpicture WHERE id = ${ID}`;

@@ -41,7 +41,7 @@ export default {
   },
   methods:{
     initTable(){
-      this.axios.get(`${this.$root.requestURL}/pictures/all`)
+      this.axios.get(`${this.$root.requestURL}/img/all`)
           .then(({data: {result}}) => {
             this.tableValues = result;
           })

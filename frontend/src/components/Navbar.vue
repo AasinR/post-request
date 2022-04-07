@@ -15,14 +15,14 @@
     <div class="navbar-link">
       <router-link :class="current === 'photos' ? 'current' : ''" :to="{name: 'Photos'}">Photos</router-link>
     </div>
-    <div class="navbar-link">
+    <div v-if=permission class="navbar-link">
       <router-link :class="current === 'admin' ? 'current' : ''" :to="{name: 'AdminUsers'}">Admin</router-link>
     </div>
     <div class="navbar-link right-align">
       <router-link :class="current === 'search' ? 'current' : ''" :to="{name: 'Search'}">Search</router-link>
     </div>
     <div class="navbar-link ">
-      <router-link :to="{name: ''}">Log out <img class="logout-icon" src="@/assets/logout.png" alt="logout.png"></router-link> <!--TODO-->
+      <router-link @click.native="logout" :to="{name: 'Login'}">Log out <img class="logout-icon" src="@/assets/logout.png" alt="logout.png"></router-link> <!--TODO-->
     </div>
   </div>
 </template>
@@ -32,6 +32,37 @@ export default {
   name: "Navbar",
   props: {
     current: String,
+  },
+  data() {
+    return {
+      permission: 0,
+    }
+  },
+  methods: {
+    async logout() {
+      try {
+        const response = await this.axios.get(`${this.$root.requestURL}/logout`);
+        this.$cookies.remove("UserID");
+        this.$cookies.remove("sid");
+
+        //console.log(response.data);
+      } catch (err) {
+        console.log(err.response.data);
+      }
+    },
+
+    async initPermission() {
+      try {
+        const response = await this.axios.get(`${this.$root.requestURL}/user/get/${this.$cookies.get("UserID")}`);
+        this.permission = response.data.result.PERMISSION;
+        //console.log(this.permission);
+      } catch (err) {
+        console.log(err.response.data);
+      }
+    },
+  },
+  mounted(){
+    this.initPermission();
   }
 }
 </script>

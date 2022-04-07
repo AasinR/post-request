@@ -6,6 +6,7 @@
         <h1>To use this website, you have to log in first!</h1>
       </div>
       <div class="input-fields">
+        <p class="error-message" v-if="errorMsg">{{errorMsg}}</p>
         <div class="input-group">
           <label for="email"> E-mail:</label> <br>
           <div class="input-field">
@@ -45,6 +46,7 @@ export default {
         email: '',
         password: '',
       },
+      errorMsg: '',
     }
   },
 
@@ -57,12 +59,11 @@ export default {
         const response = await this.axios.post(`${this.$root.requestURL}/login`,{
           email: this.inputData.email,
           password: this.inputData.password,
-        }, {
-          //withCredentials: false
         })
         this.$cookies.set("UserID", response.data.UserID);
         await this.$router.replace({name: 'Profile'});
       } catch (err) {
+        this.errorMsg = err.response.data;
         console.log(err.response);
       }
 
@@ -98,6 +99,12 @@ export default {
       flex-direction: column;
       align-items: center;
       box-shadow: 10px 10px var(--ouline-color);
+
+      .error-message {
+        color: var(--accent-color);
+        font-weight: bold;
+        margin-bottom: 2%;
+      }
 
       .input-group {
         width: 100%;

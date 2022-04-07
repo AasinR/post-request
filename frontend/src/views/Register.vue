@@ -6,7 +6,7 @@
         <h1>Registration</h1>
       </div>
       <div class="input-fields">
-        <p v-if="errorMsg">{{errorMsg}}</p>
+        <p class="error-message" v-if="errorMsg">{{errorMsg}}</p>
         <div class="name-group">
           <div class="input-group firstname">
             <label for="firstname"> First name:</label> <br>
@@ -111,20 +111,40 @@ export default {
   },
   methods: {
     async register(){
-      try {
-        await this.axios.post(`${this.$root.requestURL}/register`,{
-          firstName: this.inputData.firstName,
-          lastName: this.inputData.lastName,
-          email: this.inputData.email,
-          password: this.inputData.password,
-        })
-        await this.$router.replace({name: 'Login'});
-      } catch (err) {
-        this.errorMsg = err.response.data;
-        console.log(err.response.data);
+      if(this.areInputsValid === "OK") {
+        try {
+          await this.axios.post(`${this.$root.requestURL}/register`, {
+            firstName: this.inputData.firstName,
+            lastName: this.inputData.lastName,
+            email: this.inputData.email,
+            password: this.inputData.password,
+          })
+          await this.$router.replace({name: 'Login'});
+        } catch (err) {
+          this.errorMsg = err.response.data;
+          console.log(err.response.data);
+        }
+      } else {
+        this.errorMsg = this.areInputsValid;
       }
-
     },
+  },
+  computed: {
+    areInputsValid(){
+      if(this.inputData.firstName.trim() !== '' && this.inputData.lastName.trim() !== ''){
+        if(String(this.inputData.email).toLowerCase().match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)){
+          if(String(this.inputData.password).trim() !== '' && this.inputData.password === this.inputData.passwordAgain){
+            return "OK";
+          } else {
+            return "Invalid password!";
+          }
+        } else {
+          return "Invalid email!";
+        }
+      } else {
+        return "Please fill in the name fields!";
+      }
+    }
   },
 
 }
@@ -158,6 +178,12 @@ export default {
       flex-direction: column;
       align-items: center;
       box-shadow: 10px 10px var(--ouline-color);
+
+      .error-message {
+        color: var(--accent-color);
+        font-weight: bold;
+        margin-bottom: 2%;
+      }
 
       .input-group {
         width: 100%;

@@ -5,7 +5,7 @@
     <div class="content">
       <div class="profile-header">
         <div class="profile-picture-container">
-          <img class="profile-picture" src="@/assets/placeholder.png" alt="profile picture"/>
+          <img class="profile-picture" :src="userdata.profilePicture || require('@/assets/pfp-default.png')" alt="profile picture"/>
         </div>
         <div class="name-container">
           <p>{{user.firstName}} {{user.lastName}}</p>
@@ -15,11 +15,11 @@
       <div class="profile-content">
         <div class="about-container">
           <h2>About</h2>
-          <p>Email: <span>{{user.email}}</span></p>
-          <p>Date of birth: <span>{{userdata.birthDate}}</span></p>
-          <p>Gender: <span>{{userdata.gender}}</span></p>
-          <p>Phone number: <span>{{userdata.phoneNumber}}</span></p>
-          <p>Workplace/school: <span>{{userdata.profession}}</span></p>
+          <p>Email: <br> <span>{{user.email}}</span></p>
+          <p>Date of birth:<br> <span>{{userdata.birthDate}}</span></p>
+          <p>Gender:<br> <span>{{userdata.gender}}</span></p>
+          <p>Phone number:<br> <span>{{userdata.phoneNumber}}</span></p>
+          <p>Workplace/school:<br> <span>{{userdata.profession}}</span></p>
         </div>
         <div class="posts-container">
           <div class="new-post">
@@ -27,6 +27,7 @@
           </div>
           <div class="posts">
             <h2>Posts</h2>
+            <Post v-for="post in posts" :key="post.id" :post-data="post"></Post>
           </div>
         </div>
       </div>
@@ -39,6 +40,7 @@
 import Header from "@/components/Header";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import Post from "@/components/Post";
 
 export default {
   name: "Profile",
@@ -46,6 +48,7 @@ export default {
     Footer,
     Navbar,
     Header,
+    Post
   },
 
   data() {
@@ -67,13 +70,23 @@ export default {
         userID: '',
         content: '',
         image: '',
-      }
+      },
+
+      posts: [
+        {
+          id: 5,
+          text: "hello hello",
+          timestamp: "2002-03-07",
+          picture: "ittalink/holalink.png",
+          name: "Kis Béla"
+        }
+      ],
     }
   },
 
   methods: {
     editProfile(){
-
+      this.$router.replace({name: 'EditProfile'});
     },
 
     initProfile(){
@@ -96,7 +109,7 @@ export default {
     async initUserData(){
       try {
         const response = await this.axios.get(`${this.$root.requestURL}/user/data/get/${this.$cookies.get("UserID")}`);
-        this.userdata.birthDate = response.data.result.BIRTHDATE;
+        this.userdata.birthDate = (response.data.result.BIRTHDATE).substring(0, 10);
         this.userdata.gender = response.data.result.GENDER;
         this.userdata.phoneNumber = response.data.result.PHONENUMBER;
         this.userdata.profession = response.data.result.PROFESSION;

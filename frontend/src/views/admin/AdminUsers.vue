@@ -53,7 +53,7 @@ export default {
   },
   methods:{
     initTable(){
-      this.axios.get(`${this.$root.requestURL}/user/all`, {withCredentials: true})
+      this.axios.get(`${this.$root.requestURL}/user/all`)
           .then(({data: {result}}) => {
             this.tableValues = result;
           })

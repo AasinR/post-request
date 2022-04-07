@@ -49,7 +49,7 @@ class UserDAO {
 
     // insert user
     async create(user: User): Promise<User> {
-        const INSERT_USER = `INSERT INTO "User" (password, email, permission, firstname, lastname) VALUES ('${user.PASSWORD}', '${user.EMAIL}', 0, '${user.FIRSTNAME}', '${user.LASTNAME}') RETURNING id INTO :id`;
+        const INSERT_USER = `INSERT INTO "User" (password, email, permission, firstname, lastname) VALUES (q'[${user.PASSWORD}]', q'[${user.EMAIL}]', 0, q'[${user.FIRSTNAME}]', q'[${user.LASTNAME}]') RETURNING id INTO :id`;
         try {
             const result = await ConnectionConfig.modify(INSERT_USER, true);
             user.ID = result;
@@ -62,7 +62,7 @@ class UserDAO {
 
     // update user by ID;
     async update(user: User): Promise<User> {
-        const UPDATE_USER = `UPDATE "User" SET password = '${user.PASSWORD}', email = '${user.EMAIL}', permission = '${user.PERMISSION}', firstname = '${user.FIRSTNAME}', lastname = '${user.LASTNAME}' WHERE id = ${user.ID}`;
+        const UPDATE_USER = `UPDATE "User" SET password = q'[${user.PASSWORD}]', email = q'[${user.EMAIL}]', permission = '${user.PERMISSION}', firstname = q'[${user.FIRSTNAME}]', lastname = q'[${user.LASTNAME}]' WHERE id = ${user.ID}`;
 
         try {
             ConnectionConfig.modify(UPDATE_USER, false);

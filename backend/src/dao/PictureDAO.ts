@@ -41,6 +41,26 @@ class PictureDAO {
         }
     }
 
+    // get all picture by albumID
+    async getAlbum(ID: number): Promise<Picture[]> {
+        const GET_ALBUM = `SELECT * FROM publicpicture WHERE albumid = ${ID}`;
+
+        try {
+            const query = await ConnectionConfig.query(GET_ALBUM);
+            if (query === null) {
+                throw new Error("Query failed!");
+            }
+            const result: Picture[] = [];
+            query.rows.forEach((data: Picture) => {
+                result.push(data);
+            });
+            return result;
+        } catch(error) {
+            console.error(error);
+            return null;
+        }
+    }
+
     // get picture by id
     async get(ID: number): Promise<Picture> {
         const GET_IMG = `SELECT * FROM publicpicture WHERE id = ${ID}`;

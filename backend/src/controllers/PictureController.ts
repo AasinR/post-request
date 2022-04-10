@@ -56,6 +56,32 @@ class PictureController {
         }
     }
 
+    // get all image by albumID
+    async getAlbum(req : Request, res : Response, next : NextFunction) {
+        const albumId = parseInt(req.params.id, 10);
+        let result;
+
+        try {
+            result = await PictureDAO.getAlbum(albumId);
+            if (result === null) {
+                throw new Error("Failed to execute query!");
+            }
+            throw 200;
+        } catch(status) {
+            switch(status) {
+                case 200:
+                    res.json({
+                        "result": result
+                    });
+                    break;
+                default:
+                    res.sendStatus(500);
+                    console.error(status);
+                    break;
+            }
+        }
+    }
+
     // get image by ID
     async get(req : Request, res : Response, next : NextFunction) {
         const imgId = parseInt(req.params.id, 10);

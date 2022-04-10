@@ -150,7 +150,9 @@ class PostController {
                 TEXT: post.TEXT,
                 TIMESTAMP: post.TIMESTAMP,
                 PICTURE: link,
-                USERID: post.USERID
+                FIRSTNAME: post.FIRSTNAME,
+                LASTNAME: post.LASTNAME,
+                PROFILEPICTURE: post.PROFILEPICTURE
             }
             throw 200;
         } catch(status) {
@@ -183,7 +185,9 @@ class PostController {
                 TEXT: post.TEXT,
                 TIMESTAMP: post.TIMESTAMP,
                 PICTURE: post.PICTURE,
-                USERID: post.USERID,
+                FIRSTNAME: post.FIRSTNAME,
+                LASTNAME: post.LASTNAME,
+                PROFILEPICTURE: post.PROFILEPICTURE,
                 GROUPID: post.GROUPID
             }
             throw 200;

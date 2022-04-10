@@ -22,17 +22,32 @@ class PublicPostDAO {
     }
 
     // get all public post by userId
-    async getAll(ID: number): Promise<PublicPost[]> {
-        const GET_ALL = `SELECT * FROM publicpost WHERE userid = ${ID}`;
+    async getAll(ID: number): Promise<{[k: string]: any}[]> {
+        const GET_ALL =
+            "SELECT PublicPost.ID, PublicPost.TEXT, PublicPost.TIMESTAMP, PublicPost.PICTURE, \"User\".FIRSTNAME, \"User\".LASTNAME, UserData.PROFILEPICTURE "+
+            "FROM PublicPost, \"User\", UserData "+
+            "WHERE PublicPost.USERID = \"User\".ID AND \"User\".ID = UserData.USERID AND "+
+                `PublicPost.USERID = ${ID} `+
+            "ORDER BY PublicPost.TIMESTAMP";
 
         try {
             const query = await ConnectionConfig.query(GET_ALL);
             if (query === null) {
                 throw new Error("Query failed!");
             }
-            const result: PublicPost[] = [];
-            query.rows.forEach((data: PublicPost) => {
-                result.push(data);
+            const result: {[k: string]: any}[] = [];
+            query.rows.forEach((data: {[k: string]: any}) => {
+                const post = {
+                    ID: data.ID,
+                    TEXT: data.TEXT,
+                    TIMESTAMP: data.TIMESTAMP,
+                    PICTURE: data.PICTURE,
+                    FIRSTNAME: data.FIRSTNAME,
+                    LASTNAME: data.LASTNAME,
+                    PROFILEPICTURE: data.PROFILEPICTURE
+                };
+
+                result.push(post);
             });
             return result;
         } catch(error) {
@@ -42,8 +57,12 @@ class PublicPostDAO {
     }
 
     // get public post by id
-    async get(ID: number): Promise<PublicPost> {
-        const GET_POST = `SELECT * FROM publicpost WHERE id = ${ID}`;
+    async get(ID: number): Promise<{[k: string]: any}> {
+        const GET_POST =
+            "SELECT PublicPost.ID, PublicPost.TEXT, PublicPost.TIMESTAMP, PublicPost.PICTURE, \"User\".FIRSTNAME, \"User\".LASTNAME, UserData.PROFILEPICTURE "+
+            "FROM PublicPost, \"User\", UserData "+
+            "WHERE PublicPost.USERID = \"User\".ID AND \"User\".ID = UserData.USERID AND "+
+                `PublicPost.ID = ${ID} `;
 
         try {
             const query: {[k: string]: any} = await ConnectionConfig.query(GET_POST);
@@ -53,12 +72,15 @@ class PublicPostDAO {
             if (query.rows.length === 0) {
                 throw new Error("No data found!");
             }
-            const result = new PublicPost();
-            result.ID = query.rows[0].ID;
-            result.TEXT = query.rows[0].TEXT;
-            result.TIMESTAMP = query.rows[0].TIMESTAMP;
-            result.PICTURE = query.rows[0].PICTURE;
-            result.USERID = query.rows[0].USERID;
+            const result = {
+                ID: query.rows[0].ID,
+                TEXT: query.rows[0].TEXT,
+                TIMESTAMP: query.rows[0].TIMESTAMP,
+                PICTURE: query.rows[0].PICTURE,
+                FIRSTNAME: query.rows[0].FIRSTNAME,
+                LASTNAME: query.rows[0].LASTNAME,
+                PROFILEPICTURE: query.rows[0].PROFILEPICTURE
+            };
 
             return result;
         } catch(error) {

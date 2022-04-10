@@ -22,17 +22,33 @@ class GroupPostDAO {
     }
 
     // get all group post by groupId
-    async getAll(ID: number): Promise<GroupPost[]> {
-        const GET_ALL = `SELECT * FROM grouppost WHERE groupid = ${ID}`;
+    async getAll(ID: number): Promise<{[k: string]: any}[]> {
+        const GET_ALL =
+            "SELECT GroupPost.ID, GroupPost.TEXT, GroupPost.TIMESTAMP, GroupPost.PICTURE, \"User\".FIRSTNAME, \"User\".LASTNAME, UserData.PROFILEPICTURE "+
+            "FROM GroupPost, \"User\", UserData "+
+            "WHERE GroupPost.USERID = \"User\".ID AND \"User\".ID = UserData.USERID AND "+
+                `GroupPost.GROUPID = ${ID} `+
+            "ORDER BY GroupPost.TIMESTAMP";
 
         try {
             const query = await ConnectionConfig.query(GET_ALL);
             if (query === null) {
                 throw new Error("Query failed!");
             }
-            const result: GroupPost[] = [];
-            query.rows.forEach((data: GroupPost) => {
-                result.push(data);
+            const result: {[k: string]: any}[] = [];
+            query.rows.forEach((data: {[k: string]: any}) => {
+                const post = {
+                    ID: data.ID,
+                    TEXT: data.TEXT,
+                    TIMESTAMP: data.TIMESTAMP,
+                    PICTURE: data.PICTURE,
+                    FIRSTNAME: data.FIRSTNAME,
+                    LASTNAME: data.LASTNAME,
+                    PROFILEPICTURE: data.PROFILEPICTURE,
+                    GROUPID: data.GROUPID
+                };
+
+                result.push(post);
             });
             return result;
         } catch(error) {
@@ -42,8 +58,12 @@ class GroupPostDAO {
     }
 
     // get group post by id
-    async get(ID: number): Promise<GroupPost> {
-        const GET_POST = `SELECT * FROM grouppost WHERE id = ${ID}`;
+    async get(ID: number): Promise<{[k: string]: any}> {
+        const GET_POST =
+            "SELECT GroupPost.ID, GroupPost.TEXT, GroupPost.TIMESTAMP, GroupPost.PICTURE, \"User\".FIRSTNAME, \"User\".LASTNAME, UserData.PROFILEPICTURE "+
+            "FROM GroupPost, \"User\", UserData "+
+            "WHERE GroupPost.USERID = \"User\".ID AND \"User\".ID = UserData.USERID AND "+
+                `GroupPost.ID = ${ID} `;
 
         try {
             const query: {[k: string]: any} = await ConnectionConfig.query(GET_POST);
@@ -53,13 +73,16 @@ class GroupPostDAO {
             if (query.rows.length === 0) {
                 throw new Error("No data found!");
             }
-            const result = new GroupPost();
-            result.ID = query.rows[0].ID;
-            result.TEXT = query.rows[0].TEXT;
-            result.TIMESTAMP = query.rows[0].TIMESTAMP;
-            result.PICTURE = query.rows[0].PICTURE;
-            result.USERID = query.rows[0].USERID;
-            result.GROUPID = query.rows[0].GROUPID;
+            const result = {
+                ID: query.rows[0].ID,
+                TEXT: query.rows[0].TEXT,
+                TIMESTAMP: query.rows[0].TIMESTAMP,
+                PICTURE: query.rows[0].PICTURE,
+                FIRSTNAME: query.rows[0].FIRSTNAME,
+                LASTNAME: query.rows[0].LASTNAME,
+                PROFILEPICTURE: query.rows[0].PROFILEPICTURE,
+                GROUPID: query.rows[0].GROUPID
+            };
 
             return result;
         } catch(error) {

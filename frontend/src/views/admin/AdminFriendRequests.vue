@@ -41,7 +41,7 @@ export default {
   },
   methods:{
     initTable(){
-      this.axios.get(`${this.$root.requestURL}/friendrequests/all`)
+      this.axios.get(`${this.$root.requestURL}/friend/request/all`)
           .then(({data: {result}}) => {
             this.tableValues = result;
           })

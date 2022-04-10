@@ -131,6 +131,11 @@ const routes = [
     path: "/search",
     component: () => import('@/views/Search')
   },
+  {
+    name: "EditProfile",
+    path: "/edit-profile",
+    component: () => import('@/views/edit/EditProfile')
+  },
 ]
 
 const router = new VueRouter({
@@ -138,5 +143,14 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+
+/*const isAuthenticated = function (){
+  return nextTick(vm => vm.$cookies.get('sid') !== null ||  vm.$cookies.get('sid') !== undefined);
+}
+
+router.beforeEach((to, from, next) => {
+  if (to.name !== 'Login' && !isAuthenticated) next({ name: 'Login' })
+  else next()
+})*/
 
 export default router

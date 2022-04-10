@@ -27,6 +27,9 @@ class UserDataDAO {
         const FIND_DATA = `SELECT * FROM userdata WHERE userid = ${ID}`;
         try {
             const query: {[k: string]: any} = await ConnectionConfig.query(FIND_DATA);
+            if (query === null) {
+                throw Error("Query failed!");
+            }
             if (query.rows.length === 0) {
                 throw new Error("No data found!");
             }
@@ -50,8 +53,8 @@ class UserDataDAO {
     async save(userData: UserData): Promise<UserData> {
         const gender = userData.GENDER ? `'${userData.GENDER}'` : null;
         const birthdate = userData.BIRTHDATE ? `TO_DATE('${userData.BIRTHDATE}', 'yyyy/mm/dd')` : null;
-        const phonenumber = userData.PHONENUMBER ? `'${userData.PHONENUMBER}'` : null;
-        const profession = userData.PROFESSION ? `'${userData.PROFESSION}'` : null;
+        const phonenumber = userData.PHONENUMBER ? `q'[${userData.PHONENUMBER}]'` : null;
+        const profession = userData.PROFESSION ? `q'[${userData.PROFESSION}]'` : null;
         let profilepicture = userData.PROFILEPICTURE ? `'${userData.PROFILEPICTURE}'` : null;
 
         try {

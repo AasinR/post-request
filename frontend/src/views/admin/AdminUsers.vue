@@ -58,7 +58,8 @@ export default {
             this.tableValues = result;
           })
           .catch((error) => {
-            console.log('Hiba a lekereskor:' + error);
+            console.log('Hiba a lekereskor:' + error.response.data);
+
           });
       }
     },

@@ -13,3 +13,11 @@ WHERE GroupPost.USERID = "User".ID AND
     "User".ID = UserData.USERID AND
     GroupPost.GROUPID = 1000
 ORDER BY GroupPost.TIMESTAMP;
+
+-- get all group by userID
+SELECT GroupMembers.GROUPID, GroupMembers.USERID, "Group".NAME, "Group".LOGO, "Group".OWNERID, "User".FIRSTNAME, "User".LASTNAME, UserData.PROFILEPICTURE
+FROM GroupMembers, "Group", "User", USERDATA
+WHERE GroupMembers.GROUPID = "Group".ID AND
+    GroupMembers.USERID = "User".ID AND
+    "User".ID = UserData.USERID AND
+    GroupMembers.USERID = 1003;

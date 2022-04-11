@@ -28,7 +28,7 @@ class PublicPostDAO {
             "FROM PublicPost, \"User\", UserData "+
             "WHERE PublicPost.USERID = \"User\".ID AND \"User\".ID = UserData.USERID AND "+
                 `PublicPost.USERID = ${ID} `+
-            "ORDER BY PublicPost.TIMESTAMP";
+            "ORDER BY PublicPost.TIMESTAMP DESC";
 
         try {
             const query = await ConnectionConfig.query(GET_ALL);

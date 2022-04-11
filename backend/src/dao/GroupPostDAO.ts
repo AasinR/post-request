@@ -28,7 +28,7 @@ class GroupPostDAO {
             "FROM GroupPost, \"User\", UserData "+
             "WHERE GroupPost.USERID = \"User\".ID AND \"User\".ID = UserData.USERID AND "+
                 `GroupPost.GROUPID = ${ID} `+
-            "ORDER BY GroupPost.TIMESTAMP";
+            "ORDER BY GroupPost.TIMESTAMP DESC";
 
         try {
             const query = await ConnectionConfig.query(GET_ALL);

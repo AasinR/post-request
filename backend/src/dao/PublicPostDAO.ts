@@ -24,7 +24,7 @@ class PublicPostDAO {
     // get all public post by userId
     async getAll(ID: number): Promise<{[k: string]: any}[]> {
         const GET_ALL =
-            "SELECT PublicPost.ID, PublicPost.TEXT, PublicPost.TIMESTAMP, PublicPost.PICTURE, \"User\".FIRSTNAME, \"User\".LASTNAME, UserData.PROFILEPICTURE "+
+            "SELECT PublicPost.ID, PublicPost.TEXT, PublicPost.TIMESTAMP, PublicPost.PICTURE, \"User\".ID, \"User\".FIRSTNAME, \"User\".LASTNAME, UserData.PROFILEPICTURE "+
             "FROM PublicPost, \"User\", UserData "+
             "WHERE PublicPost.USERID = \"User\".ID AND \"User\".ID = UserData.USERID AND "+
                 `PublicPost.USERID = ${ID} `+
@@ -42,9 +42,12 @@ class PublicPostDAO {
                     TEXT: data.TEXT,
                     TIMESTAMP: data.TIMESTAMP,
                     PICTURE: data.PICTURE,
-                    FIRSTNAME: data.FIRSTNAME,
-                    LASTNAME: data.LASTNAME,
-                    PROFILEPICTURE: data.PROFILEPICTURE
+                    USER: {
+                        ID: data.ID_1,
+                        FIRSTNAME: data.FIRSTNAME,
+                        LASTNAME: data.LASTNAME,
+                        PROFILEPICTURE: data.PROFILEPICTURE
+                    }
                 };
 
                 result.push(post);
@@ -59,7 +62,7 @@ class PublicPostDAO {
     // get public post by id
     async get(ID: number): Promise<{[k: string]: any}> {
         const GET_POST =
-            "SELECT PublicPost.ID, PublicPost.TEXT, PublicPost.TIMESTAMP, PublicPost.PICTURE, \"User\".FIRSTNAME, \"User\".LASTNAME, UserData.PROFILEPICTURE "+
+            "SELECT PublicPost.ID, PublicPost.TEXT, PublicPost.TIMESTAMP, PublicPost.PICTURE, \"User\".ID, \"User\".FIRSTNAME, \"User\".LASTNAME, UserData.PROFILEPICTURE "+
             "FROM PublicPost, \"User\", UserData "+
             "WHERE PublicPost.USERID = \"User\".ID AND \"User\".ID = UserData.USERID AND "+
                 `PublicPost.ID = ${ID} `;
@@ -77,9 +80,12 @@ class PublicPostDAO {
                 TEXT: query.rows[0].TEXT,
                 TIMESTAMP: query.rows[0].TIMESTAMP,
                 PICTURE: query.rows[0].PICTURE,
-                FIRSTNAME: query.rows[0].FIRSTNAME,
-                LASTNAME: query.rows[0].LASTNAME,
-                PROFILEPICTURE: query.rows[0].PROFILEPICTURE
+                USER: {
+                    ID: query.rows[0].ID_1,
+                    FIRSTNAME: query.rows[0].FIRSTNAME,
+                    LASTNAME: query.rows[0].LASTNAME,
+                    PROFILEPICTURE: query.rows[0].PROFILEPICTURE
+                }
             };
 
             return result;

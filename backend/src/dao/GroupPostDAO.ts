@@ -24,7 +24,7 @@ class GroupPostDAO {
     // get all group post by groupId
     async getAll(ID: number): Promise<{[k: string]: any}[]> {
         const GET_ALL =
-            "SELECT GroupPost.ID, GroupPost.TEXT, GroupPost.TIMESTAMP, GroupPost.PICTURE, GroupPost.GROUPID, \"User\".ID, \"User\".FIRSTNAME, \"User\".LASTNAME, UserData.PROFILEPICTURE "+
+            "SELECT GroupPost.ID, GroupPost.TEXT, TO_CHAR(GroupPost.TIMESTAMP, 'yyyy/mm/dd hh24:mi') as TIMESTAMP, GroupPost.PICTURE, GroupPost.GROUPID, \"User\".ID, \"User\".FIRSTNAME, \"User\".LASTNAME, UserData.PROFILEPICTURE "+
             "FROM GroupPost, \"User\", UserData "+
             "WHERE GroupPost.USERID = \"User\".ID AND \"User\".ID = UserData.USERID AND "+
                 `GroupPost.GROUPID = ${ID} `+
@@ -63,7 +63,7 @@ class GroupPostDAO {
     // get group post by id
     async get(ID: number): Promise<{[k: string]: any}> {
         const GET_POST =
-            "SELECT GroupPost.ID, GroupPost.TEXT, GroupPost.TIMESTAMP, GroupPost.PICTURE, GroupPost.GROUPID, \"User\".ID, \"User\".FIRSTNAME, \"User\".LASTNAME, UserData.PROFILEPICTURE "+
+            "SELECT GroupPost.ID, GroupPost.TEXT, TO_CHAR(GroupPost.TIMESTAMP, 'yyyy/mm/dd hh24:mi') as TIMESTAMP, GroupPost.PICTURE, GroupPost.GROUPID, \"User\".ID, \"User\".FIRSTNAME, \"User\".LASTNAME, UserData.PROFILEPICTURE "+
             "FROM GroupPost, \"User\", UserData "+
             "WHERE GroupPost.USERID = \"User\".ID AND \"User\".ID = UserData.USERID AND "+
                 `GroupPost.ID = ${ID} `;

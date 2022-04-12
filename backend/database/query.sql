@@ -1,5 +1,5 @@
 -- get all public posts by userID
-SELECT PublicPost.ID, PublicPost.TEXT, PublicPost.TIMESTAMP, PublicPost.PICTURE, "User".ID, "User".FIRSTNAME, "User".LASTNAME, UserData.PROFILEPICTURE
+SELECT PublicPost.ID, PublicPost.TEXT, TO_CHAR(PublicPost.TIMESTAMP, 'yyyy/mm/dd hh24:mi') as TIMESTAMP, PublicPost.PICTURE, "User".ID, "User".FIRSTNAME, "User".LASTNAME, UserData.PROFILEPICTURE
 FROM PublicPost, "User", UserData
 WHERE PublicPost.USERID = "User".ID AND
     "User".ID = UserData.USERID AND
@@ -7,7 +7,7 @@ WHERE PublicPost.USERID = "User".ID AND
 ORDER BY PublicPost.TIMESTAMP DESC;
 
 -- get all group posts by groupID
-SELECT GroupPost.ID, GroupPost.TEXT, GroupPost.TIMESTAMP, GroupPost.PICTURE, GroupPost.GROUPID, "User".ID, "User".FIRSTNAME, "User".LASTNAME, UserData.PROFILEPICTURE
+SELECT GroupPost.ID, GroupPost.TEXT, TO_CHAR(GroupPost.TIMESTAMP, 'yyyy/mm/dd hh24:mi') as TIMESTAMP, GroupPost.PICTURE, GroupPost.GROUPID, "User".ID, "User".FIRSTNAME, "User".LASTNAME, UserData.PROFILEPICTURE
 FROM GroupPost, "User", UserData
 WHERE GroupPost.USERID = "User".ID AND
     "User".ID = UserData.USERID AND
@@ -15,7 +15,7 @@ WHERE GroupPost.USERID = "User".ID AND
 ORDER BY GroupPost.TIMESTAMP DESC;
 
 -- get all public comment by postID
-SELECT PublicComment.*, "User".FIRSTNAME, "User".LASTNAME, UserData.PROFILEPICTURE
+SELECT PublicComment.*, TO_CHAR(PublicComment.TIMESTAMP, 'yyyy/mm/dd hh24:mi') as C_TIMESTAMP, "User".FIRSTNAME, "User".LASTNAME, UserData.PROFILEPICTURE
 FROM PublicComment, "User", UserData
 WHERE PublicComment.USERID = "User".ID AND
     "User".ID = UserData.USERID AND
@@ -23,7 +23,7 @@ WHERE PublicComment.USERID = "User".ID AND
 ORDER BY PublicComment.TIMESTAMP DESC;
 
 -- get all group comment by postID
-SELECT GroupComment.*, "User".FIRSTNAME, "User".LASTNAME, UserData.PROFILEPICTURE
+SELECT GroupComment.*, TO_CHAR(GroupComment.TIMESTAMP, 'yyyy/mm/dd hh24:mi') as C_TIMESTAMP, "User".FIRSTNAME, "User".LASTNAME, UserData.PROFILEPICTURE
 FROM GroupComment, "User", UserData
 WHERE GroupComment.USERID = "User".ID AND
     "User".ID = UserData.USERID AND

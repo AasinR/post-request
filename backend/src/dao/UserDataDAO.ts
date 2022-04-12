@@ -24,7 +24,7 @@ class UserDataDAO {
 
     // get user data by userID
     async getByUserID(ID: number): Promise<UserData> {
-        const FIND_DATA = `SELECT * FROM userdata WHERE userid = ${ID}`;
+        const FIND_DATA = `SELECT id, gender, profilepicture, to_char(birthdate, 'yyyy/mm/dd') as birthdate, phonenumber, profession, userid FROM userdata WHERE userid = ${ID}`;
         try {
             const query: {[k: string]: any} = await ConnectionConfig.query(FIND_DATA);
             if (query === null) {

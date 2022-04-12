@@ -24,7 +24,7 @@ class GroupCommentDAO {
     // get all group comment by postID
     async getAll(ID: number): Promise<{[k: string]: any}[]> {
         const GET_ALL =
-            "SELECT GroupComment.*, \"User\".FIRSTNAME, \"User\".LASTNAME, UserData.PROFILEPICTURE "+
+            "SELECT GroupComment.*, TO_CHAR(GroupComment.TIMESTAMP, 'yyyy/mm/dd hh24:mi') as C_TIMESTAMP, \"User\".FIRSTNAME, \"User\".LASTNAME, UserData.PROFILEPICTURE "+
             "FROM GroupComment, \"User\", UserData "+
             "WHERE GroupComment.USERID = \"User\".ID AND \"User\".ID = UserData.USERID AND "+
                 `GroupComment.POSTID = ${ID} `+
@@ -40,7 +40,7 @@ class GroupCommentDAO {
                 const comment = {
                     ID: data.ID,
                     CONTENT: data.CONTENT,
-                    TIMESTAMP: data.TIMESTAMP,
+                    TIMESTAMP: data.C_TIMESTAMP,
                     POSTID: data.POSTID,
                     USER: {
                         ID: data.USERID,
@@ -62,7 +62,7 @@ class GroupCommentDAO {
     // get group comment by ID
     async get(ID: number): Promise<{[k: string]: any}> {
         const GET_COMMENT =
-            "SELECT GroupComment.*, \"User\".FIRSTNAME, \"User\".LASTNAME, UserData.PROFILEPICTURE "+
+            "SELECT GroupComment.*, TO_CHAR(GroupComment.TIMESTAMP, 'yyyy/mm/dd hh24:mi') as C_TIMESTAMP, \"User\".FIRSTNAME, \"User\".LASTNAME, UserData.PROFILEPICTURE "+
             "FROM GroupComment, \"User\", UserData "+
             "WHERE GroupComment.USERID = \"User\".ID AND \"User\".ID = UserData.USERID AND "+
                 `GroupComment.ID = ${ID}`;
@@ -78,7 +78,7 @@ class GroupCommentDAO {
             const result = {
                 ID: query.rows[0].ID,
                 CONTENT: query.rows[0].CONTENT,
-                TIMESTAMP: query.rows[0].TIMESTAMP,
+                TIMESTAMP: query.rows[0].C_TIMESTAMP,
                 POSTID: query.rows[0].POSTID,
                 USER: {
                     ID: query.rows[0].USERID,

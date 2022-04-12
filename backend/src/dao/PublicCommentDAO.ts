@@ -24,7 +24,7 @@ class PublicCommentDAO {
     // get all public comment by postID
     async getAll(ID: number): Promise<{[k: string]: any}[]> {
         const GET_ALL =
-            "SELECT PublicComment.*, \"User\".FIRSTNAME, \"User\".LASTNAME, UserData.PROFILEPICTURE "+
+            "SELECT PublicComment.*, TO_CHAR(PublicComment.TIMESTAMP, 'yyyy/mm/dd hh24:mi') as C_TIMESTAMP, \"User\".FIRSTNAME, \"User\".LASTNAME, UserData.PROFILEPICTURE "+
             "FROM PublicComment, \"User\", UserData "+
             "WHERE PublicComment.USERID = \"User\".ID AND \"User\".ID = UserData.USERID AND "+
                 `PublicComment.POSTID = ${ID} `+
@@ -40,7 +40,7 @@ class PublicCommentDAO {
                 const comment = {
                     ID: data.ID,
                     CONTENT: data.CONTENT,
-                    TIMESTAMP: data.TIMESTAMP,
+                    TIMESTAMP: data.C_TIMESTAMP,
                     POSTID: data.POSTID,
                     USER: {
                         ID: data.USERID,
@@ -62,7 +62,7 @@ class PublicCommentDAO {
     // get public comment by ID
     async get(ID: number): Promise<{[k: string]: any}> {
         const GET_COMMENT =
-            "SELECT PublicComment.*, \"User\".FIRSTNAME, \"User\".LASTNAME, UserData.PROFILEPICTURE "+
+            "SELECT PublicComment.*, TO_CHAR(PublicComment.TIMESTAMP, 'yyyy/mm/dd hh24:mi') as C_TIMESTAMP, \"User\".FIRSTNAME, \"User\".LASTNAME, UserData.PROFILEPICTURE "+
             "FROM PublicComment, \"User\", UserData "+
             "WHERE PublicComment.USERID = \"User\".ID AND \"User\".ID = UserData.USERID AND "+
                 `PublicComment.ID = ${ID}`;
@@ -78,7 +78,7 @@ class PublicCommentDAO {
             const result = {
                 ID: query.rows[0].ID,
                 CONTENT: query.rows[0].CONTENT,
-                TIMESTAMP: query.rows[0].TIMESTAMP,
+                TIMESTAMP: query.rows[0].C_TIMESTAMP,
                 POSTID: query.rows[0].POSTID,
                 USER: {
                     ID: query.rows[0].USERID,

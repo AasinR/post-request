@@ -22,17 +22,35 @@ class GroupCommentDAO {
     }
 
     // get all group comment by postID
-    async getAll(ID: number): Promise<Comment[]> {
-        const GET_ALL = `SELECT * FROM groupcomment WHERE postid = ${ID}`;
+    async getAll(ID: number): Promise<{[k: string]: any}[]> {
+        const GET_ALL =
+            "SELECT GroupComment.*, \"User\".FIRSTNAME, \"User\".LASTNAME, UserData.PROFILEPICTURE "+
+            "FROM GroupComment, \"User\", UserData "+
+            "WHERE GroupComment.USERID = \"User\".ID AND \"User\".ID = UserData.USERID AND "+
+                `GroupComment.POSTID = ${ID} `+
+            "ORDER BY GroupComment.TIMESTAMP DESC";
 
         try {
             const query = await ConnectionConfig.query(GET_ALL);
             if (query === null) {
                 throw new Error("Query failed!");
             }
-            const result: Comment[] = [];
-            query.rows.forEach((data: Comment) => {
-                result.push(data);
+            const result: {[k: string]: any}[] = [];
+            query.rows.forEach((data: {[k: string]: any}) => {
+                const comment = {
+                    ID: data.ID,
+                    CONTENT: data.CONTENT,
+                    TIMESTAMP: data.TIMESTAMP,
+                    POSTID: data.POSTID,
+                    USER: {
+                        ID: data.USERID,
+                        FIRSTNAME: data.FIRSTNAME,
+                        LASTNAME: data.LASTNAME,
+                        PROFILEPICTURE: data.PROFILEPICTURE
+                    }
+                }
+
+                result.push(comment);
             });
             return result;
         } catch(error) {
@@ -42,8 +60,12 @@ class GroupCommentDAO {
     }
 
     // get group comment by ID
-    async get(ID: number): Promise<Comment> {
-        const GET_COMMENT = `SELECT * FROM groupcomment WHERE id = ${ID}`;
+    async get(ID: number): Promise<{[k: string]: any}> {
+        const GET_COMMENT =
+            "SELECT GroupComment.*, \"User\".FIRSTNAME, \"User\".LASTNAME, UserData.PROFILEPICTURE "+
+            "FROM GroupComment, \"User\", UserData "+
+            "WHERE GroupComment.USERID = \"User\".ID AND \"User\".ID = UserData.USERID AND "+
+                `GroupComment.ID = ${ID}`;
 
         try {
             const query: {[k: string]: any} = await ConnectionConfig.query(GET_COMMENT);
@@ -53,12 +75,18 @@ class GroupCommentDAO {
             if (query.rows.length === 0) {
                 throw new Error("No data found!");
             }
-            const result = new Comment();
-            result.ID = query.rows[0].ID;
-            result.CONTENT = query.rows[0].CONTENT;
-            result.TIMESTAMP = query.rows[0].TIMESTAMP;
-            result.POSTID = query.rows[0].POSTID;
-            result.USERID = query.rows[0].USERID;
+            const result = {
+                ID: query.rows[0].ID,
+                CONTENT: query.rows[0].CONTENT,
+                TIMESTAMP: query.rows[0].TIMESTAMP,
+                POSTID: query.rows[0].POSTID,
+                USER: {
+                    ID: query.rows[0].USERID,
+                    FIRSTNAME: query.rows[0].FIRSTNAME,
+                    LASTNAME: query.rows[0].LASTNAME,
+                    PROFILEPICTURE: query.rows[0].PROFILEPICTURE
+                }
+            };
 
             return result;
         } catch(error) {

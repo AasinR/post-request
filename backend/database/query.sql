@@ -14,6 +14,22 @@ WHERE GroupPost.USERID = "User".ID AND
     GroupPost.GROUPID = 1000
 ORDER BY GroupPost.TIMESTAMP DESC;
 
+-- get all public comment by postID
+SELECT PublicComment.*, "User".FIRSTNAME, "User".LASTNAME, UserData.PROFILEPICTURE
+FROM PublicComment, "User", UserData
+WHERE PublicComment.USERID = "User".ID AND
+    "User".ID = UserData.USERID AND
+    PublicComment.POSTID = 1001
+ORDER BY PublicComment.TIMESTAMP DESC;
+
+-- get all group comment by postID
+SELECT GroupComment.*, "User".FIRSTNAME, "User".LASTNAME, UserData.PROFILEPICTURE
+FROM GroupComment, "User", UserData
+WHERE GroupComment.USERID = "User".ID AND
+    "User".ID = UserData.USERID AND
+    GroupComment.POSTID = 1002
+ORDER BY GroupComment.TIMESTAMP DESC;
+
 -- get all group by userID
 SELECT GroupMembers.GROUPID, GroupMembers.USERID, "Group".NAME, "Group".LOGO, "Group".OWNERID, "User".FIRSTNAME, "User".LASTNAME, UserData.PROFILEPICTURE
 FROM GroupMembers, "Group", "User", UserData

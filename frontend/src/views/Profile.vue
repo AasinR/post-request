@@ -1,4 +1,4 @@
-<template>
+|<template>
   <div class="profile">
     <Header/>
     <Navbar current="profile"/>
@@ -161,7 +161,6 @@ export default {
       }
     }
   },
-
   mounted() {
     this.initProfile();
   }

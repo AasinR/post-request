@@ -52,12 +52,20 @@ const routes = [
     name: "Admin",
     path: "/admin",
     component: () => import('@/views/Admin'),
+    beforeEnter: (from, to, next) =>{
+      Vue.nextTick(async () => {
+        if(await router.app.isAdmin()){
+          console.log('Ad mint to shopping list')
+          next();
+        } else {
+          next({name: 'NotFound'});
+        }
+      })
+    },
     children: [
       {
         path: '/',
-        beforeEnter: (from, to, next) =>{
-          router.push('/admin/users')
-        }
+        redirect: '/admin/users',
       },
       {
         name: "AdminUsers",
@@ -137,6 +145,11 @@ const routes = [
     path: "/edit-profile",
     component: () => import('@/views/edit/EditProfile')
   },
+  {
+    name: "NotFound",
+    path: "/not-found",
+    component: () => import('@/views/NotFound')
+  },
 ]
 
 const router = new VueRouter({
@@ -145,13 +158,16 @@ const router = new VueRouter({
   routes
 })
 
-/*const isAuthenticated = function (){
-  return nextTick(vm => vm.$cookies.get('sid') !== null ||  vm.$cookies.get('sid') !== undefined);
-}
 
-router.beforeEach((to, from, next) => {
-  if (to.name !== 'Login' && !isAuthenticated) next({ name: 'Login' })
-  else next()
-})*/
+router.beforeEach((to, from,next) => {
+    Vue.nextTick(() => {
+      if (to.name !== 'Login' && !router.app.isLoggedIn()) {
+        next({ name: 'Login' });
+      } else {
+        next();
+      }
+    })
+
+})
 
 export default router

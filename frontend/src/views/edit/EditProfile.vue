@@ -177,7 +177,7 @@ export default {
       if(this.inputData.firstName.trim() !== '' && this.inputData.lastName.trim() !== ''){
         if(String(this.inputData.email).toLowerCase().match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)){
           if(String(this.inputData.password).trim() !== '' && this.inputData.password === this.inputData.passwordAgain){
-            if(this.inputData.phoneNumber.trim() === '' || this.inputData.phoneNumber.match(/((?:\+?3|0)6)(?:-|\()?(\d{1,2})(?:-|\))?(\d{3})-?(\d{3,4})/)){
+            if(this.inputData.phoneNumber === '' || this.inputData.phoneNumber === null || this.inputData.phoneNumber.match(/((?:\+?3|0)6)(?:-|\()?(\d{1,2})(?:-|\))?(\d{3})-?(\d{3,4})/)){
               return "OK";
             } else {
               return "Invalid phone number!";

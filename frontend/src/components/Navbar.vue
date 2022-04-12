@@ -1,7 +1,7 @@
 <template>
   <div class="navbar">
     <div class="navbar-link">
-      <router-link :class="current === 'profile' ? 'current' : ''" :to="{name: 'Profile'}">Profile</router-link>
+      <router-link :class="current === 'profile' ? 'current' : ''" :to="{name: 'Profile', params: {userID: $cookies.get('UserID')}}">Profile</router-link>
     </div>
     <div class="navbar-link">
       <router-link :class="current === 'friends' ? 'current' : ''" :to="{name: 'Friends'}">Friends</router-link>
@@ -15,7 +15,7 @@
     <div class="navbar-link">
       <router-link :class="current === 'photos' ? 'current' : ''" :to="{name: 'Photos'}">Photos</router-link>
     </div>
-    <div v-if=permission class="navbar-link">
+    <div v-if="permission" class="navbar-link">
       <router-link :class="current === 'admin' ? 'current' : ''" :to="{name: 'AdminUsers'}">Admin</router-link>
     </div>
     <div class="navbar-link right-align">
@@ -55,7 +55,6 @@ export default {
       try {
         const response = await this.axios.get(`${this.$root.requestURL}/user/get/${this.$cookies.get("UserID")}`);
         this.permission = response.data.result.PERMISSION;
-        //console.log(this.permission);
       } catch (err) {
         console.log(err.response.data);
       }

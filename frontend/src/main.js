@@ -4,6 +4,7 @@ import router from './router'
 import VueCookies from 'vue-cookies'
 
 import axios from "axios";
+
 axios.defaults.withCredentials = true;
 Vue.prototype.axios = axios;
 Vue.config.productionTip = false;

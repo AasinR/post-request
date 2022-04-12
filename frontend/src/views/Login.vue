@@ -61,7 +61,7 @@ export default {
           password: this.inputData.password,
         })
         this.$cookies.set("UserID", response.data.UserID);
-        await this.$router.replace({name: 'Profile'});
+        await this.$router.replace({name: 'Profile', params: {userID: this.$cookies.get('UserID')}});
       } catch (err) {
         this.errorMsg = err.response.data;
         console.log(err.response);

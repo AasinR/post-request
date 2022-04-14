@@ -150,6 +150,17 @@ const routes = [
     path: "/not-found",
     component: () => import('@/views/NotFound')
   },
+  {
+    name: "GroupPage",
+    path: "/group-page/:groupID",
+    props: true,
+    component: () => import('@/views/GroupPage')
+  },
+  {
+    name: "AddGroup",
+    path: "/add-group",
+    component: () => import('@/views/add/AddGroup')
+  },
 ]
 
 const router = new VueRouter({
@@ -161,13 +172,23 @@ const router = new VueRouter({
 
 router.beforeEach((to, from,next) => {
     Vue.nextTick(() => {
-      if (to.name !== 'Login' && !router.app.isLoggedIn()) {
+      if (to.name !== 'Login' && to.name !== 'Register' && !router.app.isLoggedIn()) {
         next({ name: 'Login' });
       } else {
         next();
       }
     })
-
 })
+
+router.beforeEach((to, from,next) => {
+  Vue.nextTick(() => {
+    if ((to.name === 'Login' || to.name === 'Register') && router.app.isLoggedIn()) {
+      next({ name: 'Profile', params: {userID: Vue.$cookies.get("UserID")} });
+    } else {
+      next();
+    }
+  })
+})
+
 
 export default router

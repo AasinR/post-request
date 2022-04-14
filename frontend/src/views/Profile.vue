@@ -1,4 +1,4 @@
-|<template>
+<template>
   <div class="profile">
     <Header/>
     <Navbar current="profile"/>
@@ -24,13 +24,13 @@
         <div class="posts-container">
           <div v-if="$cookies.get('UserID') === userID" class="new-post">
             <h2>Make a new post!</h2>
-            <textarea id="newpost-text" v-model="newPost.content"></textarea>
+            <textarea id="newpost-text" v-model="newPost.content" placeholder="Write your post here..."></textarea>
             <input id="newpost-picture" type="file"><br>
             <button type="submit" id="new-post-submit" @click="sendNewPost">Post</button>
           </div>
           <div class="posts">
             <h2>Posts</h2>
-            <Post v-for="post in posts" :key="post.ID" :post-data="post" ></Post>
+            <Post v-for="post in posts" :key="post.ID" :post-data="post" type="public" ></Post>
           </div>
         </div>
       </div>
@@ -114,7 +114,6 @@ export default {
             text: this.newPost.content,
           })
         } catch (err) {
-          this.errorMsg = err.response.data;
           console.log(err.response.data);
         }
         await this.$router.go();
@@ -142,7 +141,7 @@ export default {
     async initUserData(){
       try {
         const response = await this.axios.get(`${this.$root.requestURL}/user/data/get/${this.userID}`);
-        this.userdata.birthDate = (response.data.result.BIRTHDATE).substring(0, 10);
+        this.userdata.birthDate = response.data.result.BIRTHDATE;
         this.userdata.gender = response.data.result.GENDER;
         this.userdata.phoneNumber = response.data.result.PHONENUMBER;
         this.userdata.profession = response.data.result.PROFESSION;
@@ -294,6 +293,9 @@ export default {
             margin-bottom: 2%;
             font-family: Cambria,serif;
             font-size: 16px;
+            resize: none;
+            border-radius: 15px;
+            padding: 1% 2%;
           }
           #new-post-submit{
             display: block;

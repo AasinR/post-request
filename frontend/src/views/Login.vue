@@ -55,6 +55,7 @@ export default {
       this.$router.replace({name: 'Register'});
     },
     async login(){
+      this.errorMsg = '';
       try {
         const response = await this.axios.post(`${this.$root.requestURL}/login`,{
           email: this.inputData.email,

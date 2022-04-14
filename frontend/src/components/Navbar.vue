@@ -22,7 +22,7 @@
       <router-link :class="current === 'search' ? 'current' : ''" :to="{name: 'Search'}">Search</router-link>
     </div>
     <div class="navbar-link ">
-      <router-link @click.native="logout" :to="{name: 'Login'}">Log out <img class="logout-icon" src="@/assets/logout.png" alt="logout.png"></router-link> <!--TODO-->
+      <button @click="logout" >Log out <img class="logout-icon" src="@/assets/logout.png" alt="logout.png"></button>
     </div>
   </div>
 </template>
@@ -44,7 +44,7 @@ export default {
         const response = await this.axios.get(`${this.$root.requestURL}/logout`);
         this.$cookies.remove("UserID");
         this.$cookies.remove("sid");
-
+        await this.$router.replace({name: 'Login'});
         //console.log(response.data);
       } catch (err) {
         console.log(err.response.data);
@@ -88,7 +88,17 @@ export default {
       width: 8rem;
       height: 4rem;
 
-      a {
+      button{
+        background-color: transparent;
+        border: none;
+        font-family: Cambria,serif;
+
+        &:hover {
+          cursor: pointer;
+        }
+      }
+
+      a, button {
         display: block;
         width: 100%;
         height: 100%;
@@ -107,10 +117,9 @@ export default {
       }
 
       .logout-icon {
-        display: inline-block;
         width: 1.5rem;
         margin-left: 5%;
-        margin-bottom: -2%;
+        margin-bottom: -4%;
       }
     }
 

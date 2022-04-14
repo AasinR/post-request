@@ -226,7 +226,7 @@ class CommentController {
             if (comment === null) {
                 throw new Error("Failed to get comment!");
             }
-            if (comment.USERID !== req.session.userId) {
+            if (comment.USER.ID !== req.session.userId) {
                 throw 400;
             }
 
@@ -261,7 +261,7 @@ class CommentController {
             if (comment === null) {
                 throw new Error("Failed to get comment!");
             }
-            if (comment.USERID !== req.session.userId) {
+            if (comment.USER.ID !== req.session.userId) {
                 throw 400;
             }
 

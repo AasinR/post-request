@@ -24,7 +24,7 @@ class PublicPostDAO {
     // get all public post by userId
     async getAll(ID: number): Promise<{[k: string]: any}[]> {
         const GET_ALL =
-            "SELECT PublicPost.ID, PublicPost.TEXT, PublicPost.TIMESTAMP, PublicPost.PICTURE, \"User\".ID, \"User\".FIRSTNAME, \"User\".LASTNAME, UserData.PROFILEPICTURE "+
+            "SELECT PublicPost.ID, PublicPost.TEXT, TO_CHAR(PublicPost.TIMESTAMP, 'yyyy/mm/dd hh24:mi') as TIMESTAMP, PublicPost.PICTURE, \"User\".ID, \"User\".FIRSTNAME, \"User\".LASTNAME, UserData.PROFILEPICTURE "+
             "FROM PublicPost, \"User\", UserData "+
             "WHERE PublicPost.USERID = \"User\".ID AND \"User\".ID = UserData.USERID AND "+
                 `PublicPost.USERID = ${ID} `+
@@ -62,7 +62,7 @@ class PublicPostDAO {
     // get public post by id
     async get(ID: number): Promise<{[k: string]: any}> {
         const GET_POST =
-            "SELECT PublicPost.ID, PublicPost.TEXT, PublicPost.TIMESTAMP, PublicPost.PICTURE, \"User\".ID, \"User\".FIRSTNAME, \"User\".LASTNAME, UserData.PROFILEPICTURE "+
+            "SELECT PublicPost.ID, PublicPost.TEXT, TO_CHAR(PublicPost.TIMESTAMP, 'yyyy/mm/dd hh24:mi') as TIMESTAMP, PublicPost.PICTURE, \"User\".ID, \"User\".FIRSTNAME, \"User\".LASTNAME, UserData.PROFILEPICTURE "+
             "FROM PublicPost, \"User\", UserData "+
             "WHERE PublicPost.USERID = \"User\".ID AND \"User\".ID = UserData.USERID AND "+
                 `PublicPost.ID = ${ID} `;

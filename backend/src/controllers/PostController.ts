@@ -130,14 +130,14 @@ class PostController {
         let result;
 
         try {
-            const post = await PublicPostDAO.get(id);
-            if (post === null) {
+            result = await PublicPostDAO.get(id);
+            if (result === null) {
                 throw new Error("Failed to execute query!");
             }
 
             let link;
-            if (post.PICTURE) {
-                const img = await PictureDAO.get(post.PICTURE);
+            if (result.PICTURE) {
+                const img = await PictureDAO.get(result.PICTURE);
                 if (img === null) {
                     throw new Error("Failed to get image!");
                 }
@@ -145,13 +145,8 @@ class PostController {
             }
             link = link ? link : null;
 
-            result = {
-                ID: post.ID,
-                TEXT: post.TEXT,
-                TIMESTAMP: post.TIMESTAMP,
-                PICTURE: link,
-                USERID: post.USERID
-            }
+            result.PICTURE = link;
+
             throw 200;
         } catch(status) {
             switch(status) {
@@ -174,18 +169,11 @@ class PostController {
         let result;
 
         try {
-            const post = await GroupPostDAO.get(id);
-            if (post === null) {
+            result = await GroupPostDAO.get(id);
+            if (result === null) {
                 throw new Error("Failed to get post!");
             }
-            result = {
-                ID: post.ID,
-                TEXT: post.TEXT,
-                TIMESTAMP: post.TIMESTAMP,
-                PICTURE: post.PICTURE,
-                USERID: post.USERID,
-                GROUPID: post.GROUPID
-            }
+
             throw 200;
         } catch(status) {
             switch(status) {
@@ -298,7 +286,7 @@ class PostController {
             if (post === null) {
                 throw new Error("Failed to get post!");
             }
-            if (post.USERID !== req.session.userId) {
+            if (post.USER.ID !== req.session.userId) {
                 throw 400;
             }
 
@@ -331,7 +319,7 @@ class PostController {
             if (post === null) {
                 throw new Error("Failed to get post!");
             }
-            if (post.USERID !== req.session.userId) {
+            if (post.USER.ID !== req.session.userId) {
                 throw 400;
             }
 

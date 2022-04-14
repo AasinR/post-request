@@ -10,7 +10,7 @@
         <div class="name-container">
           <p>{{user.firstName}} {{user.lastName}}</p>
         </div>
-        <button class="header-edit-btn" @click="editProfile">Edit profile</button>
+        <button v-if="$cookies.get('UserID') === userID" class="header-edit-btn" @click="editProfile">Edit profile</button>
       </div>
       <div class="profile-content">
         <div class="about-container">
@@ -22,15 +22,15 @@
           <p>Workplace/school:<br> <span>{{userdata.profession}}</span></p>
         </div>
         <div class="posts-container">
-          <div class="new-post">
+          <div v-if="$cookies.get('UserID') === userID" class="new-post">
             <h2>Make a new post!</h2>
-            <textarea id="newpost-text" v-model="newPost.content"></textarea>
+            <textarea id="newpost-text" v-model="newPost.content" placeholder="Write your post here..."></textarea>
             <input id="newpost-picture" type="file"><br>
             <button type="submit" id="new-post-submit" @click="sendNewPost">Post</button>
           </div>
           <div class="posts">
             <h2>Posts</h2>
-            <Post v-for="post in posts" :key="post.id" :post-data="post" :name="user.firstName + ' ' +user.lastName" :profile-picture="userdata.profilePicture"></Post>
+            <Post v-for="post in posts" :key="post.ID" :post-data="post" type="public" ></Post>
           </div>
         </div>
       </div>
@@ -52,6 +52,9 @@ export default {
     Navbar,
     Header,
     Post
+  },
+  props: {
+    userID: Number | String,
   },
 
   data() {
@@ -111,7 +114,6 @@ export default {
             text: this.newPost.content,
           })
         } catch (err) {
-          this.errorMsg = err.response.data;
           console.log(err.response.data);
         }
         await this.$router.go();
@@ -126,7 +128,7 @@ export default {
 
     async initUser(){
       try {
-        const response = await this.axios.get(`${this.$root.requestURL}/user/get/${this.$cookies.get("UserID")}`);
+        const response = await this.axios.get(`${this.$root.requestURL}/user/get/${this.userID}`);
         this.user.firstName = response.data.result.FIRSTNAME;
         this.user.lastName = response.data.result.LASTNAME;
         this.user.email = response.data.result.EMAIL;
@@ -138,8 +140,8 @@ export default {
 
     async initUserData(){
       try {
-        const response = await this.axios.get(`${this.$root.requestURL}/user/data/get/${this.$cookies.get("UserID")}`);
-        this.userdata.birthDate = (response.data.result.BIRTHDATE).substring(0, 10);
+        const response = await this.axios.get(`${this.$root.requestURL}/user/data/get/${this.userID}`);
+        this.userdata.birthDate = response.data.result.BIRTHDATE;
         this.userdata.gender = response.data.result.GENDER;
         this.userdata.phoneNumber = response.data.result.PHONENUMBER;
         this.userdata.profession = response.data.result.PROFESSION;
@@ -151,14 +153,13 @@ export default {
 
     async initPosts(){
       try {
-        const response = await this.axios.get(`${this.$root.requestURL}/post/public/getall/${this.$cookies.get("UserID")}`);
+        const response = await this.axios.get(`${this.$root.requestURL}/post/public/getall/${this.userID}`);
         this.posts = response.data.result;
       } catch (err) {
         console.log(err.response.data);
       }
     }
   },
-
   mounted() {
     this.initProfile();
   }
@@ -290,6 +291,11 @@ export default {
             width: 80%;
             height: 48px;
             margin-bottom: 2%;
+            font-family: Cambria,serif;
+            font-size: 16px;
+            resize: none;
+            border-radius: 15px;
+            padding: 1% 2%;
           }
           #new-post-submit{
             display: block;

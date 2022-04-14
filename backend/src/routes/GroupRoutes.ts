@@ -7,7 +7,10 @@ class GroupRoutes {
 
     constructor() {
         this._Router = Router();
+
         this._Router.get("/all", SessionController.isUser, GroupController.findAll);
+        this._Router.get("/getall/:id", SessionController.isUser, GroupController.getAllGroup);
+
         this._Router.get("/member/all", SessionController.isAdmin, GroupController.findAllMember);
     }
 

@@ -130,7 +130,7 @@ export default {
     async initUserData(){
       try {
         const response = await this.axios.get(`${this.$root.requestURL}/user/data/get/${this.$cookies.get("UserID")}`);
-        this.inputData.birthDate = (response.data.result.BIRTHDATE).substring(0, 10);
+        this.inputData.birthDate = (response.data.result.BIRTHDATE).replaceAll("/", "-");
         this.inputData.gender = response.data.result.GENDER;
         this.inputData.phoneNumber = response.data.result.PHONENUMBER;
         this.inputData.profession = response.data.result.PROFESSION;
@@ -141,6 +141,7 @@ export default {
     },
 
     async edit(){
+      this.errorMsg = '';
       if(this.areInputsValid === "OK") {
         try {
           await this.axios.post(`${this.$root.requestURL}/user/save`, {
@@ -156,16 +157,16 @@ export default {
 
         try {
           await this.axios.post(`${this.$root.requestURL}/user/data/save`, {
-            gender: this.inputData.gender,
             birthDate: this.inputData.birthDate,
             phoneNumber: this.inputData.phoneNumber,
             profession: this.inputData.profession,
+            gender: this.inputData.gender,
           })
         } catch (err) {
           this.errorMsg = err.response.data;
           console.log(err.response.data);
         }
-        await this.$router.replace({name: 'Profile'});
+        await this.$router.replace({name: 'Profile', params:{userID: this.$cookies.get('UserID')}});
       } else {
         this.errorMsg = this.areInputsValid;
       }
@@ -177,7 +178,7 @@ export default {
       if(this.inputData.firstName.trim() !== '' && this.inputData.lastName.trim() !== ''){
         if(String(this.inputData.email).toLowerCase().match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)){
           if(String(this.inputData.password).trim() !== '' && this.inputData.password === this.inputData.passwordAgain){
-            if(this.inputData.phoneNumber.trim() === '' || this.inputData.phoneNumber.match(/((?:\+?3|0)6)(?:-|\()?(\d{1,2})(?:-|\))?(\d{3})-?(\d{3,4})/)){
+            if(this.inputData.phoneNumber === '' || this.inputData.phoneNumber === null || this.inputData.phoneNumber.match(/((?:\+?3|0)6)(?:-|\()?(\d{1,2})(?:-|\))?(\d{3})-?(\d{3,4})/)){
               return "OK";
             } else {
               return "Invalid phone number!";

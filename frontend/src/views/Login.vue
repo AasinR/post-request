@@ -55,13 +55,14 @@ export default {
       this.$router.replace({name: 'Register'});
     },
     async login(){
+      this.errorMsg = '';
       try {
         const response = await this.axios.post(`${this.$root.requestURL}/login`,{
           email: this.inputData.email,
           password: this.inputData.password,
         })
         this.$cookies.set("UserID", response.data.UserID);
-        await this.$router.replace({name: 'Profile'});
+        await this.$router.replace({name: 'Profile', params: {userID: this.$cookies.get('UserID')}});
       } catch (err) {
         this.errorMsg = err.response.data;
         console.log(err.response);

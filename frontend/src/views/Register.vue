@@ -39,35 +39,6 @@
             <input type="password" id="password-again" v-model="inputData.passwordAgain" >
           </div>
         </div>
-<!--        <div class="input-group">-->
-<!--          <label for="phone-number"> Phone number:</label> <br>-->
-<!--          <div class="input-field">-->
-<!--            <input type="tel" id="phone-number" v-model="inputData.phoneNumber" >-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div class="input-group">-->
-<!--          <label for="profession"> Current workplace/school:</label> <br>-->
-<!--          <div class="input-field">-->
-<!--            <input type="text" id="profession" v-model="inputData.profession">-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div class="input-group">-->
-<!--          <label for="birthdate"> Date of birth:</label> <br>-->
-<!--          <div class="input-field">-->
-<!--            <input type="date" id="birthdate" v-model="inputData.birthDate">-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div class="input-group">-->
-<!--          <p>Gender:</p> <br>-->
-<!--          <div class="input-field radio-field">-->
-<!--            <input class="radio-input" type="radio" id="male" name="gender" value="male" v-model="inputData.gender">-->
-<!--            <label for="male">Male</label>-->
-<!--            <input class="radio-input" type="radio" id="female"  name="gender" value="female" v-model="inputData.gender">-->
-<!--            <label for="female">Female</label>-->
-<!--            <input class="radio-input" type="radio" id="custom" name="gender" value="custom" v-model="inputData.gender">-->
-<!--            <label for="custom">Custom</label>-->
-<!--          </div>-->
-<!--        </div>-->
         <div class="register-btn">
           <button type="submit" @click="register">Sign up</button>
         </div>
@@ -100,10 +71,6 @@ export default {
         email: '',
         password: '',
         passwordAgain: '',
-        // phoneNumber: '',
-        // profession: '',
-        // birthDate: '',
-        // gender: 'male',
       },
 
       errorMsg: '',
@@ -111,6 +78,7 @@ export default {
   },
   methods: {
     async register(){
+      this.errorMsg = '';
       if(this.areInputsValid === "OK") {
         try {
           await this.axios.post(`${this.$root.requestURL}/register`, {

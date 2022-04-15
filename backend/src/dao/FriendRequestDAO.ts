@@ -23,14 +23,15 @@ class FriendRequestDAO {
     // ask for friend
     async sendFriendRequest(user1: number, user2: number)
     {
-        const ADD_FRIEND_REQUEST = `INSERT INTO friendrequest (user1, user2, approved) VALUES (${user1}, ${user2}, 0) RETURNING id INTO :id`;
+        const ADD_FRIEND_REQUEST = `INSERT INTO friendrequest (user1, user2, approved) VALUES (${user1}, ${user2}, 0)`;
         try
         {
-            const query = await ConnectionConfig.modify(ADD_FRIEND_REQUEST, true);
-            if (query === null) {
-                throw Error("Query failed!");
+            const ret = await ConnectionConfig.modify(ADD_FRIEND_REQUEST, false);
+            if (ret === null)
+            {
+                throw Error("Failed to send friend request");
             }
-            return query;
+            return user2;
         } catch(error) {
             console.error(error);
             return null;

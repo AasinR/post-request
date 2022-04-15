@@ -63,7 +63,7 @@ class DatabaseConfig {
             }
             else {
                 await connection.execute(sql, [], {autoCommit: true});
-                return null;
+                return 0;
             }
         } catch(error) {
             console.error(error);

@@ -67,6 +67,7 @@ class DatabaseConfig {
             }
         } catch(error) {
             console.error(error);
+            return null;
         } finally {
             try {
                 connection.close();

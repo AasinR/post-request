@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import AuthDAO from "../dao/AuthDAO";
 import UserDAO from "../dao/UserDAO";
 import EnvConfig from "../config/EnvConfig";
 import User from "../models/User";
@@ -13,22 +14,15 @@ class AuthController {
         user.PASSWORD = req.body.password;
 
         try {
-            const users = await UserDAO.findAll();
-            if (users === null) {
-                throw new Error("Failed to execute query!");
-            }
-            users.forEach((data: User) => {
-                if(data.EMAIL === user.EMAIL) {
-                    throw 400;
-                }
-            });
-
-            const result = UserDAO.create(user);
+            const result = await AuthDAO.register(user);
             if (result === null) {
-                throw new Error("Failed to save user!");
+                throw new Error("Failed to register user!");
             }
-            throw 200;
+            if (result === 0) {
+                throw 400;
+            }
 
+            throw 200;
         } catch(error) {
             switch(error) {
                 case 200:
@@ -47,23 +41,21 @@ class AuthController {
 
     // login
     async login(req : Request, res : Response, next : NextFunction) {
-        const reqData = {
-            email: req.body.email,
-            password: req.body.password
-        };
+        const user = new User();
+        user.EMAIL = req.body.email;
+        user.PASSWORD = req.body.password;
 
         try {
-            const users = await UserDAO.findAll();
-            if (users === null) {
-                throw new Error("Failed to execute query!");
+            const result = await AuthDAO.login(user);
+            if (result === null) {
+                throw new Error("Failed to register user!");
             }
-            users.forEach((data: User) => {
-                if(data.EMAIL === reqData.email && data.PASSWORD === reqData.password) {
-                    req.session.userId = data.ID;
-                    throw 200;
-                }
-            });
-            throw 400;
+            if (result === 0) {
+                throw 400;
+            }
+
+            req.session.userId = result;
+            throw 200;
         } catch(status) {
             switch(status) {
                 case 200:
@@ -88,8 +80,10 @@ class AuthController {
             if(err) {
                 return res.status(500).send("Failed to logout!");
             }
-            res.clearCookie(EnvConfig.SESSION_NAME);
-            res.send("User has logged out!");
+            else {
+                res.clearCookie(EnvConfig.SESSION_NAME);
+                res.send("User has logged out!");
+            }
         });
     }
 }

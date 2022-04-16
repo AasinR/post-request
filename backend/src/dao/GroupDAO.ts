@@ -59,6 +59,22 @@ class GroupDAO {
             return null;
         }
     }
+
+    async createGroup(newGroup: Group) : Promise<Group>
+    {
+        const INSERT = `INSERT INTO "Group" (Name, Logo, OwnerID) VALUES (${newGroup.NAME}, ${newGroup.LOGO}, ${newGroup.OWNERID});`;
+        try {
+            const query = await ConnectionConfig.modify(INSERT, true);
+            if (query === null) {
+                throw Error("Query failed!");
+            }
+            newGroup.ID = query;
+            return newGroup;
+        } catch(error) {
+            console.error(error);
+            return null;
+        }
+    }
 }
 
 export default new GroupDAO();

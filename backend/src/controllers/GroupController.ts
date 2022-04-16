@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import Group from "../models/Group";
 import GroupDAO from "../dao/GroupDAO";
 import GroupMembersDAO from "../dao/GroupMembersDAO";
 
@@ -59,6 +60,36 @@ class GroupController {
 
         try {
             result = await GroupDAO.getAll(userId);
+            if (result === null) {
+                throw new Error("Failed to execute query!");
+            }
+
+            throw 200;
+        } catch(status) {
+            switch(status) {
+                case 200:
+                    res.json({
+                        "result": result
+                    });
+                    break;
+                default:
+                    res.sendStatus(500);
+                    console.error(status);
+                    break;
+            }
+        }
+    }
+
+    async createGroup(req : Request, res : Response, next : NextFunction)
+    {
+        let result;
+        let newGroup = new Group();
+        newGroup.LOGO = req.params.logo;
+        newGroup.NAME = req.params.name;
+        newGroup.OWNERID = req.session.userId;
+
+        try {
+            result = await GroupDAO.createGroup(newGroup);
             if (result === null) {
                 throw new Error("Failed to execute query!");
             }

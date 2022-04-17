@@ -20,7 +20,7 @@
           <div v-if="isMember" class="new-post">
             <h2>Make a new post!</h2>
             <textarea id="newpost-text" v-model="newPost.content"></textarea>
-            <input id="newpost-picture" type="file"><br>
+            <input id="newpost-picture" type="file" @change="setNewPostImage($event)" ref="imageUpload"><br>
             <button @click="sendNewPost" type="submit" id="new-post-submit" >Post</button>                                   <!--TODO-->
           </div>
           <div class="posts">
@@ -39,6 +39,8 @@ import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import Header from "@/components/Header";
 import Post from "@/components/Post";
+
+import FormData from 'form-data';
 
 export default {
   name: "GroupPage",
@@ -70,6 +72,13 @@ export default {
     }
   },
   methods: {
+    setNewPostImage(event){
+      if(event.target.files.length === 0){
+        return;
+      }
+      this.newPost.image = event.target.files[0]
+    },
+
     async initPosts(){
       try {
         const response = await this.axios.get(`${this.$root.requestURL}/post/group/getall/${this.groupID}`);
@@ -90,16 +99,31 @@ export default {
 
     async sendNewPost(){
       if(this.newPost.content.trim() !== '') {
+
+        const formData = new FormData();
+        formData.append('image', this.newPost.image);
+        formData.append('text', this.newPost.content);
+        formData.append('groupId', this.newPost.groupID);
+
         try {
-          await this.axios.post(`${this.$root.requestURL}/post/group/create`, {
-            groupId: this.newPost.groupID,
-            text: this.newPost.content,
-          })
+          await this.axios.post(
+              `${this.$root.requestURL}/post/group/create`,
+              formData,
+              {
+                headers: {
+                  'content-type': 'multipart/form-data'
+                }
+              }
+          )
         } catch (err) {
-          this.errorMsg = err.response.data;
           console.log(err.response.data);
         }
-        await this.$router.go();
+
+        await new Promise(r => setTimeout(r, 200));
+        await this.initPosts();
+        this.newPost.content = '';
+        this.newPost.image = null;
+        this.$refs.imageUpload.value = null;
       }
     },
   },

@@ -5,11 +5,11 @@
     <div class="content">
       <div class="friend-requests">
         <h2>Friend requests</h2>
-        <FriendRequest v-for="friendRequest in friendRequests" :friend-request="friendRequest"/>
+        <FriendRequest :key="index" v-for="(friendRequest, index) in friendRequests" :friend-request="friendRequest"/>
       </div>
       <div class="my-friends">
         <h2>My friends</h2>
-        <Friend v-for="friend in friends" :friend="friend"/>
+        <Friend :key="index" v-for="(friend, index) in friends" :friend="friend"/>
       </div>
     </div>
     <Footer/>

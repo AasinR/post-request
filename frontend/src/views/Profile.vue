@@ -30,7 +30,7 @@
           </div>
           <div class="posts">
             <h2>Posts</h2>
-            <Post v-for="post in posts" :key="post.ID" :post-data="post" type="public" ></Post>
+            <Post v-for="post in posts" :key="post.ID" :post-data="post" type="public" @delete="initPosts"></Post>
           </div>
         </div>
       </div>
@@ -80,26 +80,7 @@ export default {
         image: null,
       },
 
-      posts: [
-        // {
-        //   ID: 5,
-        //   TEXT: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-        //   TIMESTAMP: "2002-03-07 12:00",
-        //   PICTURE: "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/golden-retriever-royalty-free-image-506756303-1560962726.jpg?crop=0.672xw:1.00xh;0.166xw,0&resize=640:*", /*https://s.24.hu/app/uploads/sites/11/2018/05/thinkstockphotos-521697453-e1526731524153.jpg*/
-        // },
-        // {
-        //   ID: 4,
-        //   TEXT: "hello bello",
-        //   TIMESTAMP: "2002-45-25 15:00",
-        //   PICTURE: "",
-        // },
-        // {
-        //   ID: 2,
-        //   TEXT: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse ci",
-        //   TIMESTAMP: "2052-03-07 18:00",
-        //   PICTURE: "",
-        // }
-      ],
+      posts: [],
     }
   },
 
@@ -191,7 +172,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
   .profile{
     padding-top: 8vh;
     padding-bottom: 10vh;

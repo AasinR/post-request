@@ -69,7 +69,7 @@
             <div class="input-group">
               <label for="pfp"> New profile picture:</label> <br>
               <div class="input-field">
-                <input type="file" id="pfp" >
+                <input type="file" id="pfp" @change="setNewPostImage($event)" >
               </div>
             </div>
           <div class="edit-btn">
@@ -85,6 +85,9 @@
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import Header from "@/components/Header";
+
+import FormData from 'form-data';
+
 
 export default {
   name: "EditProfile",
@@ -110,6 +113,13 @@ export default {
   },
 
   methods: {
+    setNewPostImage(event){
+      if(event.target.files.length === 0){
+        return;
+      }
+      this.inputData.profilePicture = event.target.files[0];
+    },
+
     initData(){
       this.initUser();
       this.initUserData();
@@ -155,17 +165,29 @@ export default {
           console.log(err.response.data);
         }
 
+        const formData = new FormData();
+        formData.append('birthDate', this.inputData.birthDate);
+        formData.append('phoneNumber', this.inputData.phoneNumber);
+        formData.append('profession', this.inputData.profession);
+        formData.append('gender', this.inputData.gender);
+        formData.append('image', this.inputData.profilePicture);
+
         try {
-          await this.axios.post(`${this.$root.requestURL}/user/data/save`, {
-            birthDate: this.inputData.birthDate,
-            phoneNumber: this.inputData.phoneNumber,
-            profession: this.inputData.profession,
-            gender: this.inputData.gender,
-          })
+          await this.axios.post(
+              `${this.$root.requestURL}/user/data/save`,
+              formData,
+              {
+                headers: {
+                  'content-type': 'multipart/form-data'
+                }
+              }
+          )
         } catch (err) {
           this.errorMsg = err.response.data;
           console.log(err.response.data);
         }
+
+        await new Promise(r => setTimeout(r, 200));
         await this.$router.replace({name: 'Profile', params:{userID: this.$cookies.get('UserID')}});
       } else {
         this.errorMsg = this.areInputsValid;

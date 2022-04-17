@@ -25,7 +25,7 @@
           <div v-if="$cookies.get('UserID') === userID" class="new-post">
             <h2>Make a new post!</h2>
             <textarea id="newpost-text" v-model="newPost.content" placeholder="Write your post here..."></textarea>
-            <input id="newpost-picture" type="file"><br>
+            <input id="newpost-picture" type="file" @change="setNewPostImage($event)" ref="imageUpload"><br>
             <button type="submit" id="new-post-submit" @click="sendNewPost">Post</button>
           </div>
           <div class="posts">
@@ -44,6 +44,8 @@ import Header from "@/components/Header";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Post from "@/components/Post";
+
+import FormData from 'form-data';
 
 export default {
   name: "Profile",
@@ -102,21 +104,43 @@ export default {
   },
 
   methods: {
+    setNewPostImage(event){
+      if(event.target.files.length === 0){
+        return;
+      }
+      this.newPost.image = event.target.files[0]
+    },
+
     editProfile(){
       this.$router.replace({name: 'EditProfile'});
     },
 
     async sendNewPost(){
       if(this.newPost.content.trim() !== '') {
+
+        const formData = new FormData();
+        formData.append('image', this.newPost.image);
+        formData.append('text', this.newPost.content);
+
         try {
-          await this.axios.post(`${this.$root.requestURL}/post/public/create`, {
-            userId: this.newPost.userID,
-            text: this.newPost.content,
-          })
+          await this.axios.post(
+            `${this.$root.requestURL}/post/public/create`,
+            formData,
+            {
+              headers: {
+                'content-type': 'multipart/form-data'
+              }
+            }
+          )
         } catch (err) {
           console.log(err.response.data);
         }
-        await this.$router.go();
+
+        await new Promise(r => setTimeout(r, 200));
+        await this.initPosts();
+        this.newPost.content = '';
+        this.newPost.image = null;
+        this.$refs.imageUpload.value = null;
       }
     },
 

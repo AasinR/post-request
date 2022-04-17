@@ -15,7 +15,7 @@
   <hr/>
   <p id="comment-toggle" @click="collapseComments" >View comments</p>
   <div :id="postData.ID" class="comments collapsible">
-    <Comment v-for="comment in comments" :comment="comment" :type="type"/>
+    <Comment :key="index" v-for="(comment, index) in comments" :comment="comment" :type="type" @delete="initComments"/>
   </div>
   <div class="new-comment-container">
     <textarea id="comment-input" v-model="newComment.content" placeholder="Write a comment..."></textarea>
@@ -76,7 +76,8 @@ export default {
         } catch (err) {
           console.log(err.response.data);
         }
-        await this.$router.go();
+        await this.initComments();
+        this.newComment.content = '';
       }
     },
   },

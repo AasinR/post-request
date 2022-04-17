@@ -62,7 +62,7 @@ class UserDataDAO {
             if (rowExists) {
                 profilepicture = profilepicture ? profilepicture : ((rowExists.PROFILEPICTURE) ? `'${rowExists.PROFILEPICTURE}'` : null);
 
-                if (profilepicture !== rowExists.PROFILEPICTURE) {
+                if (profilepicture !== rowExists.PROFILEPICTURE && rowExists.PROFILEPICTURE !== null) {
                     const fileID = rowExists.PROFILEPICTURE.split("=")[2];
                     CloudConfig.delete(fileID);
                 }

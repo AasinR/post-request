@@ -5,7 +5,7 @@
     <div class="content">
       <div class="group-header">
         <div class="logo-container">
-          <img class="logo" :src="groupData.logo || require('@/assets/pfp-default.png')" alt="group logo"/>
+          <img class="logo" :src="groupData.logo || require('@/assets/grouplogo-default.png')" alt="group logo"/>
         </div>
         <div class="name-container">
           <p>{{groupData.name}}</p>

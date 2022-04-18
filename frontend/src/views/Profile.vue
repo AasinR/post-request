@@ -97,7 +97,7 @@ export default {
     },
 
     async sendNewPost(){
-      if(this.newPost.content.trim() !== '') {
+      if(this.newPost.content.trim() !== '' || this.newPost.image !== null) {
 
         const formData = new FormData();
         formData.append('image', this.newPost.image);

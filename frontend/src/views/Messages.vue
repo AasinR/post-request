@@ -98,7 +98,7 @@ export default {
 
     changeMessages(friend){
       this.currentFriendID = friend.ID;
-      console.log(this.currentFriendID);
+      //console.log(this.currentFriendID);
     },
 
     sendMessage(){

@@ -83,9 +83,9 @@ class GroupController {
     async createGroup(req : Request, res : Response, next : NextFunction)
     {
         let result;
-        let newGroup = new Group();
-        newGroup.LOGO = req.params.logo;
-        newGroup.NAME = req.params.name;
+        const newGroup = new Group();
+        newGroup.LOGO = req.body.logo;
+        newGroup.NAME = req.body.name;
         newGroup.OWNERID = req.session.userId;
 
         try {

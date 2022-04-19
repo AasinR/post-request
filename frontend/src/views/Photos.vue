@@ -13,12 +13,12 @@
           </div>
         </div>
         <div class="albums-container" >
-          <div class="album-container" v-for="(album, index) in albums" :key="index">
+          <router-link class="album-container" v-for="(album, index) in albums" :key="index" :to="{name: 'AlbumPage', params: {albumID: album.ID}}">
             <div class="cover-container">
               <img class="cover" :src="require('@/assets/default-gallery-cover.png')" alt="album cover"/>
             </div>
             <p class="album-name">{{album.NAME}}</p>
-          </div>
+          </router-link>
         </div>
       </div>
       <div class="my-photos">
@@ -266,6 +266,8 @@ export default {
             .album-name {
               line-height: 20px;
               margin: 10px 0;
+              text-decoration: none;
+              color: var(--font-color);
             }
             &:hover {
               cursor: pointer;

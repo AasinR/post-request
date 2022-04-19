@@ -161,6 +161,18 @@ const routes = [
     path: "/add-group",
     component: () => import('@/views/add/AddGroup')
   },
+  {
+    name: "AlbumPage",
+    path: "/album-page/:albumID",
+    props: true,
+    component: () => import('@/views/AlbumPage')
+  },
+  {
+    name: "AddPhotosToAlbum",
+    path: "/add-photos/:albumID",
+    props: true,
+    component: () => import('@/views/add/AddPhotosToAlbum')
+  },
 ]
 
 const router = new VueRouter({

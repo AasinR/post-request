@@ -2,11 +2,14 @@
   <div class="messages">
     <Header/>
     <Navbar current="messages"/>
-    <div class="content">
-      <div class="friend-list">
+    <div v-if="loadDone" class="content">
+      <div v-if="zeroFriends" class="no-friends">
+        <h1>You don't have any friends to message yet!</h1>
+      </div>
+      <div v-if="!zeroFriends" class="friend-list">
         <MessagesFriend v-for="(friend, index) in friends" :key="index" :friend="friend" :current-friend-id="currentFriendID" @chooseFriend="changeMessages(friend)"/>
       </div>
-      <div class="private-messages-box">
+      <div v-if="!zeroFriends" class="private-messages-box">
         <div class="private-messages">
           <Message v-for="(message, index) in messages" :key="index" :message="message"/>
         </div>
@@ -82,6 +85,8 @@ export default {
         content: '',
       },
       currentFriendID: 0,
+      zeroFriends: true,
+      loadDone: false,
     }
   },
   methods: {
@@ -92,7 +97,14 @@ export default {
       } catch (err) {
         console.log(err.response.data);
       }
-      this.currentFriendID = this.friends[0].ID;
+
+      if(this.friends[0] === undefined || this.friends[0] === null){
+        this.zeroFriends = true;
+      } else {
+        this.zeroFriends = false;
+        this.currentFriendID = this.friends[0].ID;
+      }
+      this.loadDone = true;
       //console.log(this.currentFriendID);
     },
 
@@ -122,6 +134,12 @@ export default {
       width: 60%;
       display: flex;
       flex-direction: row;
+
+      .no-friends{
+        margin-left: auto;
+        margin-right: auto;
+
+      }
 
       .friend-list, .private-messages {
         overflow-y: auto;

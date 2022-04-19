@@ -4,7 +4,6 @@
     <Navbar current="profile"/>
     <div class="content">
         <div class="input-fields">
-          <p class="error-message" v-if="errorMsg">{{errorMsg}}</p>
           <div class="name-group">
             <div class="input-group firstname">
               <label for="firstname"> First name:</label> <br>
@@ -72,6 +71,7 @@
                 <input type="file" id="pfp" @change="setNewPostImage($event)" >
               </div>
             </div>
+          <p class="error-message" v-if="errorMsg">{{errorMsg}}</p>
           <div class="edit-btn">
             <button type="submit" @click="edit">Edit</button>
           </div>
@@ -140,8 +140,14 @@ export default {
     async initUserData(){
       try {
         const response = await this.axios.get(`${this.$root.requestURL}/user/data/get/${this.$cookies.get("UserID")}`);
-        this.inputData.birthDate = (response.data.result.BIRTHDATE).replaceAll("/", "-");
-        this.inputData.gender = response.data.result.GENDER;
+        if(response.data.result.BIRTHDATE !== null){
+          this.inputData.birthDate = (response.data.result.BIRTHDATE).replaceAll("/", "-");
+        }
+        if(response.data.result.GENDER === null || response.data.result.GENDER === 'null'){
+          this.inputData.gender = 'Male'
+        } else {
+          this.inputData.gender = response.data.result.GENDER;
+        }
         this.inputData.phoneNumber = response.data.result.PHONENUMBER;
         this.inputData.profession = response.data.result.PROFESSION;
         this.inputData.profilePicture = response.data.result.PROFILEPICTURE;
@@ -153,19 +159,20 @@ export default {
     async edit(){
       this.errorMsg = '';
       if(this.areInputsValid === "OK") {
-        try {
-          await this.axios.post(`${this.$root.requestURL}/user/save`, {
-            firstName: this.inputData.firstName,
-            lastName: this.inputData.lastName,
-            email: this.inputData.email,
-            password: this.inputData.password,
-          })
-        } catch (err) {
-          this.errorMsg = err.response.data;
-          console.log(err.response.data);
+
+        if(this.inputData.phoneNumber === null || this.inputData.phoneNumber === 'null'){
+          this.inputData.phoneNumber = '';
+        }
+
+        if(this.inputData.profession === null || this.inputData.profession === 'null'){
+          this.inputData.profession = '';
         }
 
         const formData = new FormData();
+        formData.append('firstName', this.inputData.firstName);
+        formData.append('lastName', this.inputData.lastName);
+        formData.append('email', this.inputData.email);
+        formData.append('password', this.inputData.password);
         formData.append('birthDate', this.inputData.birthDate);
         formData.append('phoneNumber', this.inputData.phoneNumber);
         formData.append('profession', this.inputData.profession);
@@ -187,7 +194,7 @@ export default {
           console.log(err.response.data);
         }
 
-        await new Promise(r => setTimeout(r, 200));
+        await new Promise(r => setTimeout(r, 1000));
         await this.$router.replace({name: 'Profile', params:{userID: this.$cookies.get('UserID')}});
       } else {
         this.errorMsg = this.areInputsValid;

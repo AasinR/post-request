@@ -80,6 +80,7 @@ export default {
         }
         await this.initComments();
         this.newComment.content = '';
+        this.collapseComments();
       }
     },
   },

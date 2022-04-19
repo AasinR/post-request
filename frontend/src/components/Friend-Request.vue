@@ -72,6 +72,15 @@ export default {
 
   .accept-buttons {
     margin-left: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: right;
+
+    .accept-img {
+      margin-right: 15%;
+    }
+
     &:hover {
       cursor: pointer;
     }

@@ -117,7 +117,7 @@ export default {
           console.log(err.response.data);
         }
 
-        await new Promise(r => setTimeout(r, 200));
+        await new Promise(r => setTimeout(r, 1000));
         await this.initPosts();
         this.newPost.content = '';
         this.newPost.image = null;

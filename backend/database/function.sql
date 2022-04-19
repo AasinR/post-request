@@ -76,10 +76,3 @@ EXCEPTION
         RETURN null;
 END;
 /
-
-DECLARE
-    output VARCHAR2(128);
-BEGIN
-    output := update_user(1002, q'[pwd]', q'[email]', q'[fname]', q'[lname]', q'[female]', 'img', TO_DATE('2222/11/22', 'yyyy/mm/dd'), null, null);
-    DBMS_OUTPUT.PUT_LINE(output);
-END;

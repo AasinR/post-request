@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 import AuthDAO from "../dao/AuthDAO";
-import UserDAO from "../dao/UserDAO";
 import EnvConfig from "../config/EnvConfig";
 import User from "../models/User";
 

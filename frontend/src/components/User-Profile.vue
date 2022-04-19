@@ -1,17 +1,17 @@
 <template>
 <router-link :to="{name: 'Profile', params: {userID: friend.ID}}" class="friend">
   <div class="profile-picture-container">
-    <img class="pfp" :src="friend.PROFILEPICTURE || require('@/assets/pfp-default.png')" alt="profile picture"/>
+    <img class="pfp" :src="user.PROFILEPICTURE || require('@/assets/pfp-default.png')" alt="profile picture"/>
   </div>
-  <p class="name">{{friend.FIRSTNAME}} {{friend.LASTNAME}}</p>
+  <p class="name">{{ user.FIRSTNAME }} {{ user.LASTNAME }}</p>
 </router-link>
 </template>
 
 <script>
 export default {
-  name: "Friend",
+  name: "UserProfile",
   props: {
-    friend: Object,
+    user: Object,
   },
 }
 </script>

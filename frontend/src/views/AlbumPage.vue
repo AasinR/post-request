@@ -150,6 +150,9 @@ export default {
             margin-top: 2%;
             margin-bottom: 2%;
             font-size: 20px;
+            border-radius: 20px;
+            padding-left: 1%;
+            padding-right: 1%;
           }
 
           .add-photo-btn {

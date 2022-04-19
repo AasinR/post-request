@@ -1,8 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import Message from "../models/Message";
 import MessageDAO from "../dao/MessageDAO";
-import { datacatalog } from "googleapis/build/src/apis/datacatalog";
-import { time } from "console";
 
 class MessageController {
 

@@ -32,7 +32,8 @@ BEGIN
     LOOP
         IF (rekord.approved = 1) THEN
             INSERT INTO friends (user1, user2) VALUES (rekord.user1, rekord.user2);
-            DELETE FROM friendrequest WHERE CURRENT OF friendReq OR (rekord.user1 = user2 AND rekord.user2 = user1);
+            DELETE FROM friendrequest WHERE (rekord.user1 = user1 AND rekord.user2 = user2) OR (rekord.user1 = user2 AND rekord.user2 = user1);
+            EXIT;
         END IF;
     END LOOP;
 END;

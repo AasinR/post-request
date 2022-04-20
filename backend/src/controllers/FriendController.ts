@@ -101,6 +101,33 @@ class FriendController {
             }
         }
     }
+
+    // send friendRequest
+    async askForFriend(req : Request, res : Response, next : NextFunction)
+    {
+        try
+        {
+            const result = await FriendRequestDAO.sendFriendRequest(req.session.userId, req.body.user1);
+            if (result === null)
+            {
+                throw new Error("Failed to send friend request!");
+            }
+            throw 200;
+        }
+        catch(status)
+        {
+            switch(status)
+            {
+                case 200:
+                    res.send("Friend request sent!");
+                    break;
+                default:
+                    res.sendStatus(500);
+                    console.error(status);
+                    break;
+            }
+        }
+    }
 }
 
 export default new FriendController();

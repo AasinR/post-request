@@ -19,6 +19,24 @@ class FriendRequestDAO {
             return null;
         }
     }
+
+    // ask for friend
+    async sendFriendRequest(user1: number, user2: number)
+    {
+        const ADD_FRIEND_REQUEST = `INSERT INTO friendrequest (user1, user2, approved) VALUES (${user1}, ${user2}, 0)`;
+        try
+        {
+            const ret = await ConnectionConfig.modify(ADD_FRIEND_REQUEST, false);
+            if (ret === null)
+            {
+                throw Error("Failed to send friend request");
+            }
+            return user2;
+        } catch(error) {
+            console.error(error);
+            return null;
+        }
+    }
 }
 
 export default new FriendRequestDAO();

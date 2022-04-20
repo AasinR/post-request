@@ -34,7 +34,6 @@ class MessageController {
             const message = new Message();
             message.CONTENT = req.body.content;
             message.TOUSER = req.body.touser;
-            message.TIMESTAMP = Date.now().toString();
             message.FROMUSER = req.session.userId;
             result = await MessageDAO.sendMessage(message);
             if (result === null) {
@@ -82,7 +81,7 @@ class MessageController {
     async getMessaging(req : Request, res : Response, next : NextFunction) {
         let result;
         try {
-            result = await MessageDAO.getMessaging(req.body.user1, req.body.user2);
+            result = await MessageDAO.getMessaging(req.session.userId, parseInt(req.params.toId, 10));
             if (result === null) {
                 throw new Error("Failed to execute query!");
             }
@@ -104,7 +103,7 @@ class MessageController {
 
     async deleteMessage(req : Request, res : Response, next : NextFunction) {
         try {
-            const messageId = parseInt(req.body.id, 10);
+            const messageId = parseInt(req.params.id, 10);
             const message = await MessageDAO.getMessage(messageId);
             if (message === null) {
                 throw new Error("Failed to get message!");

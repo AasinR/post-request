@@ -34,7 +34,7 @@ class DatabaseConfig {
             if(connection === null) {
                 throw new Error("Failed to connect to database!");
             }
-            const result = await connection.execute(sql, [], {outFormat: db.OBJECT});
+            const result = await connection.execute(sql, [], {outFormat: db.OBJECT, autoCommit: true});
             return result;
         } catch(error) {
             console.error(error);
@@ -65,6 +65,30 @@ class DatabaseConfig {
                 await connection.execute(sql, [], {autoCommit: true});
                 return 0;
             }
+        } catch(error) {
+            console.error(error);
+            return null;
+        } finally {
+            try {
+                connection.close();
+            } catch(closeError) {
+                console.error(closeError);
+            }
+        }
+    }
+
+    // execute pl/sql function, returns :result
+    async executeFunc(sql: string): Promise<any> {
+        let connection;
+        try {
+            connection = await this.connect();
+            if(connection === null) {
+                throw new Error("Failed to connect to database!");
+            }
+
+            const result = await connection.execute(sql, {result: {dir: oracledb.BIND_OUT}}, {autoCommit: true})
+            const outBinds: {[k: string]: any} = result.outBinds;
+            return outBinds.result;
         } catch(error) {
             console.error(error);
             return null;

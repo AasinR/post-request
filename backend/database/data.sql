@@ -152,6 +152,8 @@ INSERT INTO "User" (password, email, permission, firstname, lastname) VALUES ('7
 INSERT INTO "User" (password, email, permission, firstname, lastname) VALUES ('VXIU3ZF1NE3X', 'Fynlay.Aulay@freemail.hu', 0, 'Fynlay', 'Aulay');
 INSERT INTO "User" (password, email, permission, firstname, lastname) VALUES ('8TQPZDQYUP', 'Kelso.Jincheng@stud.u-szeged.hu', 0, 'Kelso', 'Jincheng');
 
+INSERT INTO userdata (userid) VALUES ('1000');
+INSERT INTO userdata (userid) VALUES ('1001');
 INSERT INTO userdata (gender, birthdate, phonenumber, profession, userid) VALUES ('Male', TO_DATE('1990/1/19', 'yyyy/mm/dd'), '+36502130985', 'Camera operator', '1002');
 INSERT INTO userdata (gender, birthdate, phonenumber, profession, userid) VALUES ('Male', TO_DATE('1999/4/24', 'yyyy/mm/dd'), '+36701886341', 'Cartographer', '1003');
 INSERT INTO userdata (gender, birthdate, phonenumber, profession, userid) VALUES ('Female', TO_DATE('2002/9/28', 'yyyy/mm/dd'), '+36307185830', 'Chemical engineer', '1004');

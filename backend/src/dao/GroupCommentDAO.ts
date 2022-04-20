@@ -28,7 +28,7 @@ class GroupCommentDAO {
             "FROM GroupComment, \"User\", UserData "+
             "WHERE GroupComment.USERID = \"User\".ID AND \"User\".ID = UserData.USERID AND "+
                 `GroupComment.POSTID = ${ID} `+
-            "ORDER BY GroupComment.TIMESTAMP DESC";
+            "ORDER BY GroupComment.TIMESTAMP";
 
         try {
             const query = await ConnectionConfig.query(GET_ALL);

@@ -212,8 +212,14 @@ class UserController {
 
     // upload user data
     async saveData(req : Request, res : Response, next : NextFunction) {
+        const user = new User();
+        user.ID = req.session.userId;
+        user.PASSWORD = req.body.password;
+        user.EMAIL = req.body.email;
+        user.FIRSTNAME = req.body.firstName;
+        user.LASTNAME = req.body.lastName;
+
         const userData = new UserData();
-        userData.USERID = req.session.userId;
         userData.GENDER = req.body.gender;
         userData.BIRTHDATE = req.body.birthDate;
         userData.PHONENUMBER = req.body.phoneNumber;
@@ -228,7 +234,7 @@ class UserController {
                 userData.PROFILEPICTURE = link;
             }
 
-            const result = await UserDataDAO.save(userData);
+            const result = await UserDataDAO.save(user, userData);
             if (result === null) {
                 throw new Error("Failed to save user data!");
             }

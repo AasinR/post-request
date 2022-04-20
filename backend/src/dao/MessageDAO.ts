@@ -51,7 +51,21 @@ class MessageDAO {
     }
 
     async getMessaging(user1: number, user2: number): Promise<Message[]> {
-        const FIND_ALL = `SELECT *, TO_CHAR(privatemessage.TIMESTAMP, 'yyyy/mm/dd hh24:mi') as TIMESTAMPFORMATED FROM privatemessage WHERE (FromUser = ${user1} AND ToUser = ${user2}) OR (FromUser = ${user2} AND ToUser = ${user1}) ORDER BY TimeStamp`;
+        const FIND_ALL = `SELECT privatemessage.*, User1.FIRSTNAME, User1.LASTNAME, userdata1.PROFILEPICTURE, User2.FIRSTNAME, User2.LASTNAME, userdata2.PROFILEPICTURE
+        FROM privatemessage, "User" user1, UserData userdata1, "User" user2, UserData userdata2
+        WHERE privatemessage.FromUser = user1.id AND
+            privatemessage.ToUser = user2.id AND
+            user1.id = userdata1.userid AND
+            user2.id = userdata2.userid AND
+            privatemessage.FromUser = ${user1} AND
+            privatemessage.ToUser = ${user2}
+        OR privatemessage.FromUser = user1.id AND
+            privatemessage.ToUser = user2.id AND
+            user2.id = userdata2.userid AND
+            user1.id = userdata1.userid AND
+            privatemessage.ToUser = ${user1} AND
+            privatemessage.FromUser = ${user2}
+        ORDER BY privatemessage.timestamp`;
         try {
             const query = await ConnectionConfig.query(FIND_ALL);
             if (query === null) {

@@ -79,3 +79,20 @@ OR Friends.USER1 = User1.ID AND
     User1.ID = Data1.USERID AND
     User2.ID = Data2.USERID AND
     Friends.USER2 = 1000;
+
+-- get messaging by users
+SELECT privatemessage.*, User1.FIRSTNAME, User1.LASTNAME, userdata1.PROFILEPICTURE, User2.FIRSTNAME, User2.LASTNAME, userdata2.PROFILEPICTURE
+FROM privatemessage, "User" user1, UserData userdata1, "User" user2, UserData userdata2
+WHERE privatemessage.FromUser = user1.id AND
+    privatemessage.ToUser = user2.id AND
+    user1.id = userdata1.userid AND
+    user2.id = userdata2.userid AND
+    privatemessage.FromUser = 1000 AND
+    privatemessage.ToUser = 1011
+OR privatemessage.FromUser = user1.id AND
+    privatemessage.ToUser = user2.id AND
+    user2.id = userdata2.userid AND
+    user1.id = userdata1.userid AND
+    privatemessage.ToUser = 1011 AND
+    privatemessage.FromUser = 1000
+ORDER BY privatemessage.timestamp;

@@ -104,6 +104,42 @@ class MessageController {
         }
     }
 
+    // edit message by ID
+    async update(req : Request, res : Response, next : NextFunction) {
+        const msgId = parseInt(req.params.id, 10);
+
+        try {
+            const message = await MessageDAO.getMessage(msgId);
+            if (message === null) {
+                throw new Error("Failed to get message!");
+            }
+            if (message.FROMUSER !== req.session.userId) {
+                throw 400;
+            }
+            message.CONTENT = req.body.content;
+
+            const result = await MessageDAO.update(message);
+            if (result === null) {
+                throw new Error("Failed to update message!");
+            }
+
+            throw 200;
+        } catch(status) {
+            switch(status) {
+                case 200:
+                    res.send("Message updated!");
+                    break;
+                case 400:
+                    res.status(400).send("Not authorized to update other's message!");
+                    break;
+                default:
+                    res.sendStatus(500);
+                    console.error(status);
+                    break;
+            }
+        }
+    }
+
     // delete message by ID
     async deleteMessage(req : Request, res : Response, next : NextFunction) {
         try {

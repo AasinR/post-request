@@ -13,6 +13,7 @@ class MessageRoutes {
         this._Router.get("/get/:id", SessionController.isUser, MessageController.getMessage);
         this._Router.get("/delete/:id", SessionController.isUser, MessageController.deleteMessage);
         this._Router.post("/send", SessionController.isUser, MessageController.sendMessage);
+        this._Router.post("/update/:id", SessionController.isUser, MessageController.update);
     }
 
     get Router() {

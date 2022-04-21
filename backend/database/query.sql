@@ -95,4 +95,4 @@ OR PrivateMessage.FromUser = User1.id AND
     User1.id = UserData1.userid AND
     PrivateMessage.ToUser = 1000 AND
     PrivateMessage.FromUser = 1001
-ORDER BY PrivateMessage.TIMESTAMP;
+ORDER BY PrivateMessage.TIMESTAMP DESC;

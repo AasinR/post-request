@@ -1,5 +1,5 @@
 <template>
-<div class="message" :class="message.USERID.toString() === $cookies.get('UserID').toString() ? 'sent' : 'recieved'">
+<div class="message" :class="message.FROMUSER.ID.toString() === $cookies.get('UserID').toString() ? 'sent' : 'recieved'">
   <p>{{message.CONTENT}}</p>
 </div>
 </template>

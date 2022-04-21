@@ -11,10 +11,17 @@
       </div>
       <div v-if="!zeroFriends" class="private-messages-box">
         <div class="private-messages">
+          <p class="zeroMessages" v-if="zeroMessages">There are no messages yet</p>
           <Message v-for="(message, index) in messages" :key="index" :message="message"/>
         </div>
         <div class="new-message-container">
-          <textarea id="new-message" v-model="newMessage.content" rows="1" placeholder="Send a message..."></textarea>
+          <textarea id="new-message"
+                    v-model="newMessageContent"
+                    v-on:keydown.enter.exact.prevent="sendMessage"
+                    v-on:keydown.enter.shift.exact.prevent="newMessageContent += '\n'"
+                    rows="1"
+                    placeholder="Send a message..."
+          ></textarea>
           <img @click="sendMessage" id="send-img" src="@/assets/send.png" alt="send-img"/>
         </div>
       </div>
@@ -36,55 +43,11 @@ export default {
   data(){
     return{
       friends: [],
-      messages: [
-        {
-          USERID: 1002,
-          CONTENT: "Helloooooooo"
-        },
-        {
-          USERID: 1000,
-          CONTENT: "Hey"
-        },
-        {
-          USERID: 1000,
-          CONTENT: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-        },
-        {
-          USERID: 1002,
-          CONTENT: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-        },
-        {
-          USERID: 1002,
-          CONTENT: "Right?"
-        },
-        {
-          USERID: 1000,
-          CONTENT: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut"
-        },
-        {
-          USERID: 1000,
-          CONTENT: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad"
-        },
-        {
-          USERID: 1000,
-          CONTENT: "Lorem ipsum dolor sit amet, consectetur"
-        },
-        {
-          USERID: 1000,
-          CONTENT: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum"
-        },
-        {
-          USERID: 1000,
-          CONTENT: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
-        },
+      messages: [],
 
-      ],
-      newMessage: {
-        userID1: '',
-        userID2: '',
-        content: '',
-      },
+      newMessageContent: '',
       currentFriendID: 0,
+      zeroMessages: false,
       zeroFriends: true,
       loadDone: false,
     }
@@ -103,18 +66,40 @@ export default {
       } else {
         this.zeroFriends = false;
         this.currentFriendID = this.friends[0].ID;
+        await this.initMessages();
       }
       this.loadDone = true;
-      //console.log(this.currentFriendID);
+    },
+
+    async initMessages(){
+      try {
+        const response = await this.axios.get(`${this.$root.requestURL}/message/getMessaging/${this.currentFriendID}`);
+        this.messages = response.data.result;
+      } catch (err) {
+        console.log(err.response.data);
+      }
+
+      this.zeroMessages = this.messages[0] === undefined || this.messages[0] === null;
     },
 
     changeMessages(friend){
       this.currentFriendID = friend.ID;
-      //console.log(this.currentFriendID);
+      this.initMessages();
     },
 
-    sendMessage(){
-
+    async sendMessage(){
+      if(this.newMessageContent.trim() !== '') {
+        try {
+          await this.axios.post(`${this.$root.requestURL}/message/send`, {
+            content: this.newMessageContent,
+            touser: this.currentFriendID,
+          })
+        } catch (err) {
+          console.log(err.response.data);
+        }
+        await this.initMessages();
+        this.newMessageContent = '';
+      }
     },
   },
   mounted() {
@@ -156,6 +141,12 @@ export default {
         display: flex;
         flex-direction: column-reverse;
         padding-right: 3%;
+
+        .zeroMessages {
+          color: var(--lighter-bg-color);
+          font-size: 20px;
+          align-self: center;
+        }
       }
       .private-messages-box {
         height: 65vh;
@@ -186,6 +177,12 @@ export default {
           #send-img {
             width: 5%;
             margin-left: 2%;
+
+            &:hover {
+              cursor: pointer;
+              -webkit-filter: brightness(85%);
+              transition: all 100ms ease;
+            }
           }
         }
       }

@@ -28,6 +28,7 @@ class MessageController {
         }
     }
 
+    // send message to user
     async sendMessage(req : Request, res : Response, next : NextFunction) {
         let result;
         try {
@@ -44,7 +45,7 @@ class MessageController {
             switch(status) {
                 case 200:
                     res.json({
-                        "result": result
+                        "MessageId": result.ID
                     });
                     break;
                 default:
@@ -55,6 +56,7 @@ class MessageController {
         }
     }
 
+    // get message by ID
     async getMessage(req : Request, res : Response, next : NextFunction) {
         let result;
         try {
@@ -78,6 +80,7 @@ class MessageController {
         }
     }
 
+    // get conversation by user IDs
     async getMessaging(req : Request, res : Response, next : NextFunction) {
         let result;
         try {
@@ -101,6 +104,7 @@ class MessageController {
         }
     }
 
+    // delete message by ID
     async deleteMessage(req : Request, res : Response, next : NextFunction) {
         try {
             const messageId = parseInt(req.params.id, 10);

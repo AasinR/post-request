@@ -5,11 +5,11 @@
     <div class="content">
       <div class="friend-requests">
         <h2>Friend requests</h2>
-        <FriendRequest v-for="friendRequest in friendRequests" :friend-request="friendRequest"/>
+        <FriendRequest :key="index" v-for="(friendRequest, index) in friendRequests" :friend-request="friendRequest"/>
       </div>
       <div class="my-friends">
         <h2>My friends</h2>
-        <Friend v-for="friend in friends" :friend="friend"/>
+        <UserProfile :key="index" v-for="(friend, index) in friends" :user="friend"/>
       </div>
     </div>
     <Footer/>
@@ -21,12 +21,12 @@ import Header from "@/components/Header";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import FriendRequest from "@/components/Friend-Request";
-import Friend from "@/components/Friend";
+import UserProfile from "@/components/User-Profile";
 
 export default {
   name: "Friends",
   components: {
-    Friend,
+    UserProfile,
     FriendRequest,
     Header,
     Navbar,

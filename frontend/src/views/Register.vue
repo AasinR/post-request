@@ -11,32 +11,32 @@
           <div class="input-group firstname">
             <label for="firstname"> First name:</label> <br>
             <div class="input-field">
-              <input type="text"  id="firstname" v-model="inputData.firstName">
+              <input type="text"  id="firstname" v-model="inputData.firstName" v-on:keydown.enter.exact.prevent="register">
             </div>
           </div>
           <div class="input-group last-name">
             <label for="lastname"> Last name:</label> <br>
             <div class="input-field">
-              <input type="text"  id="lastname" v-model="inputData.lastName" >
+              <input type="text"  id="lastname" v-model="inputData.lastName" v-on:keydown.enter.exact.prevent="register" >
             </div>
           </div>
         </div>
         <div class="input-group">
           <label for="email"> E-mail:</label> <br>
           <div class="input-field">
-            <input type="email"  id="email" v-model="inputData.email" >
+            <input type="email"  id="email" v-model="inputData.email" v-on:keydown.enter.exact.prevent="register" >
           </div>
         </div>
         <div class="input-group">
           <label for="password"> Password:</label> <br>
           <div class="input-field">
-            <input type="password" id="password" v-model="inputData.password" >
+            <input type="password" id="password" v-model="inputData.password" v-on:keydown.enter.exact.prevent="register" >
           </div>
         </div>
         <div class="input-group">
           <label for="password-again"> Password again:</label> <br>
           <div class="input-field">
-            <input type="password" id="password-again" v-model="inputData.passwordAgain" >
+            <input type="password" id="password-again" v-model="inputData.passwordAgain" v-on:keydown.enter.exact.prevent="register" >
           </div>
         </div>
         <div class="register-btn">

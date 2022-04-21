@@ -9,7 +9,7 @@ axios.defaults.withCredentials = true;
 Vue.prototype.axios = axios;
 Vue.config.productionTip = false;
 Vue.use(VueCookies);
-Vue.$cookies.config("7d");
+Vue.$cookies.config("3h");
 
 new Vue({
   data(){

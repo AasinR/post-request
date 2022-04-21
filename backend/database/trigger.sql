@@ -5,6 +5,7 @@ CREATE OR REPLACE TRIGGER add_data
 BEGIN
     INSERT INTO UserData (userid) VALUES (:new.id);
 END;
+/
 
 CREATE OR REPLACE TRIGGER acceptExistingFriendRequest
 BEFORE INSERT
@@ -21,6 +22,7 @@ BEGIN
         END IF;
     END LOOP;
 END;
+/
 
 CREATE OR REPLACE TRIGGER acceptFriendRequest
 AFTER INSERT

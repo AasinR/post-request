@@ -55,7 +55,6 @@ const routes = [
     beforeEnter: (from, to, next) =>{
       Vue.nextTick(async () => {
         if(await router.app.isAdmin()){
-          console.log('Ad mint to shopping list')
           next();
         } else {
           next({name: 'NotFound'});
@@ -160,6 +159,18 @@ const routes = [
     name: "AddGroup",
     path: "/add-group",
     component: () => import('@/views/add/AddGroup')
+  },
+  {
+    name: "AlbumPage",
+    path: "/album-page/:albumID",
+    props: true,
+    component: () => import('@/views/AlbumPage')
+  },
+  {
+    name: "AddPhotosToAlbum",
+    path: "/add-photos/:albumID",
+    props: true,
+    component: () => import('@/views/add/AddPhotosToAlbum')
   },
 ]
 

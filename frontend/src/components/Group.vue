@@ -2,7 +2,7 @@
   <div class="group">
     <router-link :to="{name: 'GroupPage', params: {groupID: group.GROUP.ID}}" class="link">
       <div class="logo-container">
-        <img class="logo" :src="group.GROUP.LOGO || require('@/assets/pfp-default.png')" alt="group logo"/>
+        <img class="logo" :src="group.GROUP.LOGO || require('@/assets/grouplogo-default.png')" alt="group logo"/>
       </div>
       <p class="name">{{group.GROUP.NAME}}</p>
     </router-link>

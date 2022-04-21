@@ -1,10 +1,10 @@
 <template>
-<router-link :to="{name: 'Profile', params: {userID: friend.ID}}" class="friend">
-  <div class="profile-picture-container">
-    <img class="pfp" :src="friend.PROFILEPICTURE || require('@/assets/pfp-default.png')" alt="profile picture"/>
+  <div @click="chooseFriend" class="friend" :class="currentFriendId.toString() === friend.ID.toString() ? 'current' : ''">
+    <div class="profile-picture-container">
+      <img class="pfp" :src="friend.PROFILEPICTURE || require('@/assets/pfp-default.png')" alt="profile picture"/>
+    </div>
+    <p class="name">{{friend.FIRSTNAME}} {{friend.LASTNAME}}</p>
   </div>
-  <p class="name">{{friend.FIRSTNAME}} {{friend.LASTNAME}}</p>
-</router-link>
 </template>
 
 <script>
@@ -12,14 +12,20 @@ export default {
   name: "Friend",
   props: {
     friend: Object,
+    currentFriendId: Number,
   },
+  methods: {
+    chooseFriend(){
+      this.$emit("chooseFriend", this.friend);
+    }
+  }
 }
 </script>
 
 <style lang="scss" scoped>
 .friend {
-  border-top: solid 2px var(--ouline-color);
-  border-bottom: solid 2px var(--ouline-color);
+  border-top: solid 1px var(--ouline-color);
+  border-bottom: solid 1px var(--ouline-color);
   padding: 1% 3%;
   display: flex;
   flex-direction: row;
@@ -27,7 +33,7 @@ export default {
   width: 90%;
   margin-left: auto;
   margin-right: auto;
-  margin-bottom: -2px;
+  margin-bottom: -1px;
   text-decoration: none;
 
   &:hover {
@@ -36,8 +42,8 @@ export default {
   }
 
   .profile-picture-container{
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     background-color: var(--ouline-color);
     display: flex;
     flex-direction: column;
@@ -51,14 +57,18 @@ export default {
     margin-right: 2%;
 
     .pfp {
-      max-width: 40px;
-      max-height: 40px;
+      max-width: 30px;
+      max-height: 30px;
     }
   }
 
   .name {
-    font-size: 20px;
+    font-size: 16px;
     color: var(--font-color);
+  }
+
+  &.current {
+    background-color: var(--light-bg-color);
   }
 
 }

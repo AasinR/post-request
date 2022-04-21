@@ -10,13 +10,13 @@
         <div class="input-group">
           <label for="email"> E-mail:</label> <br>
           <div class="input-field">
-            <input type="email"  id="email" v-model="inputData.email">
+            <input type="email"  id="email" v-model="inputData.email" v-on:keydown.enter.exact.prevent="login">
           </div>
         </div>
         <div class="input-group">
           <label for="password"> Password:</label> <br>
           <div class="input-field">
-            <input type="password" id="password" v-model="inputData.password">
+            <input type="password" id="password" v-model="inputData.password" v-on:keydown.enter.exact.prevent="login">
           </div>
         </div>
         <div class="login-btn">
@@ -24,7 +24,7 @@
         </div>
         <hr>
         <div class="to-register-btn">
-          <button @click="sendToRegister">Create account</button>
+          <button @click="sendToRegister" >Create account</button>
         </div>
       </div>
     </div>

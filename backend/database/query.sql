@@ -81,18 +81,18 @@ OR Friends.USER1 = User1.ID AND
     Friends.USER2 = 1000;
 
 -- get messaging by users
-SELECT privatemessage.*, User1.FIRSTNAME, User1.LASTNAME, userdata1.PROFILEPICTURE, User2.FIRSTNAME, User2.LASTNAME, userdata2.PROFILEPICTURE
-FROM privatemessage, "User" user1, UserData userdata1, "User" user2, UserData userdata2
-WHERE privatemessage.FromUser = user1.id AND
-    privatemessage.ToUser = user2.id AND
-    user1.id = userdata1.userid AND
-    user2.id = userdata2.userid AND
-    privatemessage.FromUser = 1000 AND
-    privatemessage.ToUser = 1011
-OR privatemessage.FromUser = user1.id AND
-    privatemessage.ToUser = user2.id AND
-    user2.id = userdata2.userid AND
-    user1.id = userdata1.userid AND
-    privatemessage.ToUser = 1011 AND
-    privatemessage.FromUser = 1000
-ORDER BY privatemessage.timestamp;
+SELECT PrivateMessage.*, TO_CHAR(PrivateMessage.TIMESTAMP, 'yyyy/mm/dd hh24:mi') as C_TIMESTAMP, User1.FIRSTNAME, User1.LASTNAME, UserData1.PROFILEPICTURE, User2.FIRSTNAME, User2.LASTNAME, UserData2.PROFILEPICTURE
+FROM PrivateMessage, "User" User1, UserData UserData1, "User" User2, UserData UserData2
+WHERE PrivateMessage.FromUser = User1.id AND
+    PrivateMessage.ToUser = User2.id AND
+    User1.id = UserData1.userid AND
+    User2.id = UserData2.userid AND
+    PrivateMessage.FromUser = 1000 AND
+    PrivateMessage.ToUser = 1001
+OR PrivateMessage.FromUser = User1.id AND
+    PrivateMessage.ToUser = User2.id AND
+    User2.id = UserData2.userid AND
+    User1.id = UserData1.userid AND
+    PrivateMessage.ToUser = 1000 AND
+    PrivateMessage.FromUser = 1001
+ORDER BY PrivateMessage.TIMESTAMP DESC;

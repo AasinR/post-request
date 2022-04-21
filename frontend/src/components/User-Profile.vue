@@ -1,35 +1,23 @@
 <template>
-<div class="friend-request">
+<router-link :to="{name: 'Profile', params: {userID: user.ID}}" class="friend">
   <div class="profile-picture-container">
-    <img class="pfp" :src="friendRequest.PROFILEPICTURE || require('@/assets/pfp-default.png')" alt="profile picture"/>
+    <img class="pfp" :src="user.PROFILEPICTURE || require('@/assets/pfp-default.png')" alt="profile picture"/>
   </div>
-  <p class="name">{{friendRequest.FIRSTNAME}} {{friendRequest.LASTNAME}}</p>
-  <div class="accept-buttons">
-    <img @click="accept" class="accept-img" src="@/assets/accept.png" alt="accept-img">
-    <img @click="reject" class="reject-img" src="@/assets/reject.png" alt="reject-img">
-  </div>
-</div>
+  <p class="name">{{ user.FIRSTNAME }} {{ user.LASTNAME }}</p>
+</router-link>
 </template>
 
 <script>
 export default {
-  name: "Friend-Request",
+  name: "UserProfile",
   props: {
-    friendRequest: Object,
+    user: Object,
   },
-  methods: {
-    accept(){
-
-    },
-    reject(){
-
-    },
-  }
 }
 </script>
 
 <style lang="scss" scoped>
-.friend-request {
+.friend {
   border-top: solid 2px var(--ouline-color);
   border-bottom: solid 2px var(--ouline-color);
   padding: 1% 3%;
@@ -40,9 +28,11 @@ export default {
   margin-left: auto;
   margin-right: auto;
   margin-bottom: -2px;
+  text-decoration: none;
 
   &:hover {
     background-color: var(--lighter-bg-color);
+    cursor: pointer;
   }
 
   .profile-picture-container{
@@ -68,22 +58,8 @@ export default {
 
   .name {
     font-size: 20px;
+    color: var(--font-color);
   }
 
-  .accept-buttons {
-    margin-left: auto;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: right;
-
-    .accept-img {
-      margin-right: 15%;
-    }
-
-    &:hover {
-      cursor: pointer;
-    }
-  }
 }
 </style>

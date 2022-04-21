@@ -13,12 +13,12 @@
     <p id="timestamp">{{postData.TIMESTAMP}}</p>
   </div>
   <hr/>
-  <p id="comment-toggle" @click="collapseComments" >View comments</p>
+  <p id="comment-toggle" @click="collapseComments" >{{commentCollapsed ? 'View comments' : 'Hide comments'}}</p>
   <div :id="postData.ID" class="comments collapsible">
-    <Comment v-for="comment in comments" :comment="comment" :type="type"/>
+    <Comment :key="index" v-for="(comment, index) in comments" :comment="comment" :type="type" @delete="initComments"/>
   </div>
   <div class="new-comment-container">
-    <textarea id="comment-input" v-model="newComment.content" placeholder="Write a comment..."></textarea>
+    <textarea id="comment-input" v-model="newComment.content" rows="1" v-on:keydown.enter.exact.prevent="sendComment" placeholder="Write a comment..."></textarea>
     <button id="send-comment-btn" @click="sendComment">Send</button>
   </div>
 </div>
@@ -41,6 +41,7 @@ export default {
         content: '',
         postID: this.postData.ID,
       },
+      commentCollapsed: true,
     }
   },
   methods: {
@@ -59,11 +60,12 @@ export default {
       } catch (err) {
         console.log(err.response.data);
       }
-      await this.$router.go();
+      this.$emit('delete');
     },
 
     collapseComments(){
       document.getElementById(this.postData.ID).classList.toggle('collapsed');
+      this.commentCollapsed = !this.commentCollapsed;
     },
 
     async sendComment(){
@@ -76,7 +78,9 @@ export default {
         } catch (err) {
           console.log(err.response.data);
         }
-        await this.$router.go();
+        await this.initComments();
+        this.newComment.content = '';
+        this.collapseComments();
       }
     },
   },
@@ -144,7 +148,7 @@ export default {
     }
 
     #picture {
-      max-width: 100%;
+      width: 100%;
       display: block;
       margin-left: auto;
       margin-right: auto;
@@ -171,13 +175,10 @@ export default {
 
       #comment-input {
         width: 80%;
-        height: 25px;
         margin-left: 2%;
         border-radius: 15px;
         overflow: hidden;
-        padding-left: 2%;
-        padding-right: 2%;
-        padding-top: 1%;
+        padding: 1% 2%;
         font-family: Cambria,serif;
         resize: none;
       }
@@ -200,14 +201,33 @@ export default {
       }
     }
 
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+      box-shadow: inset 0 0 5px var(--ouline-color);
+      border-radius: 10px;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+      background: var(--ouline-color);
+      border-radius: 10px;
+    }
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+      background: #85a3b0;
+    }
+
     .comments{
       max-height: 0;
-      overflow-y: scroll;
+      overflow-y: auto;
 
       &.collapsed {
         max-height: 400px;
       }
-
     }
 
     #comment-toggle {

@@ -25,12 +25,12 @@
           <div v-if="$cookies.get('UserID') === userID" class="new-post">
             <h2>Make a new post!</h2>
             <textarea id="newpost-text" v-model="newPost.content" placeholder="Write your post here..."></textarea>
-            <input id="newpost-picture" type="file"><br>
+            <input id="newpost-picture" type="file" @change="setNewPostImage($event)" ref="imageUpload"><br>
             <button type="submit" id="new-post-submit" @click="sendNewPost">Post</button>
           </div>
           <div class="posts">
             <h2>Posts</h2>
-            <Post v-for="post in posts" :key="post.ID" :post-data="post" type="public" ></Post>
+            <Post v-for="post in posts" :key="post.ID" :post-data="post" type="public" @delete="initPosts"></Post>
           </div>
         </div>
       </div>
@@ -44,6 +44,8 @@ import Header from "@/components/Header";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Post from "@/components/Post";
+
+import FormData from 'form-data';
 
 export default {
   name: "Profile",
@@ -78,45 +80,48 @@ export default {
         image: null,
       },
 
-      posts: [
-        // {
-        //   ID: 5,
-        //   TEXT: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-        //   TIMESTAMP: "2002-03-07 12:00",
-        //   PICTURE: "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/golden-retriever-royalty-free-image-506756303-1560962726.jpg?crop=0.672xw:1.00xh;0.166xw,0&resize=640:*", /*https://s.24.hu/app/uploads/sites/11/2018/05/thinkstockphotos-521697453-e1526731524153.jpg*/
-        // },
-        // {
-        //   ID: 4,
-        //   TEXT: "hello bello",
-        //   TIMESTAMP: "2002-45-25 15:00",
-        //   PICTURE: "",
-        // },
-        // {
-        //   ID: 2,
-        //   TEXT: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse ci",
-        //   TIMESTAMP: "2052-03-07 18:00",
-        //   PICTURE: "",
-        // }
-      ],
+      posts: [],
     }
   },
 
   methods: {
+    setNewPostImage(event){
+      if(event.target.files.length === 0){
+        return;
+      }
+      this.newPost.image = event.target.files[0]
+    },
+
     editProfile(){
       this.$router.replace({name: 'EditProfile'});
     },
 
     async sendNewPost(){
-      if(this.newPost.content.trim() !== '') {
+      if(this.newPost.content.trim() !== '' || this.newPost.image !== null) {
+
+        const formData = new FormData();
+        formData.append('image', this.newPost.image);
+        formData.append('text', this.newPost.content);
+
         try {
-          await this.axios.post(`${this.$root.requestURL}/post/public/create`, {
-            userId: this.newPost.userID,
-            text: this.newPost.content,
-          })
+          await this.axios.post(
+            `${this.$root.requestURL}/post/public/create`,
+            formData,
+            {
+              headers: {
+                'content-type': 'multipart/form-data'
+              }
+            }
+          )
         } catch (err) {
           console.log(err.response.data);
         }
-        await this.$router.go();
+
+        await new Promise(r => setTimeout(r, 1000));
+        await this.initPosts();
+        this.newPost.content = '';
+        this.newPost.image = null;
+        this.$refs.imageUpload.value = null;
       }
     },
 
@@ -167,7 +172,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
   .profile{
     padding-top: 8vh;
     padding-bottom: 10vh;
@@ -254,7 +258,9 @@ export default {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-
+        position: -webkit-sticky;
+        position: sticky;
+        top: 7vh;
 
         p {
           margin-left: 7%;

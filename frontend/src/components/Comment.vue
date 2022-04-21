@@ -28,7 +28,7 @@ export default {
       } catch (err) {
         console.log(err.response.data);
       }
-      await this.$router.go();
+      this.$emit('delete');
     },
   },
 }

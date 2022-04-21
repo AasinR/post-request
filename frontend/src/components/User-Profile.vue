@@ -1,5 +1,5 @@
 <template>
-<router-link :to="{name: 'Profile', params: {userID: friend.ID}}" class="friend">
+<router-link :to="{name: 'Profile', params: {userID: user.ID}}" class="friend">
   <div class="profile-picture-container">
     <img class="pfp" :src="user.PROFILEPICTURE || require('@/assets/pfp-default.png')" alt="profile picture"/>
   </div>

@@ -4,7 +4,7 @@
     <Navbar current="search"/>
     <div class="content">
       <div class="search-bar">
-        <input id="search-input" type="text" v-model="searchKey">
+        <input id="search-input" type="text" v-model="searchKey" v-on:keydown.enter.exact.prevent="search">
         <button @click="search" class="search-button">Search</button>
       </div>
       <div v-if="searched" class="users">

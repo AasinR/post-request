@@ -18,7 +18,7 @@
     <Comment :key="index" v-for="(comment, index) in comments" :comment="comment" :type="type" @delete="initComments"/>
   </div>
   <div class="new-comment-container">
-    <textarea id="comment-input" v-model="newComment.content" rows="1" placeholder="Write a comment..."></textarea>
+    <textarea id="comment-input" v-model="newComment.content" rows="1" v-on:keydown.enter.exact.prevent="sendComment" placeholder="Write a comment..."></textarea>
     <button id="send-comment-btn" @click="sendComment">Send</button>
   </div>
 </div>

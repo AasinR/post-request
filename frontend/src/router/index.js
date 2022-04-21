@@ -55,7 +55,6 @@ const routes = [
     beforeEnter: (from, to, next) =>{
       Vue.nextTick(async () => {
         if(await router.app.isAdmin()){
-          console.log('Ad mint to shopping list')
           next();
         } else {
           next({name: 'NotFound'});

@@ -258,7 +258,9 @@ export default {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-
+        position: -webkit-sticky;
+        position: sticky;
+        top: 7vh;
 
         p {
           margin-left: 7%;

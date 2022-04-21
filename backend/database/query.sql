@@ -79,3 +79,20 @@ OR Friends.USER1 = User1.ID AND
     User1.ID = Data1.USERID AND
     User2.ID = Data2.USERID AND
     Friends.USER2 = 1000;
+
+-- get messaging by users
+SELECT PrivateMessage.*, TO_CHAR(PrivateMessage.TIMESTAMP, 'yyyy/mm/dd hh24:mi') as C_TIMESTAMP, User1.FIRSTNAME, User1.LASTNAME, UserData1.PROFILEPICTURE, User2.FIRSTNAME, User2.LASTNAME, UserData2.PROFILEPICTURE
+FROM PrivateMessage, "User" User1, UserData UserData1, "User" User2, UserData UserData2
+WHERE PrivateMessage.FromUser = User1.id AND
+    PrivateMessage.ToUser = User2.id AND
+    User1.id = UserData1.userid AND
+    User2.id = UserData2.userid AND
+    PrivateMessage.FromUser = 1000 AND
+    PrivateMessage.ToUser = 1001
+OR PrivateMessage.FromUser = User1.id AND
+    PrivateMessage.ToUser = User2.id AND
+    User2.id = UserData2.userid AND
+    User1.id = UserData1.userid AND
+    PrivateMessage.ToUser = 1000 AND
+    PrivateMessage.FromUser = 1001
+ORDER BY PrivateMessage.TIMESTAMP;

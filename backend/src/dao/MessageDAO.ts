@@ -66,7 +66,7 @@ class MessageDAO {
                 User1.id = UserData1.userid AND
                 PrivateMessage.ToUser = ${user1} AND
                 PrivateMessage.FromUser = ${user2}
-            ORDER BY PrivateMessage.TIMESTAMP`;
+            ORDER BY PrivateMessage.TIMESTAMP DESC`;
         try {
             const query = await ConnectionConfig.query(FIND_ALL);
             if (query === null) {

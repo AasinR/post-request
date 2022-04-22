@@ -62,7 +62,7 @@ class GroupDAO {
 
     async createGroup(newGroup: Group) : Promise<Group>
     {
-        const INSERT = `INSERT INTO "Group" (Name, Logo, OwnerID) VALUES ('${newGroup.NAME}', '${newGroup.LOGO}', ${newGroup.OWNERID});`;
+        const INSERT = `INSERT INTO "Group" (Name, Logo, OwnerID) VALUES ('${newGroup.NAME}', '${newGroup.LOGO}', ${newGroup.OWNERID}) RETURNING id INTO :id`;
         try {
             const query = await ConnectionConfig.modify(INSERT, true);
             if (query === null) {

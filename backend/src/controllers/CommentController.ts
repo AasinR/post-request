@@ -217,6 +217,82 @@ class CommentController {
         }
     }
 
+    // update public comment by ID
+    async updatePublic(req : Request, res : Response, next : NextFunction) {
+        const commentId = parseInt(req.params.id, 10);
+
+        try {
+            const commentRes = await PublicCommentDAO.get(commentId);
+            if (commentRes === null) {
+                throw new Error("Failed to get comment!");
+            }
+            if (commentRes.USER.ID !== req.session.userId) {
+                throw 400;
+            }
+            const comment = new Comment();
+            comment.ID = commentId;
+            comment.CONTENT = req.body.content;
+
+            const result = await PublicCommentDAO.update(comment);
+            if (result === null) {
+                throw new Error("Failed to update comment!");
+            }
+
+            throw 200;
+        } catch(status) {
+            switch(status) {
+                case 200:
+                    res.send("Comment updated!");
+                    break;
+                case 400:
+                    res.status(400).send("Not authorized to do update other's comment!");
+                    break;
+                default:
+                    res.sendStatus(500);
+                    console.error(status);
+                    break;
+            }
+        }
+    }
+
+    // update group comment by ID
+    async updateGroup(req : Request, res : Response, next : NextFunction) {
+        const commentId = parseInt(req.params.id, 10);
+
+        try {
+            const commentRes = await GroupCommentDAO.get(commentId);
+            if (commentRes === null) {
+                throw new Error("Failed to get comment!");
+            }
+            if (commentRes.USER.ID !== req.session.userId) {
+                throw 400;
+            }
+            const comment = new Comment();
+            comment.ID = commentId;
+            comment.CONTENT = req.body.content;
+
+            const result = await GroupCommentDAO.update(comment);
+            if (result === null) {
+                throw new Error("Failed to update comment!");
+            }
+
+            throw 200;
+        } catch(status) {
+            switch(status) {
+                case 200:
+                    res.send("Comment updated!");
+                    break;
+                case 400:
+                    res.status(400).send("Not authorized to do update other's comment!");
+                    break;
+                default:
+                    res.sendStatus(500);
+                    console.error(status);
+                    break;
+            }
+        }
+    }
+
     // delete public comment by ID
     async deletePublic(req : Request, res : Response, next : NextFunction) {
         const commentId = parseInt(req.params.id, 10);

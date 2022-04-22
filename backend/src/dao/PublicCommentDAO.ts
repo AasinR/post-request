@@ -110,6 +110,23 @@ class PublicCommentDAO {
         }
     }
 
+    // update public comment
+    async update(comment: Comment): Promise<Comment> {
+        const UPDATE_COMMENT = `UPDATE publiccomment SET content = q'[${comment.CONTENT}]' WHERE id = ${comment.ID}`;
+
+        try {
+            const result = await ConnectionConfig.modify(UPDATE_COMMENT, false);
+            if (result === null) {
+                throw new Error("Update failed!");
+            }
+
+            return comment;
+        } catch(error) {
+            console.error(error);
+            return null;
+        }
+    }
+
     // delete public comment
     async delete(ID: number): Promise<number> {
         const DELETE_COMMENT = `DELETE FROM publiccomment WHERE id = ${ID}`;

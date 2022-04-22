@@ -2,6 +2,7 @@ import ConnectionConfig from "../config/ConnectionConfig";
 import Message from "../models/Message";
 
 class MessageDAO {
+    // get all messages
     async findAll(): Promise<Message[]> {
         const FIND_ALL = 'SELECT * FROM privatemessage';
         try {
@@ -20,6 +21,7 @@ class MessageDAO {
         }
     }
 
+    // insert message
     async sendMessage(message: Message): Promise<Message> {
         const SEND = `INSERT INTO privatemessage (Content, TimeStamp, ToUser, FromUser) VALUES ('${message.CONTENT}', CURRENT_TIMESTAMP, ${message.TOUSER}, ${message.FROMUSER}) RETURNING id INTO :id`;
         try {
@@ -36,6 +38,7 @@ class MessageDAO {
         }
     }
 
+    // get message by ID
     async getMessage(id: number): Promise<Message> {
         const FIND_ALL = `SELECT * FROM privatemessage WHERE ID = ${id}`;
         try {
@@ -50,6 +53,7 @@ class MessageDAO {
         }
     }
 
+    // get messages by toUser and fromUser
     async getMessaging(user1: number, user2: number): Promise<{[k: string]: any}[]> {
         const FIND_ALL =
             `SELECT PrivateMessage.*, TO_CHAR(PrivateMessage.TIMESTAMP, 'yyyy/mm/dd hh24:mi') as C_TIMESTAMP, User1.FIRSTNAME, User1.LASTNAME, UserData1.PROFILEPICTURE, User2.FIRSTNAME, User2.LASTNAME, UserData2.PROFILEPICTURE
@@ -101,6 +105,24 @@ class MessageDAO {
         }
     }
 
+    // update message by ID
+    async update(message: Message): Promise<Message> {
+        const UPDATE_MSG = `UPDATE privatemessage SET content = q'[${message.CONTENT}]' WHERE id = ${message.ID}`;
+
+        try {
+            const result = await ConnectionConfig.modify(UPDATE_MSG, false);
+            if (result === null) {
+                throw new Error("Update failed!");
+            }
+
+            return message;
+        } catch(error) {
+            console.error(error);
+            return null;
+        }
+    }
+
+    // delete message by ID and fromUser
     async deleteMessage(id: number, fromUser: number)
     {
         const DELETE = `DELETE FROM privatemessage WHERE ID = ${id} AND FromUser = ${fromUser}`;

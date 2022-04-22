@@ -11,6 +11,8 @@ class GroupRoutes {
         this._Router.get("/all", SessionController.isUser, GroupController.findAll);
         this._Router.get("/getall/:id", SessionController.isUser, GroupController.getAllGroup);
         this._Router.post("/create", SessionController.isUser, GroupController.createGroup);
+        this._Router.get("/byId/:id", SessionController.isUser, GroupController.getGroupById);
+        this._Router.get("/byName/:name", SessionController.isUser, GroupController.getGroupByName);
         this._Router.get("/member/all", SessionController.isAdmin, GroupController.findAllMember);
     }
 

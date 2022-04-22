@@ -75,6 +75,48 @@ class GroupDAO {
             return null;
         }
     }
+
+    async getGroupById(id: number) : Promise<Group>
+    {
+        const SELECT = `SELECT * FROM "Group" WHERE id = ${id}`;
+        try {
+            const query = await ConnectionConfig.query(SELECT);
+            if (query === null) {
+                throw Error("Query failed!");
+            }
+            if (query.rows.length === 0)
+            {
+                throw Error("No data found!");
+            }
+            const group = query.rows[0] as Group;
+            return group;
+
+        } catch(error) {
+            console.error(error);
+            return null;
+        }
+    }
+
+    async getGroupByName(name: string) : Promise<Group>
+    {
+        const SELECT = `SELECT * FROM "Group" WHERE name = '${name}'`;
+        try {
+            const query = await ConnectionConfig.query(SELECT);
+            if (query === null) {
+                throw Error("Query failed!");
+            }
+            if (query.rows.length === 0)
+            {
+                throw Error("No data found!");
+            }
+            const group = query.rows[0] as Group;
+            return group;
+
+        } catch(error) {
+            console.error(error);
+            return null;
+        }
+    }
 }
 
 export default new GroupDAO();

@@ -109,6 +109,60 @@ class GroupController {
             }
         }
     }
+
+    async getGroupById(req : Request, res : Response, next : NextFunction)
+    {
+        const groupId = parseInt(req.params.id, 10);
+        let result;
+
+        try {
+            result = await GroupDAO.getGroupById(groupId);
+            if (result === null) {
+                throw new Error("Failed to execute query!");
+            }
+
+            throw 200;
+        } catch(status) {
+            switch(status) {
+                case 200:
+                    res.json({
+                        "result": result
+                    });
+                    break;
+                default:
+                    res.sendStatus(500);
+                    console.error(status);
+                    break;
+            }
+        }
+    }
+
+    async getGroupByName(req : Request, res : Response, next : NextFunction)
+    {
+        const groupName = req.params.name;
+        let result;
+
+        try {
+            result = await GroupDAO.getGroupByName(groupName);
+            if (result === null) {
+                throw new Error("Failed to execute query!");
+            }
+
+            throw 200;
+        } catch(status) {
+            switch(status) {
+                case 200:
+                    res.json({
+                        "result": result
+                    });
+                    break;
+                default:
+                    res.sendStatus(500);
+                    console.error(status);
+                    break;
+            }
+        }
+    }
 }
 
 export default new GroupController();

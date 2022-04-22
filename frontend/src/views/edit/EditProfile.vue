@@ -43,7 +43,7 @@
                 </div>
               </div>
               <div class="input-group">
-                <label for="profession"> Current workplace/school:</label> <br>
+                <label for="profession"> Profession:</label> <br>
                 <div class="input-field">
                   <input type="text" id="profession" v-model="inputData.profession">
                 </div>

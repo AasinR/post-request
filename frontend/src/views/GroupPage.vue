@@ -21,11 +21,11 @@
             <h2>Make a new post!</h2>
             <textarea id="newpost-text" v-model="newPost.content"></textarea>
             <input id="newpost-picture" type="file" @change="setNewPostImage($event)" ref="imageUpload"><br>
-            <button @click="sendNewPost" type="submit" id="new-post-submit" >Post</button>                                   <!--TODO-->
+            <button @click="sendNewPost" type="submit" id="new-post-submit" >Post</button>
           </div>
           <div class="posts">
             <h2>Posts</h2>
-            <Post v-for="post in posts" :key="post.ID" :post-data="post" type="group"></Post>
+            <Post v-for="post in posts" :key="post.ID" :post-data="post" type="group" @delete="initPosts" @postUpdate="initPosts"></Post>
           </div>
         </div>
       </div>

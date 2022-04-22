@@ -5,7 +5,7 @@
     <div class="content">
       <div v-if="loadedData" class="album">
         <div class="album-header">
-          <input @blur="editAlbumName" v-if="editNameOpen" type="text" v-model="albumNewName" class="name-input">
+          <input @blur="editAlbumName" v-on:keydown.enter.exact.prevent="editAlbumName" v-if="editNameOpen" type="text" v-model="albumNewName" class="name-input">
           <h2 v-if="!editNameOpen" class="album-name">{{albumData.name}}</h2>
           <button @click="goToAddPhotos" class="add-photo-btn">+ Add photos to album</button>
           <img @click="showNameEdit" class="edit-icon" src="@/assets/edit.png" alt="edit"/>

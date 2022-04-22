@@ -19,7 +19,7 @@
           <p>Date of birth:<br> <span>{{userdata.birthDate}}</span></p>
           <p>Gender:<br> <span>{{userdata.gender}}</span></p>
           <p>Phone number:<br> <span>{{userdata.phoneNumber}}</span></p>
-          <p>Workplace/school:<br> <span>{{userdata.profession}}</span></p>
+          <p>Profession:<br> <span>{{userdata.profession}}</span></p>
         </div>
         <div class="posts-container">
           <div v-if="$cookies.get('UserID') === userID" class="new-post">
@@ -30,7 +30,7 @@
           </div>
           <div class="posts">
             <h2>Posts</h2>
-            <Post v-for="post in posts" :key="post.ID" :post-data="post" type="public" @delete="initPosts"></Post>
+            <Post v-for="post in posts" :key="post.ID" :post-data="post" type="public" @delete="initPosts" @postUpdate="initPosts"></Post>
           </div>
         </div>
       </div>

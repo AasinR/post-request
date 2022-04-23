@@ -19,7 +19,6 @@ BEGIN
     LOOP
         IF ((rekord.user2 = :NEW.user1) AND (:NEW.user2 = rekord.user1)) THEN
 			:NEW.approved := 1;
-			UPDATE friendrequest SET approved = 1 WHERE user1 = rekord.user1 AND user2 = rekord.user2;
         END IF;
     END LOOP;
 END;

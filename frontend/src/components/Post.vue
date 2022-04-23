@@ -28,7 +28,7 @@
   <hr/>
   <p id="comment-toggle" @click="collapseComments" >{{commentCollapsed ? 'View comments' : 'Hide comments'}}</p>
   <div :id="postData.ID" class="comments collapsible">
-    <Comment :key="index" v-for="(comment, index) in comments" :comment="comment" :type="type" @delete="initComments"/>
+    <Comment :key="index" v-for="(comment, index) in comments" :comment="comment" :type="type" @delete="initComments" @edit="initComments"/>
   </div>
   <div class="new-comment-container">
     <textarea id="comment-input" v-model="newComment.content" rows="1" v-on:keydown.enter.exact.prevent="sendComment" placeholder="Write a comment..."></textarea>
@@ -231,6 +231,8 @@ export default {
 
         #edit-icon {
           width: 30px;
+          margin-right: 15%;
+          margin-left: -15%;
 
           &:hover {
             cursor: pointer;

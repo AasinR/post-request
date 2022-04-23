@@ -80,6 +80,13 @@ OR Friends.USER1 = User1.ID AND
     User2.ID = Data2.USERID AND
     Friends.USER2 = 1000;
 
+-- get all friend request by userID
+SELECT FriendRequest.USER1, FriendRequest.USER2, User1.FIRSTNAME, User1.LASTNAME, Data1.PROFILEPICTURE
+FROM FriendRequest, "User" User1, UserData Data1
+WHERE FriendRequest.USER1 = User1.ID AND
+    User1.ID = Data1.USERID AND
+    FriendRequest.USER2 = 1000;
+
 -- get messaging by users
 SELECT PrivateMessage.*, TO_CHAR(PrivateMessage.TIMESTAMP, 'yyyy/mm/dd hh24:mi') as C_TIMESTAMP, User1.FIRSTNAME, User1.LASTNAME, UserData1.PROFILEPICTURE, User2.FIRSTNAME, User2.LASTNAME, UserData2.PROFILEPICTURE
 FROM PrivateMessage, "User" User1, UserData UserData1, "User" User2, UserData UserData2

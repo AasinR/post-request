@@ -87,6 +87,14 @@ WHERE FriendRequest.USER1 = User1.ID AND
     User1.ID = Data1.USERID AND
     FriendRequest.USER2 = 1000;
 
+-- get all group members by groupID
+SELECT GroupMembers.GROUPID, GroupMembers.USERID, "User".FIRSTNAME, "User".LASTNAME, UserData.PROFILEPICTURE
+FROM GroupMembers, "User", UserData
+WHERE GroupMembers.USERID = "User".ID AND
+    "User".ID = UserData.USERID AND
+    GroupMembers.GROUPID = 1000
+ORDER BY "User".FIRSTNAME, "User".LASTNAME;
+
 -- get messaging by users
 SELECT PrivateMessage.*, TO_CHAR(PrivateMessage.TIMESTAMP, 'yyyy/mm/dd hh24:mi') as C_TIMESTAMP, User1.FIRSTNAME, User1.LASTNAME, UserData1.PROFILEPICTURE, User2.FIRSTNAME, User2.LASTNAME, UserData2.PROFILEPICTURE
 FROM PrivateMessage, "User" User1, UserData UserData1, "User" User2, UserData UserData2

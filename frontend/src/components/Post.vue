@@ -16,9 +16,9 @@
   <textarea id="updateText" v-model="editedPostData.text" v-if="editMode"></textarea>
   <label id="upload-new-picture-label" for="upload-new-picture" v-if="editMode">Upload a new picture:</label>
   <input id="upload-new-picture" type="file" v-if="editMode"  @change="setUpdateImage($event)" ref="imageUpload"><br>
-  <div class="edit-post-buttons">
-    <button id="send-edit-button" v-if="editMode" @click="onEditPost">Edit post</button>
-    <button id="send-edit-and-delete-button" v-if="editMode" @click="onEditPostWithDelete" :disabled="imageDeleteDisabled">Delete image and edit post</button>
+  <div  v-if="editMode" class="edit-post-buttons">
+    <button id="send-edit-button" @click="onEditPost">Edit post</button>
+    <button id="send-edit-and-delete-button" @click="onEditPostWithDelete" :disabled="imageDeleteDisabled">Delete image and edit post</button>
   </div>
 
   <img v-show="postData.PICTURE" id="picture" :src="postData.PICTURE" alt="post picture"/>

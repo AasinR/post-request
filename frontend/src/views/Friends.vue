@@ -5,7 +5,7 @@
     <div class="content">
       <div class="friend-requests">
         <h2>Friend requests</h2>
-        <FriendRequest :key="index" v-for="(friendRequest, index) in friendRequests" :friend-request="friendRequest"/>
+        <FriendRequest :key="index" v-for="(friendRequest, index) in friendRequests" :friend-request="friendRequest" @accept="initPage" @reject="initFriendRequests"/>
       </div>
       <div class="my-friends">
         <h2>My friends</h2>
@@ -34,32 +34,7 @@ export default {
   },
    data(){
     return {
-      friendRequests: [
-        {
-          ID: 1114,
-          FIRSTNAME: "Gordon",
-          LASTNAME: "Niro",
-          PROFILEPICTURE: ""
-        },
-        {
-          ID: 1129,
-          FIRSTNAME: "Abdul-Aziz",
-          LASTNAME: "Blazey",
-          PROFILEPICTURE: ""
-        },
-        {
-          ID: 1125,
-          FIRSTNAME: "Jaxson",
-          LASTNAME: "Marios",
-          PROFILEPICTURE: ""
-        },
-        {
-          ID: 1000,
-          FIRSTNAME: "Admin",
-          LASTNAME: "User",
-          PROFILEPICTURE: ""
-        },
-      ],
+      friendRequests: [],
       friends: [],
     }
    },
@@ -71,11 +46,25 @@ export default {
       } catch (err) {
         console.log(err.response.data);
       }
+    },
+
+    async initFriendRequests(){
+      try {
+        const response = await this.axios.get(`${this.$root.requestURL}/friend/request/getall/${this.$cookies.get('UserID')}`);
+        this.friendRequests = response.data.result;
+      } catch (err) {
+        console.log(err.response.data);
+      }
+    },
+
+    initPage(){
+      this.initFriendRequests();
+      this.initFriends();
     }
   },
 
   mounted() {
-    this.initFriends();
+    this.initPage();
   }
 }
 </script>

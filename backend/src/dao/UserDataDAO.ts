@@ -1,5 +1,6 @@
 import ConnectionConfig from "../config/ConnectionConfig";
 import UserData from "../models/UserData";
+import User from "../models/User";
 import CloudConfig from "../config/CloudConfig";
 
 class UserDataDAO {
@@ -49,32 +50,27 @@ class UserDataDAO {
         }
     }
 
-    // save user data
-    async save(userData: UserData): Promise<UserData> {
+    // save user and user data
+    async save(user: User, userData: UserData): Promise<UserData> {
         const gender = userData.GENDER ? `'${userData.GENDER}'` : null;
         const birthdate = userData.BIRTHDATE ? `TO_DATE('${userData.BIRTHDATE}', 'yyyy/mm/dd')` : null;
         const phonenumber = userData.PHONENUMBER ? `q'[${userData.PHONENUMBER}]'` : null;
         const profession = userData.PROFESSION ? `q'[${userData.PROFESSION}]'` : null;
-        let profilepicture = userData.PROFILEPICTURE ? `'${userData.PROFILEPICTURE}'` : null;
+        const profilepicture = userData.PROFILEPICTURE ? `'${userData.PROFILEPICTURE}'` : null;
 
         try {
-            const rowExists = await this.getByUserID(userData.USERID);
-            if (rowExists) {
-                profilepicture = profilepicture ? profilepicture : ((rowExists.PROFILEPICTURE) ? `'${rowExists.PROFILEPICTURE}'` : null);
+            const UPDATE_DATA =
+                `BEGIN
+                    :result := update_user(${user.ID}, q'[${user.PASSWORD}]', q'[${user.EMAIL}]', q'[${user.FIRSTNAME}]', q'[${user.LASTNAME}]', ${gender}, ${profilepicture}, ${birthdate}, ${phonenumber}, ${profession});
+                END;`;
 
-                if (profilepicture !== rowExists.PROFILEPICTURE) {
-                    const fileID = rowExists.PROFILEPICTURE.split("=")[2];
-                    CloudConfig.delete(fileID);
-                }
-
-                const UPDATE_DATA = `UPDATE userdata SET gender = ${gender}, profilepicture = ${profilepicture}, birthdate = ${birthdate}, phonenumber = ${phonenumber}, profession = ${profession} WHERE userid = ${userData.USERID}`;
-
-                ConnectionConfig.modify(UPDATE_DATA, false);
+            const result = await ConnectionConfig.executeFunc(UPDATE_DATA);
+            if (result === null) {
+                throw new Error("Failed to execute function!");
             }
-            else {
-                const INSERT_DATA = `INSERT INTO userdata (gender, profilepicture, birthdate, phonenumber, profession, userid) VALUES (${gender},${profilepicture},${birthdate},${phonenumber},${profession},${userData.USERID})`;
-
-                ConnectionConfig.modify(INSERT_DATA, false);
+            if (result !== '0') {
+                const fileID = result.split("=")[2];
+                CloudConfig.delete(fileID);
             }
 
             return userData;

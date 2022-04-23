@@ -28,7 +28,7 @@ class GroupCommentDAO {
             "FROM GroupComment, \"User\", UserData "+
             "WHERE GroupComment.USERID = \"User\".ID AND \"User\".ID = UserData.USERID AND "+
                 `GroupComment.POSTID = ${ID} `+
-            "ORDER BY GroupComment.TIMESTAMP DESC";
+            "ORDER BY GroupComment.TIMESTAMP";
 
         try {
             const query = await ConnectionConfig.query(GET_ALL);
@@ -102,6 +102,23 @@ class GroupCommentDAO {
         try {
             const result = await ConnectionConfig.modify(INSERT_COMMENT, true);
             comment.ID = result;
+
+            return comment;
+        } catch(error) {
+            console.error(error);
+            return null;
+        }
+    }
+
+    // update group comment
+    async update(comment: Comment): Promise<Comment> {
+        const UPDATE_COMMENT = `UPDATE groupcomment SET content = q'[${comment.CONTENT}]' WHERE id = ${comment.ID}`;
+
+        try {
+            const result = await ConnectionConfig.modify(UPDATE_COMMENT, false);
+            if (result === null) {
+                throw new Error("Update failed!");
+            }
 
             return comment;
         } catch(error) {

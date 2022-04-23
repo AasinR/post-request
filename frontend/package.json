@@ -1,5 +1,5 @@
 {
-  "name": "frontend",
+  "name": "post_request",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -7,8 +7,10 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "axios": "^0.26.1",
     "core-js": "^3.8.3",
     "vue": "^2.6.14",
+    "vue-cookies": "^1.7.4",
     "vue-router": "^3.5.1"
   },
   "devDependencies": {

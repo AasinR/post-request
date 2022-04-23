@@ -231,8 +231,10 @@ class PostController {
                     res.sendStatus(500);
                     console.error(status);
 
-                    const fileId = link.split("=")[2];
-                    CloudConfig.delete(fileId);
+                    if (link) {
+                        const fileId = link.split("=")[2];
+                        CloudConfig.delete(fileId);
+                    }
                     break;
             }
         }
@@ -271,8 +273,139 @@ class PostController {
                     res.sendStatus(500);
                     console.error(status);
 
-                    const fileId = link.split("=")[2];
+                    if (link) {
+                        const fileId = link.split("=")[2];
+                        CloudConfig.delete(fileId);
+                    }
+                    break;
+            }
+        }
+    }
+
+    // update public post by ID
+    async updatePublic(req : Request, res : Response, next : NextFunction) {
+        const postId = parseInt(req.params.id, 10);
+
+        const removeImg = req.body.removeImg;
+        const file = (req.file === undefined) ? null : req.file.buffer;
+        let link;
+
+        try {
+            const postRes = await PublicPostDAO.get(postId);
+            if (postRes === null) {
+                throw new Error("Failed to get post!");
+            }
+            if (postRes.USER.ID !== req.session.userId) {
+                throw 400;
+            }
+            const post = new PublicPost();
+            post.ID = postId;
+            post.TEXT = req.body.text;
+            post.PICTURE = postRes.PICTURE;
+
+            if (file) {
+                link = await CloudConfig.upload("publicPost", file);
+
+                const img = new Picture();
+                img.CONTENT = link;
+                img.USERID = req.session.userId;
+
+                const fileRes = await PictureDAO.create(img);
+                if (fileRes === null) {
+                    throw new Error("Failed to save image!");
+                }
+                post.PICTURE = fileRes.ID;
+            }
+            else if (removeImg) {
+                post.PICTURE = null;
+            }
+
+            const result = await PublicPostDAO.update(post);
+            if (result === null) {
+                throw new Error("Failed to update post!");
+            }
+
+            throw 200;
+        } catch(status) {
+            switch(status) {
+                case 200:
+                    res.send("Post updated!");
+                    break;
+                case 400:
+                    res.status(400).send("Not authorized to update other's post!");
+                    break;
+                default:
+                    res.sendStatus(500);
+                    console.error(status);
+
+                    if (link) {
+                        const fileId = link.split("=")[2];
+                        CloudConfig.delete(fileId);
+                    }
+                    break;
+            }
+        }
+    }
+
+    // update group post by ID
+    async updateGroup(req : Request, res : Response, next : NextFunction) {
+        const postId = parseInt(req.params.id, 10);
+
+        const removeImg = req.body.removeImg;
+        const file = (req.file === undefined) ? null : req.file.buffer;
+        let link;
+
+        try {
+            const postRes = await GroupPostDAO.get(postId);
+            if (postRes === null) {
+                throw new Error("Failed to get post!");
+            }
+            if (postRes.USER.ID !== req.session.userId) {
+                throw 400;
+            }
+            const post = new GroupPost();
+            post.ID = postId;
+            post.TEXT = req.body.text;
+            post.PICTURE = postRes.PICTURE;
+
+            if (file) {
+                link = await CloudConfig.upload("groupPost", file);
+                post.PICTURE = link;
+
+                if (postRes.PICTURE) {
+                    const fileId = postRes.PICTURE.split("=")[2];
                     CloudConfig.delete(fileId);
+                }
+            }
+            else if (removeImg && postRes.PICTURE) {
+                const fileId = postRes.PICTURE.split("=")[2];
+                CloudConfig.delete(fileId);
+
+                post.PICTURE = null;
+            }
+
+            const result = await GroupPostDAO.update(post);
+            if (result === null) {
+                throw new Error("Failed to update post!");
+            }
+
+            throw 200;
+        } catch(status) {
+            switch(status) {
+                case 200:
+                    res.send("Post updated!");
+                    break;
+                case 400:
+                    res.status(400).send("Not authorized to update other's post!");
+                    break;
+                default:
+                    res.sendStatus(500);
+                    console.error(status);
+
+                    if (link) {
+                        const fileId = link.split("=")[2];
+                        CloudConfig.delete(fileId);
+                    }
                     break;
             }
         }

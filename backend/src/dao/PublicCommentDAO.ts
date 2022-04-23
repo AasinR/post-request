@@ -28,7 +28,7 @@ class PublicCommentDAO {
             "FROM PublicComment, \"User\", UserData "+
             "WHERE PublicComment.USERID = \"User\".ID AND \"User\".ID = UserData.USERID AND "+
                 `PublicComment.POSTID = ${ID} `+
-            "ORDER BY PublicComment.TIMESTAMP DESC";
+            "ORDER BY PublicComment.TIMESTAMP";
 
         try {
             const query = await ConnectionConfig.query(GET_ALL);
@@ -102,6 +102,23 @@ class PublicCommentDAO {
         try {
             const result = await ConnectionConfig.modify(INSERT_COMMENT, true);
             comment.ID = result;
+
+            return comment;
+        } catch(error) {
+            console.error(error);
+            return null;
+        }
+    }
+
+    // update public comment
+    async update(comment: Comment): Promise<Comment> {
+        const UPDATE_COMMENT = `UPDATE publiccomment SET content = q'[${comment.CONTENT}]' WHERE id = ${comment.ID}`;
+
+        try {
+            const result = await ConnectionConfig.modify(UPDATE_COMMENT, false);
+            if (result === null) {
+                throw new Error("Update failed!");
+            }
 
             return comment;
         } catch(error) {

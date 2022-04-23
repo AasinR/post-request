@@ -115,6 +115,26 @@ class GroupPostDAO {
         }
     }
 
+    // update group post
+    async update(post: GroupPost): Promise<GroupPost> {
+        const text = post.TEXT ? `q'[${post.TEXT}]'` : null;
+        const picture = post.PICTURE ? `'${post.PICTURE}'` : null;
+
+        const UPDATE_POST = `UPDATE grouppost SET text = ${text}, picture = ${picture} WHERE id = ${post.ID}`;
+
+        try {
+            const result = await ConnectionConfig.modify(UPDATE_POST, false);
+            if (result === null) {
+                throw new Error("Update failed!");
+            }
+
+            return post;
+        } catch(error) {
+            console.error(error);
+            return null;
+        }
+    }
+
     // delete group post
     async delete(ID: number): Promise<number> {
         const DELETE_POST = `DELETE FROM grouppost WHERE id = ${ID}`;

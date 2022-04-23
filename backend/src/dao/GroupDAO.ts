@@ -60,9 +60,12 @@ class GroupDAO {
         }
     }
 
+    // insert group
     async createGroup(newGroup: Group) : Promise<Group>
     {
-        const INSERT = `INSERT INTO "Group" (Name, Logo, OwnerID) VALUES ('${newGroup.NAME}', '${newGroup.LOGO}', ${newGroup.OWNERID}) RETURNING id INTO :id`;
+        const logo = newGroup.LOGO ? `'${newGroup.LOGO}'` : null
+
+        const INSERT = `INSERT INTO "Group" (Name, Logo, OwnerID) VALUES (q'[${newGroup.NAME}]', ${logo}, ${newGroup.OWNERID}) RETURNING id INTO :id`;
         try {
             const query = await ConnectionConfig.modify(INSERT, true);
             if (query === null) {
@@ -76,6 +79,7 @@ class GroupDAO {
         }
     }
 
+    // get group by ID
     async getGroupById(id: number) : Promise<Group>
     {
         const SELECT = `SELECT * FROM "Group" WHERE id = ${id}`;
@@ -97,6 +101,7 @@ class GroupDAO {
         }
     }
 
+    // get group by Name
     async getGroupByName(name: string) : Promise<Group>
     {
         const SELECT = `SELECT * FROM "Group" WHERE name = '${name}'`;

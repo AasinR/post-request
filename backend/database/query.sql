@@ -51,3 +51,11 @@ OR Friends.USER1 = User1.ID AND
     User1.ID = Data1.USERID AND
     User2.ID = Data2.USERID AND
     Friends.USER2 = 1000;
+
+-- get all group members by groupID
+SELECT GroupMembers.GROUPID, GroupMembers.USERID, "User".FIRSTNAME, "User".LASTNAME, UserData.PROFILEPICTURE
+FROM GroupMembers, "User", UserData
+WHERE GroupMembers.USERID = "User".ID AND
+    "User".ID = UserData.USERID AND
+    GroupMembers.GROUPID = 1000
+ORDER BY "User".FIRSTNAME, "User".LASTNAME;

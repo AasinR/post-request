@@ -99,7 +99,10 @@ export default {
         }
         await this.initComments();
         this.newComment.content = '';
-        this.collapseComments();
+
+        if (this.commentCollapsed){
+          this.collapseComments();
+        }
       }
     },
 

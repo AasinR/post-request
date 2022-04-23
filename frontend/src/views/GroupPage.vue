@@ -10,11 +10,17 @@
         <div class="name-container">
           <p>{{groupData.name}}</p>
         </div>
-<!--        <button v-if="$cookies.get('UserID') === userID" class="header-edit-btn" @click="editProfile">Edit profile</button>        TODO-->
+        <div class="header-buttons">
+          <button v-if="Number($cookies.get('UserID')) === Number(groupData.ownerID)" class="header-edit-btn" @click="goToEditGroup">Edit group</button>
+          <button v-if="!isMember && loadDone" id="join-group-button" @click="joinGroup">Join group</button>
+        </div>
       </div>
       <div class="group-content">
         <div class="members-container">
           <h2>Members</h2>
+          <div class="group-members-container">
+            <GroupMemberProfile v-for="(member, index) in members" :key="index" :user="member" :owner-id="groupData.ownerID"/>
+          </div>
         </div>
         <div class="posts-container">
           <div v-if="isMember" class="new-post">
@@ -41,10 +47,12 @@ import Header from "@/components/Header";
 import Post from "@/components/Post";
 
 import FormData from 'form-data';
+import GroupMemberProfile from "@/components/Group-Member-Profile";
 
 export default {
   name: "GroupPage",
   components: {
+    GroupMemberProfile,
     Footer,
     Navbar,
     Header,
@@ -57,9 +65,12 @@ export default {
     return {
       groupData: {
         id: '',
-        name: 'Owly Owls',
+        name: '',
         logo: '',
+        ownerID: ''
       },
+
+      members: [],
       posts: [],
 
       newPost: {
@@ -69,6 +80,7 @@ export default {
       },
 
       usersGroups: [],
+      loadDone: false,
     }
   },
   methods: {
@@ -77,6 +89,27 @@ export default {
         return;
       }
       this.newPost.image = event.target.files[0]
+    },
+
+    async initGroupData(){
+      try {
+        const response = await this.axios.get(`${this.$root.requestURL}/group/get/${this.groupID}`);
+        this.groupData.id = response.data.result.ID;
+        this.groupData.name = response.data.result.NAME;
+        this.groupData.logo = response.data.result.LOGO;
+        this.groupData.ownerID = response.data.result.OWNERID;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
+    async initMembers(){
+      try {
+        const response = await this.axios.get(`${this.$root.requestURL}/group/member/getall/${this.groupID}`);
+        this.members = response.data.result;
+      } catch (err) {
+        console.log(err.response.data);
+      }
     },
 
     async initPosts(){
@@ -89,6 +122,7 @@ export default {
     },
 
     async initUsersGroups(){
+      this.loadDone = false;
       try {
         const response = await this.axios.get(`${this.$root.requestURL}/group/getall/${this.$cookies.get('UserID')}`);
         this.usersGroups = response.data.result;
@@ -126,18 +160,38 @@ export default {
         this.$refs.imageUpload.value = null;
       }
     },
+
+    async joinGroup(){
+      try {
+        await this.axios.get(`${this.$root.requestURL}/group/member/add/${this.groupID}`);
+      } catch (err) {
+        console.log(err);
+      }
+
+      await this.initUsersGroups();
+      await this.initMembers();
+    },
+
+    goToEditGroup(){
+      this.$router.replace({name: 'EditGroup', params:{groupID: this.groupID}});
+    },
   },
   computed: {
     isMember() {
+      this.loadDone = false;
       for (const usersGroup of this.usersGroups){
         if(Number(usersGroup.GROUP.ID) === Number(this.groupID)){
+          this.loadDone = true;
           return true;
         }
       }
+      this.loadDone = true;
       return false;
     }
   },
   mounted() {
+    this.initGroupData();
+    this.initMembers();
     this.initUsersGroups();
     this.initPosts();
   }
@@ -196,27 +250,55 @@ export default {
       }
     }
 
-    //.header-edit-btn{
-    //  display: block;
-    //  font-size: 20px;
-    //  line-height: 30px;
-    //  background-color: var(--accent-color);
-    //  color: var(--font-color);
-    //  border: none;
-    //  border-radius: 20px;
-    //  font-weight: bold;
-    //  font-family: "Cambria", sans-serif;
-    //  align-self: flex-end;
-    //  margin-left: auto;
-    //  padding-left: 3%;
-    //  padding-right: 3%;
-    //
-    //  &:hover {
-    //    cursor: pointer;
-    //    -webkit-filter: brightness(90%);
-    //    transition: all 100ms ease;
-    //  }
-    //}
+    .header-buttons {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      align-self: flex-end;
+      margin-left: auto;
+      width: 40%;
+
+      #join-group-button {
+        display: block;
+        font-size: 20px;
+        line-height: 30px;
+        background-color: var(--accent-color);
+        color: var(--font-color);
+        border: none;
+        border-radius: 20px;
+        font-weight: bold;
+        font-family: "Cambria", sans-serif;
+        padding-left: 3%;
+        padding-right: 3%;
+        margin-left: 2%;
+
+        &:hover {
+          cursor: pointer;
+          -webkit-filter: brightness(90%);
+          transition: all 100ms ease;
+        }
+      }
+
+      .header-edit-btn{
+        display: block;
+        font-size: 20px;
+        line-height: 30px;
+        background-color: var(--accent-color);
+        color: var(--font-color);
+        border: none;
+        border-radius: 20px;
+        font-weight: bold;
+        font-family: "Cambria", sans-serif;
+        padding-left: 3%;
+        padding-right: 3%;
+
+        &:hover {
+          cursor: pointer;
+          -webkit-filter: brightness(90%);
+          transition: all 100ms ease;
+        }
+      }
+    }
 
   }
 
@@ -232,6 +314,13 @@ export default {
 
       h2 {
         margin: 0 0 5% 0;
+      }
+
+      .group-members-container {
+        max-height: 50vh;
+        height: 50vh;
+        overflow-y: auto;
+        overflow-x: hidden;
       }
     }
 
@@ -260,8 +349,11 @@ export default {
           width: 80%;
           height: 48px;
           margin-bottom: 2%;
-          font-family: Cambria, serif;
+          font-family: Cambria,serif;
           font-size: 16px;
+          resize: none;
+          border-radius: 15px;
+          padding: 1% 2%;
         }
 
         #new-post-submit {

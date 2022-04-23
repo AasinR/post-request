@@ -12,7 +12,7 @@
       <div v-if="!zeroFriends" class="private-messages-box">
         <div class="private-messages">
           <p class="zeroMessages" v-if="zeroMessages">There are no messages yet</p>
-          <Message v-for="(message, index) in messages" :key="index" :message="message"/>
+          <Message v-for="(message, index) in messages" :key="index" :message="message" @edit="initMessages" @delete="initMessages"/>
         </div>
         <div class="new-message-container">
           <textarea id="new-message"
@@ -128,6 +128,7 @@ export default {
 
       .friend-list, .private-messages {
         overflow-y: auto;
+        overflow-x: hidden;
       }
 
       .friend-list {

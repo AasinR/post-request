@@ -38,7 +38,7 @@ class FriendsDAO {
             }
             const result: {[k: string]: any}[] = [];
             query.rows.forEach((data: {[k: string]: any}) => {
-                const group = {
+                const friend = {
                     USER1: {
                         ID: data.USER1,
                         FIRSTNAME: data.FIRSTNAME,
@@ -53,7 +53,7 @@ class FriendsDAO {
                     }
                 }
 
-                result.push(group);
+                result.push(friend);
             });
             return result;
         } catch(error) {

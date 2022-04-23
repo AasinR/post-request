@@ -17,8 +17,15 @@ export default {
     group: Object,
   },
   methods: {
-    leaveGroup(){
-
+    async leaveGroup(){
+      try {
+        await this.axios.post(`${this.$root.requestURL}/group/member/remove/${this.group.GROUP.ID}`, {
+          user: this.$cookies.get('UserID'),
+        })
+      } catch (err) {
+        console.log(err);
+      }
+      this.$emit("leave");
     },
   },
 }

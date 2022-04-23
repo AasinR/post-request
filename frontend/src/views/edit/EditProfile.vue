@@ -4,6 +4,7 @@
     <Navbar current="profile"/>
     <div class="content">
         <div class="input-fields">
+          <button id="delete-profile-button" @click="deleteProfile">Delete profile</button>
           <div class="name-group">
             <div class="input-group firstname">
               <label for="firstname"> First name:</label> <br>
@@ -43,7 +44,7 @@
                 </div>
               </div>
               <div class="input-group">
-                <label for="profession"> Current workplace/school:</label> <br>
+                <label for="profession"> Profession:</label> <br>
                 <div class="input-field">
                   <input type="text" id="profession" v-model="inputData.profession">
                 </div>
@@ -200,6 +201,17 @@ export default {
         this.errorMsg = this.areInputsValid;
       }
     },
+
+    async deleteProfile(){
+      try {
+        await this.axios.get(`${this.$root.requestURL}/user/delete`);
+      } catch (err) {
+        console.log(err.response.data);
+      }
+      this.$cookies.remove("UserID");
+      this.$cookies.remove("sid");
+      await this.$router.replace({name: 'Login'});
+    },
   },
 
   computed: {
@@ -337,6 +349,26 @@ export default {
             }
           }
         }
+
+         #delete-profile-button {
+           font-size: 16px;
+           line-height: 24px;
+           background-color: var(--accent-color);
+           color: var(--font-color);
+           border: none;
+           border-radius: 20px;
+           font-weight: bold;
+           font-family: "Cambria", sans-serif;
+           padding-left: 2%;
+           padding-right: 2%;
+           align-self: flex-end;
+
+           &:hover {
+             cursor: pointer;
+             -webkit-filter: brightness(85%);
+             transition: all 100ms ease;
+           }
+         }
       }
     }
   }

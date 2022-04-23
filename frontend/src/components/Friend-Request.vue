@@ -1,9 +1,11 @@
 <template>
 <div class="friend-request">
-  <div class="profile-picture-container">
-    <img class="pfp" :src="friendRequest.PROFILEPICTURE || require('@/assets/pfp-default.png')" alt="profile picture"/>
-  </div>
-  <p class="name">{{friendRequest.FIRSTNAME}} {{friendRequest.LASTNAME}}</p>
+  <router-link :to="{name: 'Profile', params: {userID: friendRequest.ID}}" class="link">
+    <div class="profile-picture-container">
+      <img class="pfp" :src="friendRequest.PROFILEPICTURE || require('@/assets/pfp-default.png')" alt="profile picture"/>
+    </div>
+    <p class="name">{{friendRequest.FIRSTNAME}} {{friendRequest.LASTNAME}}</p>
+  </router-link>
   <div class="accept-buttons">
     <img @click="accept" class="accept-img" src="@/assets/accept.png" alt="accept-img">
     <img @click="reject" class="reject-img" src="@/assets/reject.png" alt="reject-img">
@@ -18,11 +20,21 @@ export default {
     friendRequest: Object,
   },
   methods: {
-    accept(){
-
+    async accept(){
+      try {
+        await this.axios.get(`${this.$root.requestURL}/friend/request/accept/${this.friendRequest.ID}`);
+      } catch (err) {
+        console.log(err.response.data);
+      }
+      this.$emit("accept");
     },
-    reject(){
-
+    async reject(){
+      try {
+        await this.axios.get(`${this.$root.requestURL}/friend/request/reject/${this.friendRequest.ID}`);
+      } catch (err) {
+        console.log(err.response.data);
+      }
+      this.$emit("reject");
     },
   }
 }
@@ -45,29 +57,38 @@ export default {
     background-color: var(--lighter-bg-color);
   }
 
-  .profile-picture-container{
-    width: 40px;
-    height: 40px;
-    background-color: var(--ouline-color);
+  .link {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    justify-content: center;
+    width: 80%;
+    text-decoration: none;
 
-    border-radius: 30px;
-    border: solid 2px var(--ouline-color);
+    .profile-picture-container {
+      width: 40px;
+      height: 40px;
+      background-color: var(--ouline-color);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
 
-    overflow: hidden;
-    margin-right: 2%;
+      border-radius: 30px;
+      border: solid 2px var(--ouline-color);
 
-    .pfp {
-      max-width: 40px;
-      max-height: 40px;
+      overflow: hidden;
+      margin-right: 2%;
+
+      .pfp {
+        max-width: 40px;
+        max-height: 40px;
+      }
     }
   }
 
   .name {
     font-size: 20px;
+    color: var(--font-color);
   }
 
   .accept-buttons {
@@ -79,11 +100,23 @@ export default {
 
     .accept-img {
       margin-right: 15%;
+
+      &:hover {
+        cursor: pointer;
+        -webkit-filter: brightness(80%);
+        transition: all 100ms ease;
+      }
     }
 
-    &:hover {
-      cursor: pointer;
+    .reject-img {
+
+      &:hover {
+        cursor: pointer;
+        -webkit-filter: brightness(80%);
+        transition: all 100ms ease;
+      }
     }
+
   }
 }
 </style>

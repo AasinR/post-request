@@ -161,6 +161,12 @@ const routes = [
     component: () => import('@/views/add/AddGroup')
   },
   {
+    name: "EditGroup",
+    path: "/edit-group/:groupID",
+    props: true,
+    component: () => import('@/views/edit/EditGroup')
+  },
+  {
     name: "AlbumPage",
     path: "/album-page/:albumID",
     props: true,

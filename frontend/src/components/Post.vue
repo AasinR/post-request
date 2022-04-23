@@ -5,9 +5,22 @@
       <img class="pfp" :src="postData.USER.PROFILEPICTURE || require('@/assets/pfp-default.png')" alt="profile picture"/>
     </div>
     <p id="name">{{postData.USER.FIRSTNAME}} {{postData.USER.LASTNAME}}</p>
-    <img v-show="postData.USER.ID.toString() === $cookies.get('UserID').toString()" id="delete-icon" src="@/assets/delete.png" alt="delete-icon" @click="deletePost"/>
+    <div class="icons">
+      <img v-show="postData.USER.ID.toString() === $cookies.get('UserID').toString()" id="edit-icon" src="@/assets/edit.png" alt="edit-icon" @click="editModeOn" v-if="!editMode"/>
+      <img v-show="postData.USER.ID.toString() === $cookies.get('UserID').toString()" id="delete-icon" src="@/assets/delete.png" alt="delete-icon" @click="deletePost" v-if="!editMode"/>
+    </div>
+    <button id="cancelEditButton" @click="editModeOff" v-if="editMode">Cancel</button>
   </div>
-  <p id="text">{{postData.TEXT}}</p>
+  <p id="text" v-if="!editMode">{{postData.TEXT}}</p>
+
+  <textarea id="updateText" v-model="editedPostData.text" v-if="editMode"></textarea>
+  <label id="upload-new-picture-label" for="upload-new-picture" v-if="editMode">Upload a new picture:</label>
+  <input id="upload-new-picture" type="file" v-if="editMode"  @change="setUpdateImage($event)" ref="imageUpload"><br>
+  <div  v-if="editMode" class="edit-post-buttons">
+    <button id="send-edit-button" @click="onEditPost">Edit post</button>
+    <button id="send-edit-and-delete-button" @click="onEditPostWithDelete" :disabled="imageDeleteDisabled">Delete image and edit post</button>
+  </div>
+
   <img v-show="postData.PICTURE" id="picture" :src="postData.PICTURE" alt="post picture"/>
   <div class="post-footer">
     <p id="timestamp">{{postData.TIMESTAMP}}</p>
@@ -15,7 +28,7 @@
   <hr/>
   <p id="comment-toggle" @click="collapseComments" >{{commentCollapsed ? 'View comments' : 'Hide comments'}}</p>
   <div :id="postData.ID" class="comments collapsible">
-    <Comment :key="index" v-for="(comment, index) in comments" :comment="comment" :type="type" @delete="initComments"/>
+    <Comment :key="index" v-for="(comment, index) in comments" :comment="comment" :type="type" @delete="initComments" @edit="initComments"/>
   </div>
   <div class="new-comment-container">
     <textarea id="comment-input" v-model="newComment.content" rows="1" v-on:keydown.enter.exact.prevent="sendComment" placeholder="Write a comment..."></textarea>
@@ -26,6 +39,7 @@
 
 <script>
 import Comment from "@/components/Comment";
+import FormData from "form-data";
 export default {
   name: "Post",
   components: {Comment},
@@ -42,6 +56,11 @@ export default {
         postID: this.postData.ID,
       },
       commentCollapsed: true,
+      editMode: false,
+      editedPostData: {
+        text: '',
+        picture: null,
+      }
     }
   },
   methods: {
@@ -80,8 +99,95 @@ export default {
         }
         await this.initComments();
         this.newComment.content = '';
-        this.collapseComments();
+
+        if (this.commentCollapsed){
+          this.collapseComments();
+        }
       }
+    },
+
+    editModeOn(){
+      this.editedPostData.text = this.postData.TEXT;
+      this.editMode = true;
+    },
+    editModeOff(){
+      this.editMode = false;
+      this.editedPostData.text = '';
+      this.editedPostData.picture = '';
+      this.editedPostData.picture = null;
+      this.$refs.imageUpload.value = null;
+    },
+
+    setUpdateImage(event){
+      if(event.target.files.length === 0){
+        return;
+      }
+      this.editedPostData.picture = event.target.files[0];
+    },
+
+    async onEditPost(){
+      if((this.editedPostData.picture !== undefined && this.editedPostData.picture !== null && this.editedPostData.picture !== '') ||
+          (this.postData.PICTURE !== undefined && this.postData.PICTURE !== null && this.postData.PICTURE !== '') ||
+          (this.editedPostData.text.trim() !== '')){
+
+        const formData = new FormData();
+
+        if(this.editedPostData.picture !== undefined && this.editedPostData.picture !== null && this.editedPostData.picture !== ''){
+          formData.append('image', this.editedPostData.picture);
+          formData.append('text', this.editedPostData.text);
+        } else {
+          formData.append('text', this.editedPostData.text);
+        }
+
+        try {
+          await this.axios.post(
+              `${this.$root.requestURL}/post/${this.type}/update/${this.postData.ID}`,
+              formData,
+              {
+                headers: {
+                  'content-type': 'multipart/form-data'
+                }
+              }
+          )
+        } catch (err) {
+          console.log(err.response.data);
+        }
+        await new Promise(r => setTimeout(r, 1000));
+        this.$emit("postUpdate");
+        this.editModeOff();
+      }
+    },
+
+    async onEditPostWithDelete(){
+      if(this.editedPostData.text.trim() !== '') {
+
+        const formData = new FormData();
+        formData.append('text', this.editedPostData.text);
+        formData.append('removeImg', "yes");
+
+        try {
+          await this.axios.post(
+              `${this.$root.requestURL}/post/${this.type}/update/${this.postData.ID}`,
+              formData,
+              {
+                headers: {
+                  'content-type': 'multipart/form-data'
+                }
+              }
+          )
+        } catch (err) {
+          console.log(err.response.data);
+        }
+        await new Promise(r => setTimeout(r, 1000));
+        this.$emit("postUpdate");
+        this.editModeOff();
+      }
+    },
+  },
+  computed: {
+    imageDeleteDisabled(){
+      return !((this.postData.PICTURE !== undefined && this.postData.PICTURE !== null && this.postData.PICTURE !== '') &&
+          (this.editedPostData.picture === undefined || this.editedPostData.picture === null || this.editedPostData.picture === ''));
     },
   },
   mounted() {
@@ -112,12 +218,49 @@ export default {
         font-weight: bold;
       }
 
-      #delete-icon {
-        width: 25px;
+      .icons {
         margin-left: auto;
+        display: flex;
+        align-items: center;
+
+        #delete-icon {
+          width: 25px;
+
+          &:hover {
+            cursor: pointer;
+          }
+
+        }
+
+        #edit-icon {
+          width: 30px;
+          margin-right: 15%;
+          margin-left: -15%;
+
+          &:hover {
+            cursor: pointer;
+          }
+
+        }
+      }
+
+      #cancelEditButton {
+        margin-left: auto;
+        font-size: 16px;
+        line-height: 24px;
+        background-color: var(--accent-color);
+        color: var(--font-color);
+        border: none;
+        border-radius: 20px;
+        font-weight: bold;
+        font-family: "Cambria", sans-serif;
+        padding-left: 2%;
+        padding-right: 2%;
 
         &:hover {
           cursor: pointer;
+          -webkit-filter: brightness(85%);
+          transition: all 100ms ease;
         }
       }
 
@@ -146,6 +289,67 @@ export default {
     #text {
       margin: 0 0 1.5% 0;
     }
+
+    #updateText {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      width: 90%;
+      height: 48px;
+      margin-bottom: 2%;
+      font-family: Cambria,serif;
+      font-size: 16px;
+      resize: none;
+      border-radius: 15px;
+      padding: 1% 2%;
+    }
+
+    #upload-new-picture-label {
+      margin-left: 3%;
+    }
+
+    #upload-new-picture {
+      margin-bottom: 3%;
+      margin-left: 2%;
+      margin-top: 2%;
+    }
+
+    .edit-post-buttons {
+      display: flex;
+      justify-content: right;
+      margin-bottom: 2%;
+
+      #send-edit-button, #send-edit-and-delete-button {
+        font-size: 16px;
+        line-height: 24px;
+        background-color: var(--accent-color);
+        color: var(--font-color);
+        border: none;
+        border-radius: 20px;
+        font-weight: bold;
+        font-family: "Cambria", sans-serif;
+        padding-left: 2%;
+        padding-right: 2%;
+
+        &:hover {
+          cursor: pointer;
+          -webkit-filter: brightness(85%);
+          transition: all 100ms ease;
+        }
+
+        &:disabled {
+          -webkit-filter: brightness(40%);
+          cursor: auto;
+        }
+      }
+
+      #send-edit-button {
+        margin-right: 2%;
+      }
+
+    }
+
+
 
     #picture {
       width: 100%;

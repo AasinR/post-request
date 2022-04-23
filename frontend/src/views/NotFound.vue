@@ -3,7 +3,7 @@
     <Header/>
     <Navbar/>
     <div class="content">
-      <h1>404 Not Found</h1>
+      <h1>Not Authorized!</h1>
       <img id="stop-img" src="@/assets/notfound.png" alt="stop"/>
     </div>
     <Footer/>

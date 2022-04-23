@@ -59,6 +59,69 @@ class GroupDAO {
             return null;
         }
     }
+
+    // insert group
+    async createGroup(newGroup: Group) : Promise<Group>
+    {
+        const logo = newGroup.LOGO ? `'${newGroup.LOGO}'` : null
+
+        const INSERT = `INSERT INTO "Group" (Name, Logo, OwnerID) VALUES (q'[${newGroup.NAME}]', ${logo}, ${newGroup.OWNERID}) RETURNING id INTO :id`;
+        try {
+            const query = await ConnectionConfig.modify(INSERT, true);
+            if (query === null) {
+                throw Error("Query failed!");
+            }
+            newGroup.ID = query;
+            return newGroup;
+        } catch(error) {
+            console.error(error);
+            return null;
+        }
+    }
+
+    // get group by ID
+    async getGroupById(id: number) : Promise<Group>
+    {
+        const SELECT = `SELECT * FROM "Group" WHERE id = ${id}`;
+        try {
+            const query = await ConnectionConfig.query(SELECT);
+            if (query === null) {
+                throw Error("Query failed!");
+            }
+            if (query.rows.length === 0)
+            {
+                throw Error("No data found!");
+            }
+            const group = query.rows[0] as Group;
+            return group;
+
+        } catch(error) {
+            console.error(error);
+            return null;
+        }
+    }
+
+    // get group by Name
+    async getGroupByName(name: string) : Promise<Group>
+    {
+        const SELECT = `SELECT * FROM "Group" WHERE name = '${name}'`;
+        try {
+            const query = await ConnectionConfig.query(SELECT);
+            if (query === null) {
+                throw Error("Query failed!");
+            }
+            if (query.rows.length === 0)
+            {
+                throw Error("No data found!");
+            }
+            const group = query.rows[0] as Group;
+            return group;
+
+        } catch(error) {
+            console.error(error);
+            return null;
+        }
+    }
 }
 
 export default new GroupDAO();

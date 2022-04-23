@@ -11,6 +11,7 @@
           <p>{{user.firstName}} {{user.lastName}}</p>
         </div>
         <button v-if="$cookies.get('UserID') === userID" class="header-edit-btn" @click="editProfile">Edit profile</button>
+        <button v-if="isNotFriend && loadDone" class="send-friend-request-button" @click="sendFriendRequest" :disabled="alreadySentRequest || alreadyGotRequest" >{{alreadySentRequest || alreadyGotRequest ? 'Request sent' : 'Send friend request'}}</button>
       </div>
       <div class="profile-content">
         <div class="about-container">
@@ -19,7 +20,7 @@
           <p>Date of birth:<br> <span>{{userdata.birthDate}}</span></p>
           <p>Gender:<br> <span>{{userdata.gender}}</span></p>
           <p>Phone number:<br> <span>{{userdata.phoneNumber}}</span></p>
-          <p>Workplace/school:<br> <span>{{userdata.profession}}</span></p>
+          <p>Profession:<br> <span>{{userdata.profession}}</span></p>
         </div>
         <div class="posts-container">
           <div v-if="$cookies.get('UserID') === userID" class="new-post">
@@ -30,7 +31,7 @@
           </div>
           <div class="posts">
             <h2>Posts</h2>
-            <Post v-for="post in posts" :key="post.ID" :post-data="post" type="public" @delete="initPosts"></Post>
+            <Post v-for="post in posts" :key="post.ID" :post-data="post" type="public" @delete="initPosts" @postUpdate="initPosts"></Post>
           </div>
         </div>
       </div>
@@ -81,6 +82,10 @@ export default {
       },
 
       posts: [],
+      friends: [],
+      userFriendRequests: [],
+      userFriendRequests2: [],
+      loadDone: false,
     }
   },
 
@@ -126,6 +131,9 @@ export default {
     },
 
     initProfile(){
+      this.initFriends();
+      this.initFriendRequestsOfProfile();
+      this.initFriendRequestsOfLoggedIn();
       this.initUser();
       this.initUserData();
       this.initPosts();
@@ -163,7 +171,80 @@ export default {
       } catch (err) {
         console.log(err.response.data);
       }
-    }
+    },
+
+    async initFriends(){
+      this.loadDone = false;
+      try {
+        const response = await this.axios.get(`${this.$root.requestURL}/friend/getall/${this.$cookies.get('UserID')}`);
+        this.friends = response.data.result;
+      } catch (err) {
+        console.log(err.response.data);
+      }
+    },
+
+    async initFriendRequestsOfProfile(){
+      try {
+        const response = await this.axios.get(`${this.$root.requestURL}/friend/request/getall/${this.userID}`);
+        this.userFriendRequests = response.data.result;
+      } catch (err) {
+        console.log(err.response.data);
+      }
+    },
+
+    async initFriendRequestsOfLoggedIn(){
+      try {
+        const response = await this.axios.get(`${this.$root.requestURL}/friend/request/getall/${this.$cookies.get('UserID')}`);
+        this.userFriendRequests2 = response.data.result;
+      } catch (err) {
+        console.log(err.response.data);
+      }
+    },
+
+    async sendFriendRequest(){
+      try {
+        await this.axios.get(`${this.$root.requestURL}/friend/request/send/${this.userID}`);
+      } catch (err) {
+        console.log(err.response.data);
+      }
+      await this.initFriendRequestsOfProfile();
+    },
+  },
+  computed: {
+    isNotFriend(){
+      this.loadDone = false;
+      if(Number(this.$cookies.get('UserID')) === Number(this.userID)){
+        this.loadDone = true;
+        return false;
+      }
+
+      for (const friend of this.friends){
+        if(Number(friend.ID) === Number(this.userID)){
+          this.loadDone = true;
+          return false;
+        }
+      }
+      this.loadDone = true;
+      return true;
+    },
+
+    alreadySentRequest(){
+      for (const friendRequest of this.userFriendRequests){
+        if(Number(friendRequest.ID) === Number(this.$cookies.get('UserID'))){
+          return true;
+        }
+      }
+      return false;
+    },
+
+    alreadyGotRequest(){
+      for (const friendRequest of this.userFriendRequests2){
+        if(Number(friendRequest.ID) === Number(this.userID)){
+          return true;
+        }
+      }
+      return false;
+    },
   },
   mounted() {
     this.initProfile();
@@ -180,6 +261,7 @@ export default {
       margin-right: auto;
       width: 60%;
     }
+
     .profile-header{
       background-color: var(--light-bg-color);
       padding: 2% 5%;
@@ -221,7 +303,7 @@ export default {
         }
       }
 
-      .header-edit-btn{
+      .header-edit-btn, .send-friend-request-button{
         display: block;
         font-size: 20px;
         line-height: 30px;
@@ -240,6 +322,11 @@ export default {
           cursor: pointer;
           -webkit-filter: brightness(90%);
           transition: all 100ms ease;
+        }
+
+        &:disabled {
+          -webkit-filter: brightness(40%);
+          cursor: auto;
         }
       }
 

@@ -8,7 +8,7 @@
           <h2>My groups</h2>
           <button @click="createGroup" class="create-group-btn">+ Create group</button>
         </div>
-        <Group :key="index" v-for="(group, index) in groups" :group="group"></Group>
+        <Group :key="index" v-for="(group, index) in groups" :group="group" @leave="initGroups"></Group>
       </div>
     </div>
     <Footer/>

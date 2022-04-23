@@ -14,7 +14,7 @@
       <div class="input-group">
         <label for="logo">Group logo:</label> <br>
         <div class="input-field">
-          <input type="file" id="logo" >
+          <input type="file" id="logo" @change="setLogoImage($event)">
         </div>
       </div>
       <button @click="onCreateGroup" class="create-group">Create group</button>
@@ -28,6 +28,7 @@
 import Header from "@/components/Header";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import FormData from "form-data";
 export default {
   name: "AddGroup",
   components: {Footer, Navbar, Header},
@@ -42,10 +43,36 @@ export default {
     }
   },
   methods: {
+    setLogoImage(event){
+      if(event.target.files.length === 0){
+        return;
+      }
+      this.inputData.logo = event.target.files[0];
+    },
+
     async onCreateGroup(){
       this.errorMsg = '';
       if(this.areInputsValid === "OK"){
-        //TODO
+        const formData = new FormData();
+        formData.append('image', this.inputData.logo);
+        formData.append('name', this.inputData.name);
+
+        try {
+          await this.axios.post(
+              `${this.$root.requestURL}/group/create`,
+              formData,
+              {
+                headers: {
+                  'content-type': 'multipart/form-data'
+                }
+              }
+          );
+          await new Promise(r => setTimeout(r, 1000));
+          await this.$router.replace({name: 'Groups'});
+        } catch (err) {
+          console.log(err);
+        }
+
       } else {
         this.errorMsg = this.areInputsValid;
       }

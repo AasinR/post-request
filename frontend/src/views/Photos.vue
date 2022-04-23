@@ -8,7 +8,7 @@
           <h2>My albums</h2>
           <button @click="createAlbumOpen = true" v-if="!createAlbumOpen" class="create-album-button">+ Create album</button>
           <div v-if="createAlbumOpen" class="create-albums-input">
-            <input id="new-album-name" type="text" v-model="newAlbumName" placeholder="Album name">
+            <input id="new-album-name" type="text" v-model="newAlbumName" v-on:keydown.enter.exact.prevent="createAlbum" placeholder="Album name">
             <button @click="createAlbum" class="send-album-name">Create</button>
           </div>
         </div>
@@ -75,6 +75,7 @@ export default {
       } catch (err) {
         console.log(err.response.data);
       }
+      await new Promise(r => setTimeout(r, 300));
       await this.initPhotos();
     },
 

@@ -251,6 +251,7 @@ export default {
             display: flex;
             flex-direction: column;
             align-items: center;
+            text-decoration: none;
 
             .cover-container{
               background-color: var(--ouline-color);
@@ -267,8 +268,8 @@ export default {
             .album-name {
               line-height: 20px;
               margin: 10px 0;
-              text-decoration: none;
               color: var(--font-color);
+
             }
             &:hover {
               cursor: pointer;

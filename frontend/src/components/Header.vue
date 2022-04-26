@@ -22,6 +22,7 @@ export default {
   display: flex;
   flex-direction: row;
   align-items: center;
+  z-index: 100;
 
   .logo{
     height: 80%;

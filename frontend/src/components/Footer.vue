@@ -23,6 +23,7 @@ export default {
     display: flex;
     justify-content: right;
     align-items: center;
+    z-index: 100;
 
     .logo{
       height: 60%;

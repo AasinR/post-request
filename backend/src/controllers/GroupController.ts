@@ -4,6 +4,9 @@ import GroupDAO from "../dao/GroupDAO";
 import GroupMembersDAO from "../dao/GroupMembersDAO";
 import CloudConfig from "../config/CloudConfig";
 import GroupMember from "../models/GroupMember";
+import Picture from "../models/Picture";
+import PictureDAO from "../dao/PictureDAO";
+import { debug } from "console";
 
 class GroupController {
 
@@ -113,6 +116,55 @@ class GroupController {
             }
 
             throw 200;
+        } catch(status) {
+            switch(status) {
+                case 200:
+                    res.json({
+                        "groupId": group.ID
+                    });
+                    break;
+                default:
+                    res.sendStatus(500);
+                    console.error(status);
+
+                    if (link) {
+                        const fileId = link.split("=")[2];
+                        CloudConfig.delete(fileId);
+                    }
+                    break;
+            }
+        }
+    }
+
+    async editGroup(req : Request, res : Response, next : NextFunction)
+    {
+        const group = new Group();
+        group.ID = parseInt(req.params.id, 10);
+        group.NAME = req.body.name;
+
+        const file = (req.file === undefined) ? null : req.file.buffer;
+        let link;
+
+        try {
+            const groupRes = await GroupDAO.getGroupById(group.ID);
+            if (groupRes === null)
+            {
+                throw new Error("Failed to get group!");
+            }
+            if (groupRes.OWNERID !== req.session.userId)
+            {
+                throw 400;
+            }
+            if (file) {
+                link = await CloudConfig.upload("group", file)
+                group.LOGO = link;
+            }
+
+            const result = await GroupDAO.editGroup(group);
+            if (result === null) {
+                throw new Error("Failed to edit group!");
+            }
+            group.ID = result.ID;
         } catch(status) {
             switch(status) {
                 case 200:

@@ -79,6 +79,24 @@ class GroupDAO {
         }
     }
 
+    async editGroup(newGroup: Group) : Promise<Group>
+    {
+        const logo = newGroup.LOGO ? `'${newGroup.LOGO}'` : null
+
+        const INSERT = `UPDATE "Group" SET name = q'[${newGroup.NAME}]', LOGO = ${logo} WHERE id = ${newGroup.ID} RETURNING id INTO :id`;
+        try {
+            const query = await ConnectionConfig.modify(INSERT, true);
+            if (query === null) {
+                throw Error("Query failed!");
+            }
+            newGroup.ID = query;
+            return newGroup;
+        } catch(error) {
+            console.error(error);
+            return null;
+        }
+    }
+
     // get group by ID
     async getGroupById(id: number) : Promise<Group>
     {

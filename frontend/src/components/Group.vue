@@ -1,12 +1,12 @@
 <template>
   <div class="group">
-    <router-link :to="{name: 'GroupPage', params: {groupID: group.GROUP.ID}}" class="link">
+    <router-link :to="{name: 'GroupPage', params: {groupID: search ? group.ID : group.GROUP.ID}}" class="link">
       <div class="logo-container">
-        <img class="logo" :src="group.GROUP.LOGO || require('@/assets/grouplogo-default.png')" alt="group logo"/>
+        <img class="logo" :src="(search ? group.LOGO : group.GROUP.LOGO) || require('@/assets/grouplogo-default.png')" alt="group logo"/>
       </div>
-      <p class="name">{{group.GROUP.NAME}}</p>
+      <p class="name">{{search ? group.NAME : group.GROUP.NAME}}</p>
     </router-link>
-    <button class="leave-btn" @click="leaveGroup">Leave group</button>
+    <button class="leave-btn" @click="leaveGroup" v-if="!search">Leave group</button>
   </div>
 </template>
 
@@ -15,7 +15,9 @@ export default {
   name: "Friend",
   props: {
     group: Object,
+    search: Boolean,
   },
+
   methods: {
     async leaveGroup(){
       try {
@@ -27,6 +29,7 @@ export default {
       }
       this.$emit("leave");
     },
+
   },
 }
 </script>

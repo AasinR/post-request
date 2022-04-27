@@ -20,6 +20,7 @@ class GroupRoutes {
         this._Router.get("/get/:id", SessionController.isUser, GroupController.getGroupById);
         this._Router.get("/getname/:name", SessionController.isUser, GroupController.getGroupByName);
         this._Router.post("/edit/:id", SessionController.isUser, GroupController.editGroup);
+        this._Router.post("/delete/:id", SessionController.isUser, GroupController.deleteGroup);
 
         this._Router.get("/member/all", SessionController.isAdmin, GroupController.findAllMember);
         this._Router.get("/member/getall/:id", SessionController.isUser, GroupController.getAllMember);

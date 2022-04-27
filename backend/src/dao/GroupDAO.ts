@@ -97,6 +97,19 @@ class GroupDAO {
         }
     }
 
+    async deleteGroup(id: number) : Promise<number>
+    {
+        const DELETE_GROUP = `DELETE FROM "Group" WHERE id = ${id}`;
+
+        try {
+            ConnectionConfig.modify(DELETE_GROUP, false);
+            return id;
+        } catch (error) {
+            console.error(error);
+            return null;
+        }
+    }
+
     // get group by ID
     async getGroupById(id: number) : Promise<Group>
     {

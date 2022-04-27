@@ -165,6 +165,7 @@ class GroupController {
                 throw new Error("Failed to edit group!");
             }
             group.ID = result.ID;
+            throw 200;
         } catch(status) {
             switch(status) {
                 case 200:
@@ -180,6 +181,42 @@ class GroupController {
                         const fileId = link.split("=")[2];
                         CloudConfig.delete(fileId);
                     }
+                    break;
+            }
+        }
+    }
+
+    async deleteGroup(req : Request, res : Response, next : NextFunction) {
+        try
+        {
+            const groupId = parseInt(req.params.id, 10);
+            const group = await GroupDAO.getGroupById(groupId);
+            if (group === null)
+            {
+                throw new Error("Failed to get group!");
+            }
+            if (group.OWNERID !== req.session.userId)
+            {
+                throw 400;
+            }
+
+            const result = await GroupDAO.deleteGroup(group.ID);
+            if (result === null)
+            {
+                throw new Error("Failed to delete group!");
+            }
+            throw 200;
+        } catch(status) {
+            switch(status) {
+                case 200:
+                    res.send("Group deleted!");
+                    break;
+                case 400:
+                    res.status(400).send("Not authorized to delete other's group!");
+                    break;
+                default:
+                    res.sendStatus(500);
+                    console.error(status);
                     break;
             }
         }

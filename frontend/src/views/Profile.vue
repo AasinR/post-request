@@ -23,7 +23,7 @@
           <p>Profession:<br> <span>{{userdata.profession}}</span></p>
         </div>
         <div class="posts-container">
-          <div v-if="$cookies.get('UserID') === userID" class="new-post">
+          <div v-if="Number($cookies.get('UserID')) === Number(userID)" class="new-post">
             <h2>Make a new post!</h2>
             <textarea id="newpost-text" v-model="newPost.content" placeholder="Write your post here..."></textarea>
             <input id="newpost-picture" type="file" @change="setNewPostImage($event)" ref="imageUpload"><br>

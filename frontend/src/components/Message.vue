@@ -138,7 +138,7 @@ export default {
       position: absolute;
       left: -60px;
       top: 2px;
-      width: 120%;
+      width: 160%;
       height: 30px;
 
       #delete-icon {

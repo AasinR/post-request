@@ -9,11 +9,11 @@
       </div>
       <div v-if="searched" class="users">
         <h2>Users found</h2>
-        <UserProfile class="user-found" v-for="(userFound, index) in usersFound" :key="index" :user="userFound"/>
+        <UserProfile class="user-found" v-for="(userFound, index) in usersFound" :key="index" :user="userFound" v-if="userMatch(userFound)"/>
       </div>
       <div v-if="searched" class="groups">
         <h2>Groups found</h2>
-        <Group class="group-found" v-for="(groupFound, index) in groupsFound" :key="index" :group="groupFound"/>
+        <Group class="group-found" v-for="(groupFound, index) in groupsFound" :key="index" :group="groupFound" search v-if="groupMatch(groupFound)"/>
       </div>
     </div>
     <Footer/>
@@ -40,19 +40,42 @@ export default {
   },
   methods: {
     async initUsersFound(){
-
+      try {
+        const response = await this.axios.get(`${this.$root.requestURL}/user/all`);
+        this.usersFound = response.data.result;
+      } catch (err) {
+        console.log(err.response.data);
+      }
     },
 
     async initGroupsFound(){
-
+      try {
+        const response = await this.axios.get(`${this.$root.requestURL}/group/all`);
+        this.groupsFound = response.data.result;
+      } catch (err) {
+        console.log(err.response.data);
+      }
     },
 
     search() {
-      this.initUsersFound();
-      this.initGroupsFound();
       this.searched = true;
     },
+
+    userMatch(user){
+      let name = user.FIRSTNAME + " " + user.LASTNAME;
+      return (name.toLowerCase()).includes(this.searchKey.toLowerCase());
+
+    },
+
+    groupMatch(group){
+      return (group.NAME.toLowerCase()).includes(this.searchKey.toLowerCase());
+
+    }
   },
+  mounted() {
+    this.initUsersFound();
+    this.initGroupsFound();
+  }
 }
 </script>
 

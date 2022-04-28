@@ -19,7 +19,7 @@ class GroupRoutes {
         this._Router.post("/create", SessionController.isUser, upload.single("image"), GroupController.createGroup);
         this._Router.get("/get/:id", SessionController.isUser, GroupController.getGroupById);
         this._Router.get("/getname/:name", SessionController.isUser, GroupController.getGroupByName);
-        this._Router.post("/edit/:id", SessionController.isUser, GroupController.editGroup);
+        this._Router.post("/edit/:id", SessionController.isUser, upload.single("image"), GroupController.editGroup);
         this._Router.post("/delete/:id", SessionController.isUser, GroupController.deleteGroup);
 
         this._Router.get("/member/all", SessionController.isAdmin, GroupController.findAllMember);

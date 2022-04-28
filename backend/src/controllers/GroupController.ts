@@ -139,6 +139,7 @@ class GroupController {
     async editGroup(req : Request, res : Response, next : NextFunction)
     {
         const group = new Group();
+        const removeImg = req.body.removeImg;
         group.ID = parseInt(req.params.id, 10);
         group.NAME = req.body.name;
 
@@ -158,6 +159,18 @@ class GroupController {
             if (file) {
                 link = await CloudConfig.upload("group", file)
                 group.LOGO = link;
+
+                if (groupRes.LOGO)
+                {
+                    const fileId = groupRes.LOGO.split("=")[2];
+                    CloudConfig.delete(fileId);
+                }
+            }
+            else if (removeImg)
+            {
+                const fileId = groupRes.LOGO.split("=")[2];
+                CloudConfig.delete(fileId);
+                group.LOGO = null;
             }
 
             const result = await GroupDAO.editGroup(group);

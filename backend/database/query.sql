@@ -111,3 +111,43 @@ OR PrivateMessage.FromUser = User1.id AND
     PrivateMessage.ToUser = 1000 AND
     PrivateMessage.FromUser = 1001
 ORDER BY PrivateMessage.TIMESTAMP DESC;
+
+-- get all albums by userId with image count
+SELECT MediaAlbum.ID, MediaAlbum.NAME, MediaAlbum.USERID, COUNT(PublicPicture.ID) as IMG_COUNT
+FROM MediaAlbum LEFT JOIN PublicPicture ON MediaAlbum.ID = PublicPicture.ALBUMID AND MediaAlbum.USERID = PublicPicture.USERID
+WHERE MediaAlbum.USERID = 1000
+GROUP BY MediaAlbum.ID, MediaAlbum.NAME, MediaAlbum.USERID
+ORDER BY IMG_COUNT DESC, MediaAlbum.NAME;
+
+-- get album by ID with img count
+SELECT MediaAlbum.ID, MediaAlbum.NAME, MediaAlbum.USERID, COUNT(PublicPicture.ID) as IMG_COUNT
+FROM MediaAlbum LEFT JOIN PublicPicture ON MediaAlbum.ID = PublicPicture.ALBUMID AND MediaAlbum.USERID = PublicPicture.USERID
+WHERE MediaAlbum.ID = 1020
+GROUP BY MediaAlbum.ID, MediaAlbum.NAME, MediaAlbum.USERID;
+
+-- get all users with friend count
+SELECT "User".ID, "User".PASSWORD, "User".EMAIL, "User".PERMISSION, "User".FIRSTNAME, "User".LASTNAME, COUNT(Friends.USER1) as FRIENDS_COUNT
+FROM "User" LEFT JOIN Friends ON
+    "User".ID = Friends.USER1 OR
+    "User".ID = Friends.USER2
+GROUP BY "User".ID, "User".PASSWORD, "User".EMAIL, "User".PERMISSION, "User".FIRSTNAME, "User".LASTNAME;
+
+-- get user by ID with friend count
+SELECT "User".ID, "User".PASSWORD, "User".EMAIL, "User".PERMISSION, "User".FIRSTNAME, "User".LASTNAME, COUNT(Friends.USER1) as FRIENDS_COUNT
+FROM "User" LEFT JOIN Friends ON
+    "User".ID = Friends.USER1 OR
+    "User".ID = Friends.USER2
+WHERE "User".ID = 1000
+GROUP BY "User".ID, "User".PASSWORD, "User".EMAIL, "User".PERMISSION, "User".FIRSTNAME, "User".LASTNAME;
+
+-- get groups with more than average members
+SELECT "Group".ID, "Group".NAME, "Group".LOGO, "Group".OWNERID, COUNT(GroupMembers.GROUPID) as MEMBER_COUNT
+FROM "Group" LEFT JOIN GroupMembers ON
+    "Group".ID = GroupMembers.GROUPID
+HAVING COUNT(GroupMembers.GROUPID) >= (
+    SELECT AVG(COUNT(GroupMembers.GROUPID))
+    FROM GroupMembers
+    GROUP BY GroupMembers.GROUPID
+)
+GROUP BY "Group".ID, "Group".NAME, "Group".LOGO, "Group".OWNERID
+ORDER BY MEMBER_COUNT DESC, "Group".NAME;

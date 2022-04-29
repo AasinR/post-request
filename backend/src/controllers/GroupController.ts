@@ -4,6 +4,9 @@ import GroupDAO from "../dao/GroupDAO";
 import GroupMembersDAO from "../dao/GroupMembersDAO";
 import CloudConfig from "../config/CloudConfig";
 import GroupMember from "../models/GroupMember";
+import Picture from "../models/Picture";
+import PictureDAO from "../dao/PictureDAO";
+import { debug } from "console";
 
 class GroupController {
 
@@ -36,6 +39,30 @@ class GroupController {
         let result;
         try {
             result = await GroupMembersDAO.findAll();
+            if (result === null) {
+                throw new Error("Failed to execute query!");
+            }
+            throw 200;
+        } catch(status) {
+            switch(status) {
+                case 200:
+                    res.json({
+                        "result": result
+                    });
+                    break;
+                default:
+                    res.sendStatus(500);
+                    console.error(status);
+                    break;
+            }
+        }
+    }
+
+    // get groups with more than average member count
+    async getPopular(req : Request, res : Response, next : NextFunction) {
+        let result;
+        try {
+            result = await GroupDAO.getPopular();
             if (result === null) {
                 throw new Error("Failed to execute query!");
             }
@@ -128,6 +155,105 @@ class GroupController {
                         const fileId = link.split("=")[2];
                         CloudConfig.delete(fileId);
                     }
+                    break;
+            }
+        }
+    }
+
+    async editGroup(req : Request, res : Response, next : NextFunction)
+    {
+        const group = new Group();
+        const removeImg = req.body.removeImg;
+        group.ID = parseInt(req.params.id, 10);
+        group.NAME = req.body.name;
+
+        const file = (req.file === undefined) ? null : req.file.buffer;
+        let link;
+
+        try {
+            const groupRes = await GroupDAO.getGroupById(group.ID);
+            if (groupRes === null)
+            {
+                throw new Error("Failed to get group!");
+            }
+            if (groupRes.OWNERID !== req.session.userId)
+            {
+                throw 400;
+            }
+            if (file) {
+                link = await CloudConfig.upload("group", file)
+                group.LOGO = link;
+
+                if (groupRes.LOGO)
+                {
+                    const fileId = groupRes.LOGO.split("=")[2];
+                    CloudConfig.delete(fileId);
+                }
+            }
+            else if (removeImg)
+            {
+                const fileId = groupRes.LOGO.split("=")[2];
+                CloudConfig.delete(fileId);
+                group.LOGO = null;
+            }
+
+            const result = await GroupDAO.editGroup(group);
+            if (result === null) {
+                throw new Error("Failed to edit group!");
+            }
+            group.ID = result.ID;
+            throw 200;
+        } catch(status) {
+            switch(status) {
+                case 200:
+                    res.json({
+                        "groupId": group.ID
+                    });
+                    break;
+                default:
+                    res.sendStatus(500);
+                    console.error(status);
+
+                    if (link) {
+                        const fileId = link.split("=")[2];
+                        CloudConfig.delete(fileId);
+                    }
+                    break;
+            }
+        }
+    }
+
+    async deleteGroup(req : Request, res : Response, next : NextFunction) {
+        try
+        {
+            const groupId = parseInt(req.params.id, 10);
+            const group = await GroupDAO.getGroupById(groupId);
+            if (group === null)
+            {
+                throw new Error("Failed to get group!");
+            }
+            if (group.OWNERID !== req.session.userId)
+            {
+                throw 400;
+            }
+
+            const result = await GroupDAO.deleteGroup(group.ID);
+            if (result === null)
+            {
+                throw new Error("Failed to delete group!");
+            }
+            throw 200;
+        } catch(status) {
+            switch(status) {
+                case 200:
+                    res.send("Group deleted!");
+                    break;
+                case 400:
+                    res.status(400).send("Not authorized to delete other's group!");
+                    break;
+                default:
+                    res.sendStatus(500);
+                    console.error(status);
                     break;
             }
         }

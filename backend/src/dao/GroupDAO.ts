@@ -21,6 +21,36 @@ class GroupDAO {
         }
     }
 
+    // get groups with more than average member count
+    async getPopular(): Promise<{[k: string]: any}[]> {
+        const GET_POPULAR =
+            `SELECT "Group".ID, "Group".NAME, "Group".LOGO, "Group".OWNERID, COUNT(GroupMembers.GROUPID) as MEMBER_COUNT
+            FROM "Group" LEFT JOIN GroupMembers ON
+                "Group".ID = GroupMembers.GROUPID
+            HAVING COUNT(GroupMembers.GROUPID) >= (
+                SELECT AVG(COUNT(GroupMembers.GROUPID))
+                FROM GroupMembers
+                GROUP BY GroupMembers.GROUPID
+            )
+            GROUP BY "Group".ID, "Group".NAME, "Group".LOGO, "Group".OWNERID
+            ORDER BY MEMBER_COUNT DESC, "Group".NAME`;
+
+            try {
+                const query = await ConnectionConfig.query(GET_POPULAR);
+                if (query === null) {
+                    throw Error("Query failed!");
+                }
+                const result: {[k: string]: any}[] = [];
+                query.rows.forEach((data: Group) => {
+                    result.push(data);
+                });
+                return result;
+            } catch(error) {
+                console.error(error);
+                return null;
+            }
+    }
+
     // get all group by userID
     async getAll(ID: number): Promise<{[k: string]: any}[]> {
         const GET_ALL =

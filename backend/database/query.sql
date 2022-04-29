@@ -139,3 +139,15 @@ FROM "User" LEFT JOIN Friends ON
     "User".ID = Friends.USER2
 WHERE "User".ID = 1000
 GROUP BY "User".ID, "User".PASSWORD, "User".EMAIL, "User".PERMISSION, "User".FIRSTNAME, "User".LASTNAME;
+
+-- get groups with more than average members
+SELECT "Group".ID, "Group".NAME, "Group".LOGO, "Group".OWNERID, COUNT(GroupMembers.GROUPID) as MEMBER_COUNT
+FROM "Group" LEFT JOIN GroupMembers ON
+    "Group".ID = GroupMembers.GROUPID
+HAVING COUNT(GroupMembers.GROUPID) >= (
+    SELECT AVG(COUNT(GroupMembers.GROUPID))
+    FROM GroupMembers
+    GROUP BY GroupMembers.GROUPID
+)
+GROUP BY "Group".ID, "Group".NAME, "Group".LOGO, "Group".OWNERID
+ORDER BY MEMBER_COUNT DESC, "Group".NAME;

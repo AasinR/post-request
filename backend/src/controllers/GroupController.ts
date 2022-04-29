@@ -58,6 +58,30 @@ class GroupController {
         }
     }
 
+    // get groups with more than average member count
+    async getPopular(req : Request, res : Response, next : NextFunction) {
+        let result;
+        try {
+            result = await GroupDAO.getPopular();
+            if (result === null) {
+                throw new Error("Failed to execute query!");
+            }
+            throw 200;
+        } catch(status) {
+            switch(status) {
+                case 200:
+                    res.json({
+                        "result": result
+                    });
+                    break;
+                default:
+                    res.sendStatus(500);
+                    console.error(status);
+                    break;
+            }
+        }
+    }
+
     // get all group by userID
     async getAllGroup(req : Request, res : Response, next : NextFunction) {
         const userId = parseInt(req.params.id, 10);

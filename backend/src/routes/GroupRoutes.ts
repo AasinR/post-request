@@ -15,6 +15,7 @@ class GroupRoutes {
         this._Router = Router();
 
         this._Router.get("/all", SessionController.isUser, GroupController.findAll);
+        this._Router.get("/popular", SessionController.isUser, GroupController.getPopular);
         this._Router.get("/getall/:id", SessionController.isUser, GroupController.getAllGroup);
         this._Router.post("/create", SessionController.isUser, upload.single("image"), GroupController.createGroup);
         this._Router.get("/get/:id", SessionController.isUser, GroupController.getGroupById);

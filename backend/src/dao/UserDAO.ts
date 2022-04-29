@@ -3,8 +3,13 @@ import User from "../models/User";
 
 class UserDAO {
     // get all users
-    async findAll(): Promise<User[]> {
-        const FIND_ALL = 'SELECT * FROM "User"';
+    async findAll(): Promise<{[k: string]: any}[]> {
+        const FIND_ALL =
+            `SELECT "User".ID, "User".PASSWORD, "User".EMAIL, "User".PERMISSION, "User".FIRSTNAME, "User".LASTNAME, COUNT(Friends.USER1) as FRIENDS_COUNT
+            FROM "User" LEFT JOIN Friends ON
+                "User".ID = Friends.USER1 OR
+                "User".ID = Friends.USER2
+            GROUP BY "User".ID, "User".PASSWORD, "User".EMAIL, "User".PERMISSION, "User".FIRSTNAME, "User".LASTNAME`;
         try {
             const query = await ConnectionConfig.query(FIND_ALL);
             if (query === null) {
@@ -22,8 +27,14 @@ class UserDAO {
     }
 
     // get user by ID
-    async get(ID: number): Promise<User> {
-        const FIND_USER = `SELECT * FROM "User" WHERE id = ${ID}`;
+    async get(ID: number): Promise<{[k: string]: any}> {
+        const FIND_USER =
+            `SELECT "User".ID, "User".PASSWORD, "User".EMAIL, "User".PERMISSION, "User".FIRSTNAME, "User".LASTNAME, COUNT(Friends.USER1) as FRIENDS_COUNT
+            FROM "User" LEFT JOIN Friends ON
+                "User".ID = Friends.USER1 OR
+                "User".ID = Friends.USER2
+            WHERE "User".ID = ${ID}
+            GROUP BY "User".ID, "User".PASSWORD, "User".EMAIL, "User".PERMISSION, "User".FIRSTNAME, "User".LASTNAME`;
         try {
             const query: {[k: string]: any} = await ConnectionConfig.query(FIND_USER);
             if (query === null) {
@@ -32,13 +43,15 @@ class UserDAO {
             if (query.rows.length === 0) {
                 throw new Error("No data found!");
             }
-            const result = new User();
-            result.ID = query.rows[0].ID;
-            result.PASSWORD = query.rows[0].PASSWORD;
-            result.EMAIL = query.rows[0].EMAIL;
-            result.PERMISSION = query.rows[0].PERMISSION;
-            result.FIRSTNAME = query.rows[0].FIRSTNAME;
-            result.LASTNAME = query.rows[0].LASTNAME;
+            const result = {
+                ID: query.rows[0].ID,
+                PASSWORD: query.rows[0].PASSWORD,
+                EMAIL: query.rows[0].EMAIL,
+                PERMISSION: query.rows[0].PERMISSION,
+                FIRSTNAME: query.rows[0].FIRSTNAME,
+                LASTNAME: query.rows[0].LASTNAME,
+                FRIENDS_COUNT: query.rows[0].FRIENDS_COUNT
+            };
 
             return result;
         } catch(error) {

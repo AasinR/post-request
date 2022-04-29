@@ -279,6 +279,30 @@ class UserController {
             }
         }
     }
+
+    // get user activity statistics
+    async getStat(req : Request, res : Response, next : NextFunction) {
+        let result;
+        try {
+            result = await UserDAO.stat();
+            if (result === null) {
+                throw new Error("Failed to get stats!");
+            }
+            throw 200;
+        } catch(status) {
+            switch(status) {
+                case 200:
+                    res.json({
+                        "result": result
+                    });
+                    break;
+                default:
+                    res.sendStatus(500);
+                    console.error(status);
+                    break;
+            }
+        }
+    }
 }
 
 export default new UserController();

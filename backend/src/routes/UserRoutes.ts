@@ -25,6 +25,7 @@ class UserRoutes {
         this._Router.post("/data/save", SessionController.isUser, upload.single("image"), UserController.saveData);
 
         this._Router.get("/admin/all", SessionController.isAdmin, UserController.findAll);
+        this._Router.get("/admin/stat", SessionController.isAdmin, UserController.getStat);
     }
 
     get Router() {

@@ -137,6 +137,40 @@ class MessageDAO {
             return null;
         }
     }
+
+    // get user's longer conversations
+    async stat(ID: number): Promise<{[k: string]: any}[]> {
+        const GET_STAT =
+            `SELECT FromUser.ID F_ID, FromUser.FIRSTNAME F_FIRSTNAME, FromUser.LASTNAME F_LASTNAME,
+            ToUser.ID T_ID, ToUser.FIRSTNAME T_FIRSTNAME, ToUser.LASTNAME T_LASTNAME, COUNT(PrivateMessage.ID) MSG_COUNT
+        FROM "User" FromUser, "User" ToUser, PrivateMessage
+        WHERE PrivateMessage.FROMUSER = FromUser.ID AND
+            PrivateMessage.TOUSER = ToUser.ID AND
+            FromUser.ID = ${ID}
+        HAVING COUNT(PrivateMessage.ID) > (
+            SELECT AVG(COUNT(PrivateMessage.ID))
+            FROM PrivateMessage
+            GROUP BY PrivateMessage.ID
+        )
+        GROUP BY FromUser.ID, FromUser.FIRSTNAME, FromUser.LASTNAME,
+            ToUser.ID, ToUser.FIRSTNAME, ToUser.LASTNAME
+        ORDER BY MSG_COUNT DESC`;
+
+        try {
+            const query = await ConnectionConfig.query(GET_STAT);
+            if (query === null) {
+                throw Error("Query failed!");
+            }
+            const result: {[k: string]: any}[] = [];
+            query.rows.forEach((data: {[k: string]: any}) => {
+                result.push(data);
+            });
+            return result;
+        } catch(error) {
+            console.error(error);
+            return null;
+        }
+    }
 }
 
 export default new MessageDAO();

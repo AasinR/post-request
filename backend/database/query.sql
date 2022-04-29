@@ -176,3 +176,19 @@ SELECT "User".ID, "User".FIRSTNAME, "User".LASTNAME,
     ) GC_COUNT
 FROM "User"
 ORDER BY (PP_COUNT + PC_COUNT + GP_COUNT + GC_COUNT) DESC;
+
+-- get user's longer conversations
+SELECT FromUser.ID F_ID, FromUser.FIRSTNAME F_FIRSTNAME, FromUser.LASTNAME F_LASTNAME,
+    ToUser.ID T_ID, ToUser.FIRSTNAME T_FIRSTNAME, ToUser.LASTNAME T_LASTNAME, COUNT(PrivateMessage.ID) MSG_COUNT
+FROM "User" FromUser, "User" ToUser, PrivateMessage
+WHERE PrivateMessage.FROMUSER = FromUser.ID AND
+    PrivateMessage.TOUSER = ToUser.ID AND
+    FromUser.ID = 1000
+HAVING COUNT(PrivateMessage.ID) > (
+    SELECT AVG(COUNT(PrivateMessage.ID))
+    FROM PrivateMessage
+    GROUP BY PrivateMessage.ID
+)
+GROUP BY FromUser.ID, FromUser.FIRSTNAME, FromUser.LASTNAME,
+    ToUser.ID, ToUser.FIRSTNAME, ToUser.LASTNAME
+ORDER BY MSG_COUNT DESC;

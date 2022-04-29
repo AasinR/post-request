@@ -151,3 +151,28 @@ HAVING COUNT(GroupMembers.GROUPID) >= (
 )
 GROUP BY "Group".ID, "Group".NAME, "Group".LOGO, "Group".OWNERID
 ORDER BY MEMBER_COUNT DESC, "Group".NAME;
+
+-- get user statistics
+SELECT "User".ID, "User".FIRSTNAME, "User".LASTNAME,
+    (
+        SELECT COUNT(ID)
+        FROM PublicPost
+        WHERE USERID = "User".ID
+    ) PP_COUNT,
+    (
+        SELECT COUNT(ID)
+        FROM PublicComment
+        WHERE USERID = "User".ID
+    ) PC_COUNT,
+    (
+        SELECT COUNT(ID)
+        FROM GroupPost
+        WHERE USERID = "User".ID
+    ) GP_COUNT,
+    (
+        SELECT COUNT(ID)
+        FROM GroupComment
+        WHERE USERID = "User".ID
+    ) GC_COUNT
+FROM "User"
+ORDER BY (PP_COUNT + PC_COUNT + GP_COUNT + GC_COUNT) DESC;

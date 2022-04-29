@@ -98,6 +98,49 @@ class UserDAO {
             return null;
         }
     }
+
+    // get user activity statistics
+    async stat(): Promise<{[k: string]: any}[]> {
+        const GET_STAT =
+            `SELECT "User".ID, "User".FIRSTNAME, "User".LASTNAME,
+            (
+                SELECT COUNT(ID)
+                FROM PublicPost
+                WHERE USERID = "User".ID
+            ) PP_COUNT,
+            (
+                SELECT COUNT(ID)
+                FROM PublicComment
+                WHERE USERID = "User".ID
+            ) PC_COUNT,
+            (
+                SELECT COUNT(ID)
+                FROM GroupPost
+                WHERE USERID = "User".ID
+            ) GP_COUNT,
+            (
+                SELECT COUNT(ID)
+                FROM GroupComment
+                WHERE USERID = "User".ID
+            ) GC_COUNT
+        FROM "User"
+        ORDER BY (PP_COUNT + PC_COUNT + GP_COUNT + GC_COUNT) DESC`;
+
+        try {
+            const query = await ConnectionConfig.query(GET_STAT);
+            if (query === null) {
+                throw Error("Query failed!");
+            }
+            const result: {[k: string]: any}[] = [];
+            query.rows.forEach((data: {[k: string]: any}) => {
+                result.push(data);
+            });
+            return result;
+        } catch(error) {
+            console.error(error);
+            return null;
+        }
+    }
 }
 
 export default new UserDAO();

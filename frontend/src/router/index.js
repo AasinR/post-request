@@ -131,7 +131,16 @@ const routes = [
         path: "group-members",
         component: () => import('@/views/admin/AdminGroupMembers')
       },
-
+      {
+        name: "AdminUserActivity",
+        path: "user-activity",
+        component: () => import('@/views/admin/UserActivity')
+      },
+      {
+        name: "AdminLongerConvos",
+        path: "longer-convos",
+        component: () => import('@/views/admin/LongerConvos')
+      },
     ]
   },
   {

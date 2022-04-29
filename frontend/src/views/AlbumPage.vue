@@ -6,7 +6,7 @@
       <div v-if="loadedData" class="album">
         <div class="album-header">
           <input @blur="editAlbumName" v-on:keydown.enter.exact.prevent="editAlbumName" v-if="editNameOpen" type="text" v-model="albumNewName" class="name-input">
-          <h2 v-if="!editNameOpen" class="album-name">{{albumData.name}}</h2>
+          <h2 v-if="!editNameOpen" class="album-name">{{albumData.name}} <span class="photo_count">({{albumData.imgCount}} photos)</span></h2>
           <button @click="goToAddPhotos" class="add-photo-btn">+ Add photos to album</button>
           <img @click="showNameEdit" class="edit-icon" src="@/assets/edit.png" alt="edit"/>
           <img @click="deleteAlbum" class="delete-icon" src="@/assets/delete.png" alt="delete"/>
@@ -42,6 +42,7 @@ export default {
         id: '',
         name: '',
         userID: '',
+        imgCount: '',
       },
       albumPictures: [],
       noPictures: true,
@@ -58,6 +59,7 @@ export default {
         this.albumData.name = response.data.result.NAME;
         this.albumNewName = response.data.result.NAME;
         this.albumData.userID = response.data.result.USERID;
+        this.albumData.imgCount = response.data.result.IMG_COUNT;
       } catch (err) {
         console.log(err.response.data);
       }
@@ -143,6 +145,12 @@ export default {
 
             h2 {
               margin: 0;
+            }
+
+            .photo_count {
+              font-size: 18px;
+              font-weight: normal;
+              font-style: italic;
             }
           }
           .name-input {

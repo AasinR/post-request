@@ -6,6 +6,7 @@
       <div class="search-bar">
         <input id="search-input" type="text" v-model="searchKey" v-on:keydown.enter.exact.prevent="search">
         <button @click="search" class="search-button">Search</button>
+        <button @click="showPopularGroups" class="popular-groups-button">Show popular groups</button>
       </div>
       <div v-if="searched" class="users">
         <h2>Users found</h2>
@@ -14,6 +15,10 @@
       <div v-if="searched" class="groups">
         <h2>Groups found</h2>
         <Group class="group-found" v-for="(groupFound, index) in groupsFound" :key="index" :group="groupFound" search v-if="groupMatch(groupFound)"/>
+      </div>
+      <div v-if="showPopularOn && !searched" class="groups">
+        <h2>Popular groups</h2>
+        <Group class="group-found" v-for="(popularGroup, index) in popularGroups" :key="index" :group="popularGroup" search/>
       </div>
     </div>
     <Footer/>
@@ -34,8 +39,10 @@ export default {
     return {
       usersFound: [],
       groupsFound: [],
+      popularGroups: [],
       searchKey: '',
       searched : false,
+      showPopularOn: false,
     }
   },
   methods: {
@@ -57,7 +64,17 @@ export default {
       }
     },
 
+    async initPopularGroups(){
+      try {
+        const response = await this.axios.get(`${this.$root.requestURL}/group/popular`);
+        this.popularGroups = response.data.result;
+      } catch (err) {
+        console.log(err.response.data);
+      }
+    },
+
     search() {
+      this.showPopularOn = false;
       this.searched = true;
     },
 
@@ -70,7 +87,14 @@ export default {
     groupMatch(group){
       return (group.NAME.toLowerCase()).includes(this.searchKey.toLowerCase());
 
-    }
+    },
+
+    showPopularGroups(){
+      this.searched = false;
+      this.showPopularOn = true;
+
+      this.initPopularGroups();
+    },
   },
   mounted() {
     this.initUsersFound();
@@ -103,7 +127,7 @@ export default {
           margin-right: 1%;
         }
 
-        .search-button {
+        .search-button, .popular-groups-button {
           font-size: 20px;
           line-height: 32px;
           background-color: var(--accent-color);
@@ -114,6 +138,7 @@ export default {
           font-family: "Cambria", sans-serif;
           padding-left: 2%;
           padding-right: 2%;
+          margin-right: 1%;
 
           &:hover {
             cursor: pointer;

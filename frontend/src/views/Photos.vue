@@ -17,7 +17,7 @@
             <div class="cover-container">
               <img class="cover" :src="require('@/assets/default-gallery-cover.png')" alt="album cover"/>
             </div>
-            <p class="album-name">{{album.NAME}}</p>
+            <p class="album-name">{{album.NAME}} ({{album.IMG_COUNT}})</p>
           </router-link>
         </div>
       </div>

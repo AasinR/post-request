@@ -8,7 +8,7 @@
         <FriendRequest :key="index" v-for="(friendRequest, index) in friendRequests" :friend-request="friendRequest" @accept="initPage" @reject="initFriendRequests"/>
       </div>
       <div class="my-friends">
-        <h2>My friends</h2>
+        <h2>My friends <span class="friends-count">({{friendsCount}})</span></h2>
         <UserProfile :key="index" v-for="(friend, index) in friends" :user="friend"/>
       </div>
     </div>
@@ -36,6 +36,7 @@ export default {
     return {
       friendRequests: [],
       friends: [],
+      friendsCount: '',
     }
    },
   methods: {
@@ -57,9 +58,19 @@ export default {
       }
     },
 
+    async initFriendCount(){
+      try {
+        const response = await this.axios.get(`${this.$root.requestURL}/user/get/${this.$cookies.get('UserID')}`);
+        this.friendsCount = response.data.result.FRIENDS_COUNT;
+      } catch (err) {
+        console.log(err.response.data);
+      }
+    },
+
     initPage(){
       this.initFriendRequests();
       this.initFriends();
+      this.initFriendCount();
     }
   },
 
@@ -84,6 +95,11 @@ export default {
         background-color: var(--light-bg-color);
         padding: 2% 5% 3% 5%;
         margin-bottom: 2%;
+
+        .friends-count {
+          font-size: 18px;
+          font-weight: normal;
+        }
       }
     }
   }

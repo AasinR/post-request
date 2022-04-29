@@ -4,6 +4,7 @@
     <Navbar current="groups"/>
     <div class="content">
       <div class="input-fields">
+        <button id="delete-group-button" @click="deleteGroup">Delete group</button>
         <p class="error-message" v-if="errorMsg">{{errorMsg}}</p>
         <div class="input-group">
           <label for="name">Name:</label> <br>
@@ -62,32 +63,42 @@ export default {
       }
     },
 
-    async onEditGroup(){                                          // TODO
-      // this.errorMsg = '';
-      // if(this.areInputsValid === "OK"){
-      //   const formData = new FormData();
-      //   formData.append('image', this.inputData.logo);
-      //   formData.append('name', this.inputData.name);
-      //
-      //   try {
-      //     await this.axios.post(
-      //         `${this.$root.requestURL}/group/create`,
-      //         formData,
-      //         {
-      //           headers: {
-      //             'content-type': 'multipart/form-data'
-      //           }
-      //         }
-      //     );
-      //     await new Promise(r => setTimeout(r, 1000));
-      //     await this.$router.replace({name: 'Groups'});
-      //   } catch (err) {
-      //     console.log(err);
-      //   }
-      //
-      // } else {
-      //   this.errorMsg = this.areInputsValid;
-      // }
+    async onEditGroup(){
+      this.errorMsg = '';
+      if(this.areInputsValid === "OK"){
+        const formData = new FormData();
+        formData.append('image', this.inputData.logo);
+        formData.append('name', this.inputData.name);
+
+        try {
+          await this.axios.post(
+              `${this.$root.requestURL}/group/edit/${this.groupID}`,
+              formData,
+              {
+                headers: {
+                  'content-type': 'multipart/form-data'
+                }
+              }
+          );
+          await new Promise(r => setTimeout(r, 1000));
+          await this.$router.replace({name: 'GroupPage', params: {groupID: this.groupID}});
+        } catch (err) {
+          console.log(err);
+        }
+
+      } else {
+        this.errorMsg = this.areInputsValid;
+      }
+    },
+
+    async deleteGroup(){
+      try {
+        await this.axios.post(`${this.$root.requestURL}/group/delete/${this.groupID}`);
+      } catch (err) {
+        console.log(err.response.data);
+      }
+      await new Promise(r => setTimeout(r, 1000));
+      await this.$router.replace({name: 'Groups'});
     },
   },
   computed: {
@@ -170,6 +181,28 @@ export default {
         &:hover {
           cursor: pointer;
           -webkit-filter: brightness(90%);
+          transition: all 100ms ease;
+        }
+      }
+
+      #delete-group-button {
+        font-size: 16px;
+        line-height: 24px;
+        background-color: var(--accent-color);
+        color: var(--font-color);
+        border: none;
+        border-radius: 20px;
+        font-weight: bold;
+        font-family: "Cambria", sans-serif;
+        padding-left: 2%;
+        padding-right: 2%;
+        align-self: flex-end;
+        margin-top: 0;
+        margin-bottom: 0;
+
+        &:hover {
+          cursor: pointer;
+          -webkit-filter: brightness(85%);
           transition: all 100ms ease;
         }
       }

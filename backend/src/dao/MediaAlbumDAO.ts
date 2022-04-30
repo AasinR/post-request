@@ -22,16 +22,21 @@ class MediaAlbumDAO {
     }
 
     // get all album by userID
-    async getAll(ID: number): Promise<MediaAlbum[]> {
-        const GET_ALL = `SELECT * FROM mediaalbum WHERE userid = ${ID}`;
+    async getAll(ID: number): Promise<{[k: string]: any}[]> {
+        const GET_ALL =
+            `SELECT MediaAlbum.ID, MediaAlbum.NAME, MediaAlbum.USERID, COUNT(PublicPicture.ID) as IMG_COUNT
+            FROM MediaAlbum LEFT JOIN PublicPicture ON MediaAlbum.ID = PublicPicture.ALBUMID AND MediaAlbum.USERID = PublicPicture.USERID
+            WHERE MediaAlbum.USERID = ${ID}
+            GROUP BY MediaAlbum.ID, MediaAlbum.NAME, MediaAlbum.USERID
+            ORDER BY IMG_COUNT DESC, MediaAlbum.NAME`;
 
         try {
             const query = await ConnectionConfig.query(GET_ALL);
             if (query === null) {
                 throw Error("Query failed!");
             }
-            const result: MediaAlbum[] = [];
-            query.rows.forEach((data: MediaAlbum) => {
+            const result: {[k: string]: any}[] = [];
+            query.rows.forEach((data: {[k: string]: any}) => {
                 result.push(data);
             });
             return result;
@@ -42,8 +47,12 @@ class MediaAlbumDAO {
     }
 
     // get album by ID
-    async get(ID: number): Promise<MediaAlbum> {
-        const GET_ALBUM = `SELECT * FROM mediaalbum WHERE id = ${ID}`;
+    async get(ID: number): Promise<{[k: string]: any}> {
+        const GET_ALBUM =
+            `SELECT MediaAlbum.ID, MediaAlbum.NAME, MediaAlbum.USERID, COUNT(PublicPicture.ID) as IMG_COUNT
+            FROM MediaAlbum LEFT JOIN PublicPicture ON MediaAlbum.ID = PublicPicture.ALBUMID AND MediaAlbum.USERID = PublicPicture.USERID
+            WHERE MediaAlbum.ID = ${ID}
+            GROUP BY MediaAlbum.ID, MediaAlbum.NAME, MediaAlbum.USERID`;
 
         try {
             const query: {[k: string]: any} = await ConnectionConfig.query(GET_ALBUM);
@@ -53,10 +62,12 @@ class MediaAlbumDAO {
             if (query.rows.length === 0) {
                 throw new Error("No data found!");
             }
-            const result = new MediaAlbum();
-            result.ID = query.rows[0].ID;
-            result.NAME = query.rows[0].NAME;
-            result.USERID = query.rows[0].USERID;
+            const result = {
+                ID: query.rows[0].ID,
+                NAME: query.rows[0].NAME,
+                USERID: query.rows[0].USERID,
+                IMG_COUNT: query.rows[0].IMG_COUNT
+            }
 
             return result;
         } catch(error) {
@@ -95,7 +106,10 @@ class MediaAlbumDAO {
 
     // delete album
     async delete(ID: number): Promise<number> {
-        const DELETE_ALBUM = `DELETE FROM mediaalbum WHERE id = ${ID}`;
+        const DELETE_ALBUM =
+            `BEGIN
+                delete_album(${ID});
+            END;`;
 
         try {
             ConnectionConfig.modify(DELETE_ALBUM, false);

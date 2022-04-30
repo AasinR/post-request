@@ -3,15 +3,21 @@ import User from "../models/User";
 
 class UserDAO {
     // get all users
-    async findAll(): Promise<User[]> {
-        const FIND_ALL = 'SELECT * FROM "User"';
+    async findAll(): Promise<{[k: string]: any}[]> {
+        const FIND_ALL =
+            `SELECT "User".ID, "User".PASSWORD, "User".EMAIL, "User".PERMISSION, "User".FIRSTNAME, "User".LASTNAME, COUNT(Friends.USER1) as FRIENDS_COUNT
+            FROM "User" LEFT JOIN Friends ON
+                "User".ID = Friends.USER1 OR
+                "User".ID = Friends.USER2
+            GROUP BY "User".ID, "User".PASSWORD, "User".EMAIL, "User".PERMISSION, "User".FIRSTNAME, "User".LASTNAME
+            ORDER BY "User".ID`;
         try {
             const query = await ConnectionConfig.query(FIND_ALL);
             if (query === null) {
                 throw Error("Query failed!");
             }
-            const result: User[] = [];
-            query.rows.forEach((data: User) => {
+            const result: {[k: string]: any}[] = [];
+            query.rows.forEach((data: {[k: string]: any}) => {
                 result.push(data);
             });
             return result;
@@ -22,8 +28,14 @@ class UserDAO {
     }
 
     // get user by ID
-    async get(ID: number): Promise<User> {
-        const FIND_USER = `SELECT * FROM "User" WHERE id = ${ID}`;
+    async get(ID: number): Promise<{[k: string]: any}> {
+        const FIND_USER =
+            `SELECT "User".ID, "User".PASSWORD, "User".EMAIL, "User".PERMISSION, "User".FIRSTNAME, "User".LASTNAME, COUNT(Friends.USER1) as FRIENDS_COUNT
+            FROM "User" LEFT JOIN Friends ON
+                "User".ID = Friends.USER1 OR
+                "User".ID = Friends.USER2
+            WHERE "User".ID = ${ID}
+            GROUP BY "User".ID, "User".PASSWORD, "User".EMAIL, "User".PERMISSION, "User".FIRSTNAME, "User".LASTNAME`;
         try {
             const query: {[k: string]: any} = await ConnectionConfig.query(FIND_USER);
             if (query === null) {
@@ -32,13 +44,15 @@ class UserDAO {
             if (query.rows.length === 0) {
                 throw new Error("No data found!");
             }
-            const result = new User();
-            result.ID = query.rows[0].ID;
-            result.PASSWORD = query.rows[0].PASSWORD;
-            result.EMAIL = query.rows[0].EMAIL;
-            result.PERMISSION = query.rows[0].PERMISSION;
-            result.FIRSTNAME = query.rows[0].FIRSTNAME;
-            result.LASTNAME = query.rows[0].LASTNAME;
+            const result = {
+                ID: query.rows[0].ID,
+                PASSWORD: query.rows[0].PASSWORD,
+                EMAIL: query.rows[0].EMAIL,
+                PERMISSION: query.rows[0].PERMISSION,
+                FIRSTNAME: query.rows[0].FIRSTNAME,
+                LASTNAME: query.rows[0].LASTNAME,
+                FRIENDS_COUNT: query.rows[0].FRIENDS_COUNT
+            };
 
             return result;
         } catch(error) {
@@ -80,6 +94,80 @@ class UserDAO {
         try {
             ConnectionConfig.modify(DELETE_USER, false);
             return ID;
+        } catch(error) {
+            console.error(error);
+            return null;
+        }
+    }
+
+    // get user activity statistics
+    async stat(): Promise<{[k: string]: any}[]> {
+        const GET_STAT =
+            `SELECT "User".ID, "User".FIRSTNAME, "User".LASTNAME,
+            (
+                SELECT COUNT(ID)
+                FROM PublicPost
+                WHERE USERID = "User".ID
+            ) PP_COUNT,
+            (
+                SELECT COUNT(ID)
+                FROM PublicComment
+                WHERE USERID = "User".ID
+            ) PC_COUNT,
+            (
+                SELECT COUNT(ID)
+                FROM GroupPost
+                WHERE USERID = "User".ID
+            ) GP_COUNT,
+            (
+                SELECT COUNT(ID)
+                FROM GroupComment
+                WHERE USERID = "User".ID
+            ) GC_COUNT
+        FROM "User"
+        ORDER BY (PP_COUNT + PC_COUNT + GP_COUNT + GC_COUNT) DESC`;
+
+        try {
+            const query = await ConnectionConfig.query(GET_STAT);
+            if (query === null) {
+                throw Error("Query failed!");
+            }
+            const result: {[k: string]: any}[] = [];
+            query.rows.forEach((data: {[k: string]: any}) => {
+                result.push(data);
+            });
+            return result;
+        } catch(error) {
+            console.error(error);
+            return null;
+        }
+    }
+
+    // get age of users
+    async age(): Promise<{[k: string]: any}[]> {
+        const GET_AGE =
+            `SELECT "User".ID, "User".FIRSTNAME, "User".LASTNAME,
+            TRUNC((CURRENT_DATE - UserData.BIRTHDATE)/365.25) AGE,
+            (
+                SELECT AVG(TRUNC((CURRENT_DATE - UserData.BIRTHDATE)/365.25))
+                FROM UserData
+                WHERE UserData.BIRTHDATE IS NOT NULL
+            ) AVG_AGE
+        FROM UserData, "User"
+        WHERE "User".ID = UserData.USERID AND
+            UserData.BIRTHDATE IS NOT NULL
+        ORDER BY TRUNC((CURRENT_DATE - UserData.BIRTHDATE)/365.25), "User".ID`;
+
+        try {
+            const query = await ConnectionConfig.query(GET_AGE);
+            if (query === null) {
+                throw Error("Query failed!");
+            }
+            const result: {[k: string]: any}[] = [];
+            query.rows.forEach((data: {[k: string]: any}) => {
+                result.push(data);
+            });
+            return result;
         } catch(error) {
             console.error(error);
             return null;

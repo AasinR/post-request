@@ -14,6 +14,7 @@ class MessageRoutes {
         this._Router.get("/delete/:id", SessionController.isUser, MessageController.deleteMessage);
         this._Router.post("/send", SessionController.isUser, MessageController.sendMessage);
         this._Router.post("/update/:id", SessionController.isUser, MessageController.update);
+        this._Router.get("/stat/:id", SessionController.isAdmin, MessageController.getStat);
     }
 
     get Router() {

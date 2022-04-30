@@ -172,6 +172,31 @@ class MessageController {
             }
         }
     }
+
+    // get user's longer conversations
+    async getStat(req : Request, res : Response, next : NextFunction) {
+        const fromUser = parseInt(req.params.id, 10);
+        let result;
+        try {
+            result = await MessageDAO.stat(fromUser);
+            if (result === null) {
+                throw new Error("Failed to execute query!");
+            }
+            throw 200;
+        } catch(status) {
+            switch(status) {
+                case 200:
+                    res.json({
+                        "result": result
+                    });
+                    break;
+                default:
+                    res.sendStatus(500);
+                    console.error(status);
+                    break;
+            }
+        }
+    }
 }
 
 export default new MessageController();

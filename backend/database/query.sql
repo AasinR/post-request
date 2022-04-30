@@ -111,3 +111,126 @@ OR PrivateMessage.FromUser = User1.id AND
     PrivateMessage.ToUser = 1000 AND
     PrivateMessage.FromUser = 1001
 ORDER BY PrivateMessage.TIMESTAMP DESC;
+
+-- get all albums by userId with image count
+SELECT MediaAlbum.ID, MediaAlbum.NAME, MediaAlbum.USERID, COUNT(PublicPicture.ID) as IMG_COUNT
+FROM MediaAlbum LEFT JOIN PublicPicture ON MediaAlbum.ID = PublicPicture.ALBUMID AND MediaAlbum.USERID = PublicPicture.USERID
+WHERE MediaAlbum.USERID = 1000
+GROUP BY MediaAlbum.ID, MediaAlbum.NAME, MediaAlbum.USERID
+ORDER BY IMG_COUNT DESC, MediaAlbum.NAME;
+
+-- get album by ID with img count
+SELECT MediaAlbum.ID, MediaAlbum.NAME, MediaAlbum.USERID, COUNT(PublicPicture.ID) as IMG_COUNT
+FROM MediaAlbum LEFT JOIN PublicPicture ON MediaAlbum.ID = PublicPicture.ALBUMID AND MediaAlbum.USERID = PublicPicture.USERID
+WHERE MediaAlbum.ID = 1020
+GROUP BY MediaAlbum.ID, MediaAlbum.NAME, MediaAlbum.USERID;
+
+-- get all users with friend count
+SELECT "User".ID, "User".PASSWORD, "User".EMAIL, "User".PERMISSION, "User".FIRSTNAME, "User".LASTNAME, COUNT(Friends.USER1) as FRIENDS_COUNT
+FROM "User" LEFT JOIN Friends ON
+    "User".ID = Friends.USER1 OR
+    "User".ID = Friends.USER2
+GROUP BY "User".ID, "User".PASSWORD, "User".EMAIL, "User".PERMISSION, "User".FIRSTNAME, "User".LASTNAME
+ORDER BY "User".ID;
+
+-- get user by ID with friend count
+SELECT "User".ID, "User".PASSWORD, "User".EMAIL, "User".PERMISSION, "User".FIRSTNAME, "User".LASTNAME, COUNT(Friends.USER1) as FRIENDS_COUNT
+FROM "User" LEFT JOIN Friends ON
+    "User".ID = Friends.USER1 OR
+    "User".ID = Friends.USER2
+WHERE "User".ID = 1000
+GROUP BY "User".ID, "User".PASSWORD, "User".EMAIL, "User".PERMISSION, "User".FIRSTNAME, "User".LASTNAME;
+
+-- get groups with more than average members
+SELECT "Group".ID, "Group".NAME, "Group".LOGO, "Group".OWNERID, COUNT(GroupMembers.GROUPID) as MEMBER_COUNT
+FROM "Group" LEFT JOIN GroupMembers ON
+    "Group".ID = GroupMembers.GROUPID
+HAVING COUNT(GroupMembers.GROUPID) >= (
+    SELECT AVG(COUNT(GroupMembers.GROUPID))
+    FROM GroupMembers
+    GROUP BY GroupMembers.GROUPID
+)
+GROUP BY "Group".ID, "Group".NAME, "Group".LOGO, "Group".OWNERID
+ORDER BY MEMBER_COUNT DESC, "Group".NAME;
+
+-- get user statistics
+SELECT "User".ID, "User".FIRSTNAME, "User".LASTNAME,
+    (
+        SELECT COUNT(ID)
+        FROM PublicPost
+        WHERE USERID = "User".ID
+    ) PP_COUNT,
+    (
+        SELECT COUNT(ID)
+        FROM PublicComment
+        WHERE USERID = "User".ID
+    ) PC_COUNT,
+    (
+        SELECT COUNT(ID)
+        FROM GroupPost
+        WHERE USERID = "User".ID
+    ) GP_COUNT,
+    (
+        SELECT COUNT(ID)
+        FROM GroupComment
+        WHERE USERID = "User".ID
+    ) GC_COUNT
+FROM "User"
+ORDER BY (PP_COUNT + PC_COUNT + GP_COUNT + GC_COUNT) DESC;
+
+-- get user's longer conversations
+SELECT FromUser.ID F_ID, FromUser.FIRSTNAME F_FIRSTNAME, FromUser.LASTNAME F_LASTNAME,
+    ToUser.ID T_ID, ToUser.FIRSTNAME T_FIRSTNAME, ToUser.LASTNAME T_LASTNAME, COUNT(PrivateMessage.ID) MSG_COUNT
+FROM "User" FromUser, "User" ToUser, PrivateMessage
+WHERE PrivateMessage.FROMUSER = FromUser.ID AND
+    PrivateMessage.TOUSER = ToUser.ID AND
+    FromUser.ID = 1000
+HAVING COUNT(PrivateMessage.ID) > (
+    SELECT AVG(COUNT(PrivateMessage.ID))
+    FROM PrivateMessage
+    GROUP BY PrivateMessage.ID
+)
+GROUP BY FromUser.ID, FromUser.FIRSTNAME, FromUser.LASTNAME,
+    ToUser.ID, ToUser.FIRSTNAME, ToUser.LASTNAME
+ORDER BY MSG_COUNT DESC;
+
+-- most active poster in a group
+SELECT "User".ID, "User".FIRSTNAME, "User".LASTNAME, "Group".ID, "Group".NAME, COUNT(GroupPost.ID) GP_COUNT
+FROM "User", "Group", GroupPost
+WHERE "User".ID = GroupPost.USERID AND
+    "Group".ID = GroupPost.GROUPID AND
+    "Group".ID = 1000
+HAVING COUNT(GroupPost.ID) = (
+    SELECT MAX(COUNT(GroupPost.USERID))
+    FROM GroupPost, "Group"
+    WHERE "Group".ID = GroupPost.GROUPID AND
+        "Group".ID = 1000
+    GROUP BY GroupPost.USERID
+)
+GROUP BY "User".ID, "User".FIRSTNAME, "User".LASTNAME, "Group".ID, "Group".NAME
+ORDER BY "User".ID, "User".FIRSTNAME, "User".LASTNAME;
+
+-- get latest picture of an album
+SELECT PublicPicture.ID, PublicPicture.CONTENT, PublicPicture.TIMESTAMP, MediaAlbum.NAME G_NAME
+FROM PublicPicture, MediaAlbum
+WHERE PublicPicture.ALBUMID = MediaAlbum.ID AND
+    MediaAlbum.ID = 1001
+HAVING PublicPicture.TIMESTAMP = (
+    SELECT MAX(TIMESTAMP)
+    FROM PublicPicture
+    WHERE PublicPicture.ALBUMID = 1001
+)
+GROUP BY PublicPicture.ID, PublicPicture.CONTENT, PublicPicture.TIMESTAMP, MediaAlbum.NAME;
+
+-- age of users
+SELECT "User".ID, "User".FIRSTNAME, "User".LASTNAME,
+    TRUNC((CURRENT_DATE - UserData.BIRTHDATE)/365.25) AGE,
+    (
+        SELECT AVG(TRUNC((CURRENT_DATE - UserData.BIRTHDATE)/365.25))
+        FROM UserData
+        WHERE UserData.BIRTHDATE IS NOT NULL
+    ) AVG_AGE
+FROM UserData, "User"
+WHERE "User".ID = UserData.USERID AND
+    UserData.BIRTHDATE IS NOT NULL
+ORDER BY TRUNC((CURRENT_DATE - UserData.BIRTHDATE)/365.25), "User".ID;

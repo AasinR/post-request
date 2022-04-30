@@ -19,7 +19,7 @@ Leképezés
         _ID, Name, *UserID )
 
     PublicPicture (
-        _ID, Content, *AlbumID )
+        _ID, Content, TimeStamp, *AlbumID, *UserID )
 
     PublicPost (
         _ID, Text, TimeStamp, *Picture, *UserID )
@@ -88,7 +88,7 @@ Normalizálás
 
     PublicPicture ( _ID, Content, *AlbumID )
         Funkcionális függőségek:
-            { ID } -> { Content, *AlbumID }
+            { ID } -> { Content, TimeStamp, *AlbumID, *UserID }
 
         1NF: Megfelel 1NF-nek, mivel minden attribútum atomi
         2NF: Megfelel 2NF-nek

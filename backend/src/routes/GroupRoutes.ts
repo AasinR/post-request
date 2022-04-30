@@ -15,10 +15,14 @@ class GroupRoutes {
         this._Router = Router();
 
         this._Router.get("/all", SessionController.isUser, GroupController.findAll);
+        this._Router.get("/popular", SessionController.isUser, GroupController.getPopular);
+        this._Router.get("/active/:id", SessionController.isUser, GroupController.getActive);
         this._Router.get("/getall/:id", SessionController.isUser, GroupController.getAllGroup);
         this._Router.post("/create", SessionController.isUser, upload.single("image"), GroupController.createGroup);
         this._Router.get("/get/:id", SessionController.isUser, GroupController.getGroupById);
         this._Router.get("/getname/:name", SessionController.isUser, GroupController.getGroupByName);
+        this._Router.post("/edit/:id", SessionController.isUser, upload.single("image"), GroupController.editGroup);
+        this._Router.post("/delete/:id", SessionController.isUser, GroupController.deleteGroup);
 
         this._Router.get("/member/all", SessionController.isAdmin, GroupController.findAllMember);
         this._Router.get("/member/getall/:id", SessionController.isUser, GroupController.getAllMember);

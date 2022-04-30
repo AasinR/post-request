@@ -41,13 +41,14 @@ class UserController {
                 throw new Error("Failed to get users!");
             }
 
-            users.forEach((data: User) => {
+            users.forEach((data: {[k: string]: any}) => {
                 result.push({
                     ID: data.ID,
                     EMAIL: data.EMAIL,
                     PERMISSION: data.PERMISSION,
                     FIRSTNAME: data.FIRSTNAME,
-                    LASTNAME: data.LASTNAME
+                    LASTNAME: data.LASTNAME,
+                    FRIENDS_COUNT: data.FRIENDS_COUNT
                 });
             });
             throw 200;
@@ -96,16 +97,9 @@ class UserController {
         let result;
 
         try {
-            const user = await UserDAO.get(id);
-            if (user === null) {
+            result = await UserDAO.get(id);
+            if (result === null) {
                 throw new Error("Failed to execute query!");
-            }
-            result = {
-                ID: user.ID,
-                EMAIL: user.EMAIL,
-                PERMISSION: user.PERMISSION,
-                FIRSTNAME: user.FIRSTNAME,
-                LASTNAME: user.LASTNAME
             }
             throw 200;
         } catch(status) {
@@ -152,14 +146,18 @@ class UserController {
     // update user
     async saveUser(req : Request, res : Response, next : NextFunction) {
         try {
-            const user = await UserDAO.get(req.session.userId);
-            if (user === null) {
+            const userRes = await UserDAO.get(req.session.userId);
+            if (userRes === null) {
                 throw new Error("Failed to get user!");
             }
+
+            const user = new User();
+            user.ID = userRes.ID;
             user.PASSWORD = req.body.password;
             user.EMAIL = req.body.email;
             user.FIRSTNAME = req.body.firstName;
             user.LASTNAME = req.body.lastName;
+            user.PERMISSION = userRes.PERMISSION;
 
             const result = await UserDAO.update(user);
             if (result === null) {
@@ -187,10 +185,16 @@ class UserController {
         };
 
         try {
-            const user = await UserDAO.get(data.id);
-            if (user === null) {
+            const userRes = await UserDAO.get(data.id);
+            if (userRes === null) {
                 throw new Error("Failed to get user!");
             }
+            const user = new User();
+            user.ID = userRes.ID;
+            user.PASSWORD = userRes.PASSWORD;
+            user.EMAIL = userRes.EMAIL;
+            user.FIRSTNAME = userRes.FIRSTNAME;
+            user.LASTNAME = userRes.LASTNAME;
             user.PERMISSION = data.permission;
             const result = await UserDAO.update(user);
             if (result === null) {
@@ -267,6 +271,54 @@ class UserController {
             switch(status) {
                 case 200:
                     res.send("User deleted!");
+                    break;
+                default:
+                    res.sendStatus(500);
+                    console.error(status);
+                    break;
+            }
+        }
+    }
+
+    // get user activity statistics
+    async getStat(req : Request, res : Response, next : NextFunction) {
+        let result;
+        try {
+            result = await UserDAO.stat();
+            if (result === null) {
+                throw new Error("Failed to get stats!");
+            }
+            throw 200;
+        } catch(status) {
+            switch(status) {
+                case 200:
+                    res.json({
+                        "result": result
+                    });
+                    break;
+                default:
+                    res.sendStatus(500);
+                    console.error(status);
+                    break;
+            }
+        }
+    }
+
+    // get age of users
+    async getAge(req : Request, res : Response, next : NextFunction) {
+        let result;
+        try {
+            result = await UserDAO.age();
+            if (result === null) {
+                throw new Error("Failed to get users!");
+            }
+            throw 200;
+        } catch(status) {
+            switch(status) {
+                case 200:
+                    res.json({
+                        "result": result
+                    });
                     break;
                 default:
                     res.sendStatus(500);

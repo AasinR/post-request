@@ -1,7 +1,7 @@
 <template>
-  <div class="admin-users">
+  <div class="admin-user-activity">
     <div class="rowflex">
-      <AdminNavbar current="users"/>
+      <AdminNavbar current="activity"/>
       <DataTable :table-headers="tableHeaders" :table-values="tableValues" />
     </div>
   </div>
@@ -12,12 +12,12 @@ import DataTable from '@/components/Data-Table'
 import AdminNavbar from '@/components/Admin-Navbar'
 
 export default {
-  name: "Users",
+  name: "UserActivity",
   components: {
     DataTable,
     AdminNavbar,
   },
-  data(){
+  data() {
     return {
       tableHeaders: [
         {
@@ -29,29 +29,29 @@ export default {
           key: "FIRSTNAME"
         },
         {
-          label: "Last name",
-          key: "LASTNAME"
+          label: "Public posts",
+          key: "PP_COUNT"
         },
         {
-          label: "Password",
-          key: 'PASSWORD'
+          label: "Public comments",
+          key: 'PC_COUNT'
         },
         {
-          label: "Email",
-          key: "EMAIL"
+          label: "Group posts",
+          key: "GP_COUNT"
         },
         {
-          label: "Permission",
-          key: "PERMISSION"
+          label: "Group comments",
+          key: "GC_COUNT"
         },
 
       ],
       tableValues: []
     }
   },
-  methods:{
+  methods: {
     initTable(){
-      this.axios.get(`${this.$root.requestURL}/user/admin/all`)
+      this.axios.get(`${this.$root.requestURL}/user/admin/stat`)
           .then(({data: {result}}) => {
             this.tableValues = result;
           })
@@ -59,23 +59,24 @@ export default {
             console.log('Hiba a lekereskor:' + error.response.data);
 
           });
-      }
-    },
-    mounted() {
-      this.initTable();
     }
+  },
+  mounted() {
+    this.initTable();
+  }
 }
 </script>
 
 <style lang="scss" scoped>
-  .admin-users {
 
-    .rowflex {
-      display: flex;
-      flex-direction: row;
-      align-items: flex-start;
+.admin-user-activity {
 
-    }
+  .rowflex {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+
   }
+}
 
 </style>

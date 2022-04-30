@@ -1,8 +1,11 @@
 <template>
   <div class="admin-users">
     <div class="rowflex">
-      <AdminNavbar current="users"/>
-      <DataTable :table-headers="tableHeaders" :table-values="tableValues" />
+      <AdminNavbar current="userage"/>
+      <div>
+        <p>Average age of users: <span>{{this.avgAge}}</span></p>
+        <DataTable :table-headers="tableHeaders" :table-values="tableValues" />
+      </div>
     </div>
   </div>
 </template>
@@ -12,7 +15,7 @@ import DataTable from '@/components/Data-Table'
 import AdminNavbar from '@/components/Admin-Navbar'
 
 export default {
-  name: "Users",
+  name: "UserAge",
   components: {
     DataTable,
     AdminNavbar,
@@ -33,49 +36,53 @@ export default {
           key: "LASTNAME"
         },
         {
-          label: "Password",
-          key: 'PASSWORD'
-        },
-        {
-          label: "Email",
-          key: "EMAIL"
-        },
-        {
-          label: "Permission",
-          key: "PERMISSION"
+          label: "Age",
+          key: 'AGE'
         },
 
       ],
-      tableValues: []
+      tableValues: [],
+      avgAge: '',
     }
   },
   methods:{
     initTable(){
-      this.axios.get(`${this.$root.requestURL}/user/admin/all`)
+      this.axios.get(`${this.$root.requestURL}/user/admin/age`)
           .then(({data: {result}}) => {
             this.tableValues = result;
+            if(this.tableValues[0] !== undefined && this.tableValues !== null){
+              this.avgAge = this.tableValues[0].AVG_AGE;
+            }
           })
           .catch((error) => {
             console.log('Hiba a lekereskor:' + error.response.data);
 
           });
-      }
-    },
-    mounted() {
-      this.initTable();
     }
+  },
+  mounted() {
+    this.initTable();
+  }
 }
 </script>
 
 <style lang="scss" scoped>
-  .admin-users {
+.admin-users {
 
-    .rowflex {
-      display: flex;
-      flex-direction: row;
-      align-items: flex-start;
+  .rowflex {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
 
+    p {
+      font-size: 20px;
+
+      span {
+        font-weight: bold;
+      }
     }
+
   }
+}
 
 </style>

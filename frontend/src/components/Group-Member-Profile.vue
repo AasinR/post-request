@@ -1,7 +1,7 @@
 <template>
-  <router-link :to="{name: 'Profile', params: {userID: user.USERID}}" class="friend">
-    <div class="profile-picture-container" :class="ownerId === user.USERID ? 'owner' : ''">
-      <img class="pfp" :src="user.PROFILEPICTURE || require('@/assets/pfp-default.png')" alt="profile picture"/>
+  <router-link :to="{name: 'Profile', params: {userID: activeMembers ? user.ID : user.USERID}}" class="friend">
+    <div class="profile-picture-container" :class="ownerId === (activeMembers ? user.ID : user.USERID) ? 'owner' : ''">
+      <img class="pfp" :src="pfp || require('@/assets/pfp-default.png')" alt="profile picture"/>
     </div>
     <p class="name">{{ user.FIRSTNAME }} {{ user.LASTNAME }}</p>
   </router-link>
@@ -13,7 +13,27 @@ export default {
   props: {
     user: Object,
     ownerId: Number | String,
+    activeMembers: Boolean,
   },
+  data(){
+    return {
+      pfp: this.user.PROFILEPICTURE,
+    }
+  },
+  methods: {
+    async initPfp(){
+      if(this.activeMembers){
+        try {
+          const response = await this.axios.get(`${this.$root.requestURL}/user/data/get/${this.user.ID}`);
+          this.pfp = response.data.result.PROFILEPICTURE;
+        } catch (err) {
+        }
+      }
+    },
+  },
+  mounted() {
+    this.initPfp();
+  }
 }
 </script>
 

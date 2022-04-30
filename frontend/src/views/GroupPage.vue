@@ -16,22 +16,31 @@
         </div>
       </div>
       <div class="group-content">
-        <div class="members-container">
-          <h2>Members</h2>
-          <div class="group-members-container">
-            <GroupMemberProfile v-for="(member, index) in members" :key="index" :user="member" :owner-id="groupData.ownerID"/>
+        <div class="members-side">
+          <div class="members-container">
+            <h3>Members</h3>
+            <div class="group-members-container">
+              <GroupMemberProfile v-for="(member, index) in members" :key="index" :user="member" :owner-id="groupData.ownerID"/>
+            </div>
+          </div>
+          <div class="active-members-container">
+            <h3>Most active members</h3>
+            <p class="number-of-posts" v-if="activeMemberExists">With number of posts: <span>{{activeMemberExists ? activeMembers[0].GP_COUNT : ''}}</span></p>
+            <div class="active-members">
+              <GroupMemberProfile v-for="(activeMember, index) in activeMembers" :key="index" :user="activeMember" :owner-id="groupData.ownerID" active-members/>
+            </div>
           </div>
         </div>
         <div class="posts-container">
           <div v-if="isMember" class="new-post">
             <h2>Make a new post!</h2>
-            <textarea id="newpost-text" v-model="newPost.content"></textarea>
-            <input id="newpost-picture" type="file" @change="setNewPostImage($event)" ref="imageUpload"><br>
+            <textarea id="newpost-text" v-model="newPost.content" v-on:keydown.enter.exact.prevent="sendNewPost" placeholder="Write your post here..."></textarea>
+            <input id="newpost-picture" type="file"  @change="setNewPostImage($event)" ref="imageUpload"><br>
             <button @click="sendNewPost" type="submit" id="new-post-submit" >Post</button>
           </div>
           <div class="posts">
             <h2>Posts</h2>
-            <Post v-for="post in posts" :key="post.ID" :post-data="post" type="group" @delete="initPosts" @postUpdate="initPosts"></Post>
+            <Post v-for="post in posts" :key="post.ID" :post-data="post" type="group" @delete="atPostDelete" @postUpdate="initPosts"></Post>
           </div>
         </div>
       </div>
@@ -81,9 +90,16 @@ export default {
 
       usersGroups: [],
       loadDone: false,
+
+      activeMembers: [],
     }
   },
   methods: {
+    atPostDelete(){
+      this.initPosts();
+      this.initActiveMembers();
+    },
+
     setNewPostImage(event){
       if(event.target.files.length === 0){
         return;
@@ -131,6 +147,15 @@ export default {
       }
     },
 
+    async initActiveMembers(){
+      try {
+        const response = await this.axios.get(`${this.$root.requestURL}/group/active/${this.groupID}`);
+        this.activeMembers = response.data.result;
+      } catch (err) {
+        console.log(err.response.data);
+      }
+    },
+
     async sendNewPost(){
       if(this.newPost.content.trim() !== '') {
 
@@ -155,6 +180,7 @@ export default {
 
         await new Promise(r => setTimeout(r, 200));
         await this.initPosts();
+        await this.initActiveMembers();
         this.newPost.content = '';
         this.newPost.image = null;
         this.$refs.imageUpload.value = null;
@@ -187,13 +213,21 @@ export default {
       }
       this.loadDone = true;
       return false;
-    }
+    },
+
+    activeMemberExists(){
+      if(this.activeMembers[0] !== undefined && this.activeMembers[0] !== null){
+        return true;
+      }
+      return false;
+    },
   },
   mounted() {
     this.initGroupData();
     this.initMembers();
     this.initUsersGroups();
     this.initPosts();
+    this.initActiveMembers();
   }
 }
 </script>
@@ -307,20 +341,49 @@ export default {
     flex-direction: row;
     align-items: flex-start;
 
-    .members-container {
-      background-color: var(--light-bg-color);
+    .members-side{
       width: 30%;
-      padding: 3% 3%;
 
-      h2 {
-        margin: 0 0 5% 0;
+      .members-container {
+        background-color: var(--light-bg-color);
+        padding: 9% 9%;
+
+        h3 {
+          margin: 0 0 5% 0;
+        }
+
+        .group-members-container {
+          max-height: 30vh;
+          height: 30vh;
+          overflow-y: auto;
+          overflow-x: hidden;
+        }
       }
 
-      .group-members-container {
-        max-height: 50vh;
-        height: 50vh;
-        overflow-y: auto;
-        overflow-x: hidden;
+      .active-members-container {
+        background-color: var(--light-bg-color);
+        padding: 9% 9%;
+        margin-top: 7%;
+
+        h3 {
+          margin: 0 0 5% 0;
+        }
+
+        .number-of-posts{
+          font-style: italic;
+          margin-left: 5%;
+
+          span {
+            font-weight: bold;
+          }
+        }
+
+        .active-members {
+          max-height: 30vh;
+          height: 15vh;
+          overflow-y: auto;
+          overflow-x: hidden;
+        }
       }
     }
 

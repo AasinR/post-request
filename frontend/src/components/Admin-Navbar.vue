@@ -1,5 +1,6 @@
 <template>
   <div class="admin-navbar">
+    <h1 id="data-tables-head">Data tables</h1>
     <div class="navbar-link">
       <router-link :class="current === 'users' ? 'current' : ''" :to="{name: 'AdminUsers'}">Users</router-link>
     </div>
@@ -39,6 +40,16 @@
     <div class="navbar-link">
       <router-link :class="current === 'group_members' ? 'current' : ''" :to="{name: 'AdminGroupMembers'}">Group Members</router-link>
     </div>
+    <h1 id="statistics-head">Statistics</h1>
+    <div class="navbar-link">
+      <router-link :class="current === 'activity' ? 'current' : ''" :to="{name: 'AdminUserActivity'}">User activity</router-link>
+    </div>
+    <div class="navbar-link">
+      <router-link :class="current === 'longconvos' ? 'current' : ''" :to="{name: 'AdminLongerConvos'}">Longer convos</router-link>
+    </div>
+    <div class="navbar-link">
+      <router-link :class="current === 'userage' ? 'current' : ''" :to="{name: 'AdminUserAge'}">Age of users</router-link>
+    </div>
   </div>
 </template>
 
@@ -56,6 +67,13 @@ export default {
   margin-bottom: 2%;
   margin-right: 3%;
   width: 20vh;
+
+  #data-tables-head, #statistics-head{
+    font-size: 22px;
+    text-decoration: underline;
+
+  }
+
   .navbar-link {
     margin-bottom: 10%;
     a {

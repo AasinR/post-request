@@ -25,7 +25,7 @@
         <div class="posts-container">
           <div v-if="Number($cookies.get('UserID')) === Number(userID)" class="new-post">
             <h2>Make a new post!</h2>
-            <textarea id="newpost-text" v-model="newPost.content" placeholder="Write your post here..."></textarea>
+            <textarea id="newpost-text" v-model="newPost.content" v-on:keydown.enter.exact.prevent="sendNewPost" placeholder="Write your post here..."></textarea>
             <input id="newpost-picture" type="file" @change="setNewPostImage($event)" ref="imageUpload"><br>
             <button type="submit" id="new-post-submit" @click="sendNewPost">Post</button>
           </div>

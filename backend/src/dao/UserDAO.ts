@@ -9,7 +9,8 @@ class UserDAO {
             FROM "User" LEFT JOIN Friends ON
                 "User".ID = Friends.USER1 OR
                 "User".ID = Friends.USER2
-            GROUP BY "User".ID, "User".PASSWORD, "User".EMAIL, "User".PERMISSION, "User".FIRSTNAME, "User".LASTNAME`;
+            GROUP BY "User".ID, "User".PASSWORD, "User".EMAIL, "User".PERMISSION, "User".FIRSTNAME, "User".LASTNAME
+            ORDER BY "User".ID`;
         try {
             const query = await ConnectionConfig.query(FIND_ALL);
             if (query === null) {

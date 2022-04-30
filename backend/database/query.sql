@@ -130,7 +130,8 @@ SELECT "User".ID, "User".PASSWORD, "User".EMAIL, "User".PERMISSION, "User".FIRST
 FROM "User" LEFT JOIN Friends ON
     "User".ID = Friends.USER1 OR
     "User".ID = Friends.USER2
-GROUP BY "User".ID, "User".PASSWORD, "User".EMAIL, "User".PERMISSION, "User".FIRSTNAME, "User".LASTNAME;
+GROUP BY "User".ID, "User".PASSWORD, "User".EMAIL, "User".PERMISSION, "User".FIRSTNAME, "User".LASTNAME
+ORDER BY "User".ID;
 
 -- get user by ID with friend count
 SELECT "User".ID, "User".PASSWORD, "User".EMAIL, "User".PERMISSION, "User".FIRSTNAME, "User".LASTNAME, COUNT(Friends.USER1) as FRIENDS_COUNT
@@ -192,3 +193,19 @@ HAVING COUNT(PrivateMessage.ID) > (
 GROUP BY FromUser.ID, FromUser.FIRSTNAME, FromUser.LASTNAME,
     ToUser.ID, ToUser.FIRSTNAME, ToUser.LASTNAME
 ORDER BY MSG_COUNT DESC;
+
+-- most active poster in a group
+SELECT "User".ID, "User".FIRSTNAME, "User".LASTNAME, "Group".ID, "Group".NAME, COUNT(GroupPost.ID) GP_COUNT
+FROM "User", "Group", GroupPost
+WHERE "User".ID = GroupPost.USERID AND
+    "Group".ID = GroupPost.GROUPID AND
+    "Group".ID = 1000
+HAVING COUNT(GroupPost.ID) = (
+    SELECT MAX(COUNT(GroupPost.USERID))
+    FROM GroupPost, "Group"
+    WHERE "Group".ID = GroupPost.GROUPID AND
+        "Group".ID = 1000
+    GROUP BY GroupPost.USERID
+)
+GROUP BY "User".ID, "User".FIRSTNAME, "User".LASTNAME, "Group".ID, "Group".NAME
+ORDER BY "User".ID, "User".FIRSTNAME, "User".LASTNAME;

@@ -183,6 +183,39 @@ class GroupDAO {
             return null;
         }
     }
+
+    // get active users
+    async active(ID: number): Promise<{[k: string]: any}[]> {
+        const GET_ACTIVE =
+            `SELECT "User".ID, "User".FIRSTNAME, "User".LASTNAME, "Group".ID, "Group".NAME, COUNT(GroupPost.ID) GP_COUNT
+            FROM "User", "Group", GroupPost
+            WHERE "User".ID = GroupPost.USERID AND
+                "Group".ID = GroupPost.GROUPID AND
+                "Group".ID = ${ID}
+            HAVING COUNT(GroupPost.ID) = (
+                SELECT MAX(COUNT(GroupPost.USERID))
+                FROM GroupPost, "Group"
+                WHERE "Group".ID = GroupPost.GROUPID AND
+                    "Group".ID = ${ID}
+                GROUP BY GroupPost.USERID
+            )
+            GROUP BY "User".ID, "User".FIRSTNAME, "User".LASTNAME, "Group".ID, "Group".NAME
+            ORDER BY "User".ID, "User".FIRSTNAME, "User".LASTNAME`;
+        try {
+            const query = await ConnectionConfig.query(GET_ACTIVE);
+            if (query === null) {
+                throw Error("Query failed!");
+            }
+            const result: Group[] = [];
+            query.rows.forEach((data: Group) => {
+                result.push(data);
+            });
+            return result;
+        } catch(error) {
+            console.error(error);
+            return null;
+        }
+    }
 }
 
 export default new GroupDAO();

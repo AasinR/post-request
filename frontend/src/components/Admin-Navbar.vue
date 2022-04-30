@@ -47,6 +47,9 @@
     <div class="navbar-link">
       <router-link :class="current === 'longconvos' ? 'current' : ''" :to="{name: 'AdminLongerConvos'}">Longer convos</router-link>
     </div>
+    <div class="navbar-link">
+      <router-link :class="current === 'userage' ? 'current' : ''" :to="{name: 'AdminUserAge'}">Age of users</router-link>
+    </div>
   </div>
 </template>
 

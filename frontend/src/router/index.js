@@ -141,6 +141,11 @@ const routes = [
         path: "longer-convos",
         component: () => import('@/views/admin/LongerConvos')
       },
+      {
+        name: "AdminUserAge",
+        path: "user-age",
+        component: () => import('@/views/admin/UserAge')
+      },
     ]
   },
   {

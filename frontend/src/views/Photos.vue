@@ -13,12 +13,7 @@
           </div>
         </div>
         <div class="albums-container" >
-          <router-link class="album-container" v-for="(album, index) in albums" :key="index" :to="{name: 'AlbumPage', params: {albumID: album.ID}}">
-            <div class="cover-container">
-              <img class="cover" :src="require('@/assets/default-gallery-cover.png')" alt="album cover"/>
-            </div>
-            <p class="album-name">{{album.NAME}} ({{album.IMG_COUNT}})</p>
-          </router-link>
+          <Album v-for="(album, index) in albums" :key="index" :album="album"/>
         </div>
       </div>
       <div class="my-photos">
@@ -39,10 +34,11 @@
 import Header from "@/components/Header";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import Album from "@/components/Album";
 
 export default {
   name: "Photos",
-  components: {Footer, Navbar, Header},
+  components: {Footer, Navbar, Header, Album},
   data() {
     return {
       photos: [],
@@ -245,38 +241,6 @@ export default {
           justify-content: space-evenly;
           grid-gap: 10px;
 
-          .album-container {
-            width: 230px;
-            height: 260px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-decoration: none;
-
-            .cover-container{
-              background-color: var(--ouline-color);
-              display: flex;
-              flex-direction: column;
-              align-items: center;
-              justify-content: center;
-              overflow: hidden;
-              .cover {
-                max-width: 235px;
-                max-height: 235px;
-              }
-            }
-            .album-name {
-              line-height: 20px;
-              margin: 10px 0;
-              color: var(--font-color);
-
-            }
-            &:hover {
-              cursor: pointer;
-              -webkit-filter: brightness(80%);
-              transition: all 100ms ease;
-            }
-          }
           &::after{
             content: "";
             flex: auto;

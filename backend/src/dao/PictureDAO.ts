@@ -103,7 +103,7 @@ class PictureDAO {
 
     // update picture
     async update(img: Picture): Promise<Picture> {
-        const UPDATE_IMG = `UPDATE publicpicture SET albumid = ${img.ALBUMID} WHERE id = ${img.ID}`;
+        const UPDATE_IMG = `UPDATE publicpicture SET albumid = ${img.ALBUMID}, timestamp = CURRENT_TIMESTAMP WHERE id = ${img.ID}`;
 
         try {
             ConnectionConfig.modify(UPDATE_IMG, false);
@@ -121,6 +121,36 @@ class PictureDAO {
         try {
             ConnectionConfig.modify(DELETE_IMG, false);
             return ID;
+        } catch(error) {
+            console.error(error);
+            return null;
+        }
+    }
+
+    // get latest image from an album
+    async latest(ID: number): Promise<{[k: string]: any}[]> {
+        const GET_NEW =
+            `SELECT PublicPicture.ID, PublicPicture.CONTENT, PublicPicture.TIMESTAMP, MediaAlbum.NAME G_NAME
+            FROM PublicPicture, MediaAlbum
+            WHERE PublicPicture.ALBUMID = MediaAlbum.ID AND
+                MediaAlbum.ID = ${ID}
+            HAVING PublicPicture.TIMESTAMP = (
+                SELECT MAX(TIMESTAMP)
+                FROM PublicPicture
+                WHERE PublicPicture.ALBUMID = ${ID}
+            )
+            GROUP BY PublicPicture.ID, PublicPicture.CONTENT, PublicPicture.TIMESTAMP, MediaAlbum.NAME`;
+
+        try {
+            const query = await ConnectionConfig.query(GET_NEW);
+            if (query === null) {
+                throw Error("Query failed!");
+            }
+            const result: {[k: string]: any}[] = [];
+            query.rows.forEach((data: {[k: string]: any}) => {
+                result.push(data);
+            });
+            return result;
         } catch(error) {
             console.error(error);
             return null;

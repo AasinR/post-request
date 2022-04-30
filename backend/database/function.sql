@@ -76,3 +76,14 @@ EXCEPTION
         RETURN null;
 END;
 /
+
+-- set image timestamp to null after album delete
+CREATE OR REPLACE PROCEDURE delete_album(
+    v_albumid IN NUMBER
+)
+IS
+BEGIN
+    UPDATE PublicPicture SET timestamp = null WHERE albumid = v_albumid;
+    DELETE FROM MediaAlbum WHERE id = v_albumid;
+END;
+/

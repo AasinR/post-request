@@ -14,6 +14,7 @@ class PictureRoutes {
         this._Router.get("/getalbum/:id", SessionController.isUser, PictureController.getAlbum);
         this._Router.post("/add/:id", SessionController.isUser, PictureController.update);
         this._Router.get("/delete/:id", SessionController.isUser, PictureController.delete);
+        this._Router.get("/latest/:id", SessionController.isUser, PictureController.getNew);
     }
 
     get Router() {

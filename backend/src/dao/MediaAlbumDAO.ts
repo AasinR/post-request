@@ -106,7 +106,10 @@ class MediaAlbumDAO {
 
     // delete album
     async delete(ID: number): Promise<number> {
-        const DELETE_ALBUM = `DELETE FROM mediaalbum WHERE id = ${ID}`;
+        const DELETE_ALBUM =
+            `BEGIN
+                delete_album(${ID});
+            END;`;
 
         try {
             ConnectionConfig.modify(DELETE_ALBUM, false);

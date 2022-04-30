@@ -209,3 +209,15 @@ HAVING COUNT(GroupPost.ID) = (
 )
 GROUP BY "User".ID, "User".FIRSTNAME, "User".LASTNAME, "Group".ID, "Group".NAME
 ORDER BY "User".ID, "User".FIRSTNAME, "User".LASTNAME;
+
+-- get latest picture of an album
+SELECT PublicPicture.ID, PublicPicture.CONTENT, PublicPicture.TIMESTAMP, MediaAlbum.NAME G_NAME
+FROM PublicPicture, MediaAlbum
+WHERE PublicPicture.ALBUMID = MediaAlbum.ID AND
+    MediaAlbum.ID = 1001
+HAVING PublicPicture.TIMESTAMP = (
+    SELECT MAX(TIMESTAMP)
+    FROM PublicPicture
+    WHERE PublicPicture.ALBUMID = 1001
+)
+GROUP BY PublicPicture.ID, PublicPicture.CONTENT, PublicPicture.TIMESTAMP, MediaAlbum.NAME;

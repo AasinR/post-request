@@ -221,3 +221,16 @@ HAVING PublicPicture.TIMESTAMP = (
     WHERE PublicPicture.ALBUMID = 1001
 )
 GROUP BY PublicPicture.ID, PublicPicture.CONTENT, PublicPicture.TIMESTAMP, MediaAlbum.NAME;
+
+-- age of users
+SELECT "User".ID, "User".FIRSTNAME, "User".LASTNAME,
+    TRUNC((CURRENT_DATE - UserData.BIRTHDATE)/365.25) AGE,
+    (
+        SELECT AVG(TRUNC((CURRENT_DATE - UserData.BIRTHDATE)/365.25))
+        FROM UserData
+        WHERE UserData.BIRTHDATE IS NOT NULL
+    ) AVG_AGE
+FROM UserData, "User"
+WHERE "User".ID = UserData.USERID AND
+    UserData.BIRTHDATE IS NOT NULL
+ORDER BY TRUNC((CURRENT_DATE - UserData.BIRTHDATE)/365.25), "User".ID;

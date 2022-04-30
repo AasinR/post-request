@@ -26,6 +26,7 @@ class UserRoutes {
 
         this._Router.get("/admin/all", SessionController.isAdmin, UserController.findAll);
         this._Router.get("/admin/stat", SessionController.isAdmin, UserController.getStat);
+        this._Router.get("/admin/age", SessionController.isAdmin, UserController.getAge);
     }
 
     get Router() {

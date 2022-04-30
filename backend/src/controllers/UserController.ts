@@ -303,6 +303,30 @@ class UserController {
             }
         }
     }
+
+    // get age of users
+    async getAge(req : Request, res : Response, next : NextFunction) {
+        let result;
+        try {
+            result = await UserDAO.age();
+            if (result === null) {
+                throw new Error("Failed to get users!");
+            }
+            throw 200;
+        } catch(status) {
+            switch(status) {
+                case 200:
+                    res.json({
+                        "result": result
+                    });
+                    break;
+                default:
+                    res.sendStatus(500);
+                    console.error(status);
+                    break;
+            }
+        }
+    }
 }
 
 export default new UserController();

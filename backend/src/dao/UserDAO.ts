@@ -16,8 +16,8 @@ class UserDAO {
             if (query === null) {
                 throw Error("Query failed!");
             }
-            const result: User[] = [];
-            query.rows.forEach((data: User) => {
+            const result: {[k: string]: any}[] = [];
+            query.rows.forEach((data: {[k: string]: any}) => {
                 result.push(data);
             });
             return result;
@@ -129,6 +129,37 @@ class UserDAO {
 
         try {
             const query = await ConnectionConfig.query(GET_STAT);
+            if (query === null) {
+                throw Error("Query failed!");
+            }
+            const result: {[k: string]: any}[] = [];
+            query.rows.forEach((data: {[k: string]: any}) => {
+                result.push(data);
+            });
+            return result;
+        } catch(error) {
+            console.error(error);
+            return null;
+        }
+    }
+
+    // get age of users
+    async age(): Promise<{[k: string]: any}[]> {
+        const GET_AGE =
+            `SELECT "User".ID, "User".FIRSTNAME, "User".LASTNAME,
+            TRUNC((CURRENT_DATE - UserData.BIRTHDATE)/365.25) AGE,
+            (
+                SELECT AVG(TRUNC((CURRENT_DATE - UserData.BIRTHDATE)/365.25))
+                FROM UserData
+                WHERE UserData.BIRTHDATE IS NOT NULL
+            ) AVG_AGE
+        FROM UserData, "User"
+        WHERE "User".ID = UserData.USERID AND
+            UserData.BIRTHDATE IS NOT NULL
+        ORDER BY TRUNC((CURRENT_DATE - UserData.BIRTHDATE)/365.25), "User".ID`;
+
+        try {
+            const query = await ConnectionConfig.query(GET_AGE);
             if (query === null) {
                 throw Error("Query failed!");
             }

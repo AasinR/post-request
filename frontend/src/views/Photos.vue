@@ -73,6 +73,7 @@ export default {
       }
       await new Promise(r => setTimeout(r, 300));
       await this.initPhotos();
+      await this.initAlbums();
     },
 
     async createAlbum(){

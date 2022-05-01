@@ -7,6 +7,7 @@ import GroupMember from "../models/GroupMember";
 import Picture from "../models/Picture";
 import PictureDAO from "../dao/PictureDAO";
 import { debug } from "console";
+import UserDAO from "../dao/UserDAO";
 
 class GroupController {
 
@@ -400,6 +401,30 @@ class GroupController {
             result = await GroupDAO.active(groupId);
             if (result === null) {
                 throw new Error("Failed to execute query!");
+            }
+            throw 200;
+        } catch(status) {
+            switch(status) {
+                case 200:
+                    res.json({
+                        "result": result
+                    });
+                    break;
+                default:
+                    res.sendStatus(500);
+                    console.error(status);
+                    break;
+            }
+        }
+    }
+    // get number of group members
+    async getMemberCount(req : Request, res : Response, next : NextFunction) {
+        const groupId = parseInt(req.params.id, 10);
+        let result;
+        try {
+            result = await GroupMembersDAO.getMemberCount(groupId);
+            if (result === null) {
+                throw new Error("Failed to get member count!");
             }
             throw 200;
         } catch(status) {

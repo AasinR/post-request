@@ -18,7 +18,8 @@
       <div class="group-content">
         <div class="members-side">
           <div class="members-container">
-            <h3>Members</h3>
+            <h3>Members </h3>
+            <p class="member-count">({{memberCount}})</p>
             <div class="group-members-container">
               <GroupMemberProfile v-for="(member, index) in members" :key="index" :user="member" :owner-id="groupData.ownerID"/>
             </div>
@@ -92,6 +93,7 @@ export default {
       loadDone: false,
 
       activeMembers: [],
+      memberCount: '',
     }
   },
   methods: {
@@ -152,6 +154,16 @@ export default {
         const response = await this.axios.get(`${this.$root.requestURL}/group/active/${this.groupID}`);
         this.activeMembers = response.data.result;
       } catch (err) {
+        console.log(err.response.data);
+      }
+    },
+
+    async initMemberCount(){
+      try {
+        const response = await this.axios.get(`${this.$root.requestURL}/group/member/count/${this.groupID}`);
+        this.memberCount = response.data.result.MEMBERCOUNT;
+      } catch (err) {
+        this.memberCount = 0;
         console.log(err.response.data);
       }
     },
@@ -228,6 +240,7 @@ export default {
     this.initUsersGroups();
     this.initPosts();
     this.initActiveMembers();
+    this.initMemberCount();
   }
 }
 </script>
@@ -350,6 +363,14 @@ export default {
 
         h3 {
           margin: 0 0 5% 0;
+          display: inline-block;
+        }
+
+        .member-count {
+          display: inline-block;
+          margin-left: 2%;
+          margin-top: 0;
+          font-size: 14px;
         }
 
         .group-members-container {

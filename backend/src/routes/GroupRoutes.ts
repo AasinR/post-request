@@ -28,6 +28,7 @@ class GroupRoutes {
         this._Router.get("/member/getall/:id", SessionController.isUser, GroupController.getAllMember);
         this._Router.get("/member/add/:id", SessionController.isUser, GroupController.addMember);
         this._Router.post("/member/remove/:id", SessionController.isUser, GroupController.removeMember);
+        this._Router.get("/member/count/:id", SessionController.isUser, GroupController.getMemberCount);
     }
 
     get Router() {

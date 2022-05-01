@@ -79,6 +79,31 @@ class GroupMembersDAO {
             return null;
         }
     }
+
+    // get number of members by groupID
+    async getMemberCount(id: number) : Promise<{[k: string]: any}>
+    {
+        const SELECT =
+            `SELECT GroupMembers.GroupID, "Group".NAME, COUNT(GroupMembers.GroupID) AS MEMBERCOUNT
+             FROM GroupMembers, "Group"
+             WHERE "Group".ID = ${id} AND "Group".ID = GroupMembers.GroupID
+             GROUP BY GroupMembers.GroupID, "Group".NAME`;
+        try {
+            const query = await ConnectionConfig.query(SELECT);
+            if (query === null) {
+                throw Error("Query failed!");
+            }
+            if (query.rows.length === 0)
+            {
+                throw Error("No data found!");
+            }
+            return query.rows[0];
+
+        } catch(error) {
+            console.error(error);
+            return null;
+        }
+    }
 }
 
 export default new GroupMembersDAO();

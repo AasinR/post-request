@@ -234,3 +234,17 @@ FROM UserData, "User"
 WHERE "User".ID = UserData.USERID AND
     UserData.BIRTHDATE IS NOT NULL
 ORDER BY TRUNC((CURRENT_DATE - UserData.BIRTHDATE)/365.25), "User".ID;
+
+-- group member count
+SELECT COUNT(GroupMembers.GroupID)
+FROM GroupMembers
+WHERE GroupMembers.GroupID = 1001
+GROUP BY GroupMembers.GroupID
+
+-- biggest album
+SELECT PublicPicture.AlbumID, COUNT(PublicPicture.AlbumID)
+FROM PublicPicture
+WHERE PublicPicture.AlbumID = 1001
+GROUP BY PublicPicture.AlbumID
+ORDER BY COUNT(PublicPicture.AlbumID) DESC
+FETCH FIRST 1 ROWS ONLY; 

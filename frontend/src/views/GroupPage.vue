@@ -208,6 +208,7 @@ export default {
 
       await this.initUsersGroups();
       await this.initMembers();
+      await this.initMemberCount();
     },
 
     goToEditGroup(){

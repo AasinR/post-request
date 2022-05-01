@@ -33,7 +33,8 @@ export default {
   },
   mounted() {
     this.initPfp();
-  }
+  },
+
 }
 </script>
 

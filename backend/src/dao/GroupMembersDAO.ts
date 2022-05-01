@@ -85,8 +85,8 @@ class GroupMembersDAO {
     {
         const SELECT =
             `SELECT GroupMembers.GroupID, "Group".NAME, COUNT(GroupMembers.GroupID) AS MEMBERCOUNT
-             FROM GroupMembers, "Group"
-             WHERE "Group".ID = ${id} AND "Group".ID = GroupMembers.GroupID
+             FROM "Group" LEFT JOIN GroupMembers ON "Group".ID = GroupMembers.GroupID
+             WHERE "Group".ID = ${id}
              GROUP BY GroupMembers.GroupID, "Group".NAME`;
         try {
             const query = await ConnectionConfig.query(SELECT);

@@ -72,8 +72,7 @@ export default {
         console.log(err.response.data);
       }
       await new Promise(r => setTimeout(r, 300));
-      await this.initPhotos();
-      await this.initAlbums();
+      this.$router.go();
     },
 
     async createAlbum(){

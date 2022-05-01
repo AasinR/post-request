@@ -169,7 +169,7 @@ export default {
     },
 
     async sendNewPost(){
-      if(this.newPost.content.trim() !== '') {
+      if(this.newPost.content.trim() !== '' || this.newPost.image !== null) {
 
         const formData = new FormData();
         formData.append('image', this.newPost.image);
@@ -191,8 +191,7 @@ export default {
         }
 
         await new Promise(r => setTimeout(r, 200));
-        await this.initPosts();
-        await this.initActiveMembers();
+        this.$router.go();
         this.newPost.content = '';
         this.newPost.image = null;
         this.$refs.imageUpload.value = null;

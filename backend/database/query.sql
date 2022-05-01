@@ -234,3 +234,9 @@ FROM UserData, "User"
 WHERE "User".ID = UserData.USERID AND
     UserData.BIRTHDATE IS NOT NULL
 ORDER BY TRUNC((CURRENT_DATE - UserData.BIRTHDATE)/365.25), "User".ID;
+
+--group membe count
+SELECT GroupMembers.GroupID, "Group".NAME, COUNT(GroupMembers.GroupID) AS MEMBERCOUNT
+FROM GroupMembers, "Group"
+WHERE "Group".ID = 1001 AND "Group".ID = GroupMembers.GroupID
+GROUP BY GroupMembers.GroupID, "Group".NAME
